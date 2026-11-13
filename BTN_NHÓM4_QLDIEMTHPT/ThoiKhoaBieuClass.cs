@@ -9,10 +9,8 @@ using MySql.Data.MySqlClient;
 namespace QLDiemTHPT
 {
     //Quản lý bảng schedule (thời khoá biểu: môn nào, lớp nào, giáo viên nào, phòng nào, học kỳ nào)
-    class ThoiKhoaBieuClass
+    class ThoiKhoaBieuClass : DuLieuClass
     {
-        DBconnect connect = new DBconnect();
-
         //các thứ trong tuần, dùng để đổ vào combobox
         public static string[] cacThu = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
 
@@ -34,7 +32,7 @@ namespace QLDiemTHPT
         //hàm thêm một tiết vào thời khoá biểu
         public bool insertTiet(int maMon, int maLop, int maGV, int maPhong, int maHK, string thu, TimeSpan batDau, TimeSpan ketThuc)
         {
-            MySqlCommand command = new MySqlCommand("INSERT INTO `schedule`(`CourseId`, `ClassId`, `TeacherId`, `RoomId`, `SemesterId`, `DayOfWeek`, `StartTime`, `EndTime`) VALUES (@mm,@ml,@mgv,@mp,@mhk,@thu,@bd,@kt)", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("INSERT INTO `schedule`(`CourseId`, `ClassId`, `TeacherId`, `RoomId`, `SemesterId`, `DayOfWeek`, `StartTime`, `EndTime`) VALUES (@mm,@ml,@mgv,@mp,@mhk,@thu,@bd,@kt)");
             command.Parameters.Add("@mm", MySqlDbType.Int32).Value = maMon;
             command.Parameters.Add("@ml", MySqlDbType.Int32).Value = maLop;
             command.Parameters.Add("@mgv", MySqlDbType.Int32).Value = maGV;
@@ -43,13 +41,13 @@ namespace QLDiemTHPT
             command.Parameters.Add("@thu", MySqlDbType.VarChar).Value = thu;
             command.Parameters.Add("@bd", MySqlDbType.Time).Value = batDau;
             command.Parameters.Add("@kt", MySqlDbType.Time).Value = ketThuc;
-            return run(command);
+            return run(command, 1452);
         }
 
         //hàm sửa một tiết
         public bool updateTiet(int maTiet, int maMon, int maLop, int maGV, int maPhong, int maHK, string thu, TimeSpan batDau, TimeSpan ketThuc)
         {
-            MySqlCommand command = new MySqlCommand("UPDATE `schedule` SET `CourseId`=@mm,`ClassId`=@ml,`TeacherId`=@mgv,`RoomId`=@mp,`SemesterId`=@mhk,`DayOfWeek`=@thu,`StartTime`=@bd,`EndTime`=@kt WHERE `ScheduleId`=@ma", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("UPDATE `schedule` SET `CourseId`=@mm,`ClassId`=@ml,`TeacherId`=@mgv,`RoomId`=@mp,`SemesterId`=@mhk,`DayOfWeek`=@thu,`StartTime`=@bd,`EndTime`=@kt WHERE `ScheduleId`=@ma");
             command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maTiet;
             command.Parameters.Add("@mm", MySqlDbType.Int32).Value = maMon;
             command.Parameters.Add("@ml", MySqlDbType.Int32).Value = maLop;
@@ -59,45 +57,15 @@ namespace QLDiemTHPT
             command.Parameters.Add("@thu", MySqlDbType.VarChar).Value = thu;
             command.Parameters.Add("@bd", MySqlDbType.Time).Value = batDau;
             command.Parameters.Add("@kt", MySqlDbType.Time).Value = ketThuc;
-            return run(command);
+            return run(command, 1452);
         }
 
         //hàm xoá một tiết
         public bool deleteTiet(int maTiet)
         {
-            MySqlCommand command = new MySqlCommand("DELETE FROM `schedule` WHERE `ScheduleId`=@ma", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("DELETE FROM `schedule` WHERE `ScheduleId`=@ma");
             command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maTiet;
-            return run(command);
-        }
-
-        //chạy lệnh thêm/sửa/xoá
-        private bool run(MySqlCommand command)
-        {
-            try
-            {
-                connect.openConnect();
-                return command.ExecuteNonQuery() == 1;
-            }
-            catch (MySqlException ex)
-            {
-                if (ex.Number == 1452)
-                    return false;
-                throw;
-            }
-            finally
-            {
-                connect.closeConnect();
-            }
-        }
-
-        //hàm chạy câu select bất kỳ
-        public DataTable getList(MySqlCommand command)
-        {
-            command.Connection = connect.getconnection;
-            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
-            DataTable table = new DataTable();
-            adapter.Fill(table);
-            return table;
+            return run(command, 1452);
         }
 
         //câu select dùng chung: nối 5 bảng để hiện tên thay vì mã
@@ -160,11 +128,8 @@ namespace QLDiemTHPT
         //hàm đếm tổng số tiết trong thời khoá biểu
         public string tongTiet()
         {
-            MySqlCommand command = new MySqlCommand("SELECT COUNT(*) FROM schedule", connect.getconnection);
-            connect.openConnect();
-            string dem = command.ExecuteScalar().ToString();
-            connect.closeConnect();
-            return dem;
+            MySqlCommand command = new MySqlCommand("SELECT COUNT(*) FROM schedule");
+            return tinhMotGiaTri(command);
         }
     }
 }

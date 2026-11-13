@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DBconnect.cs" />
+    <Compile Include="DuLieuClass.cs" />
     <Compile Include="LoginClass.cs" />
     <Compile Include="KhoaClass.cs" />
     <Compile Include="MonHocClass.cs" />

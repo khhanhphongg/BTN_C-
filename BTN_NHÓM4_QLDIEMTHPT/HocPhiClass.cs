@@ -9,10 +9,8 @@ using MySql.Data.MySqlClient;
 namespace QLDiemTHPT
 {
     //Quản lý bảng tuition (học phí mỗi học kỳ: Paid đã đóng, Unpaid chưa đóng)
-    class HocPhiClass
+    class HocPhiClass : DuLieuClass
     {
-        DBconnect connect = new DBconnect();
-
         //hai trạng thái học phí
         public static string[] cacTrangThai = { "Paid", "Unpaid" };
 
@@ -27,64 +25,34 @@ namespace QLDiemTHPT
         //hàm thêm một dòng học phí, chưa đóng thì ngày đóng để trống
         public bool insertHocPhi(int maHS, int maHK, int soTien, DateTime? ngayDong, string trangThai)
         {
-            MySqlCommand command = new MySqlCommand("INSERT INTO `tuition`(`StudentId`, `SemesterId`, `Amount`, `PaidDate`, `Status`) VALUES (@mhs,@mhk,@st,@nd,@tt)", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("INSERT INTO `tuition`(`StudentId`, `SemesterId`, `Amount`, `PaidDate`, `Status`) VALUES (@mhs,@mhk,@st,@nd,@tt)");
             command.Parameters.Add("@mhs", MySqlDbType.Int32).Value = maHS;
             command.Parameters.Add("@mhk", MySqlDbType.Int32).Value = maHK;
             command.Parameters.Add("@st", MySqlDbType.Int32).Value = soTien;
             command.Parameters.Add("@nd", MySqlDbType.Date).Value = ngayDong.HasValue ? (object)ngayDong.Value : DBNull.Value;
             command.Parameters.Add("@tt", MySqlDbType.VarChar).Value = trangThai;
-            return run(command);
+            return run(command, 1062, 1452);
         }
 
         //hàm sửa một dòng học phí
         public bool updateHocPhi(int maHP, int maHS, int maHK, int soTien, DateTime? ngayDong, string trangThai)
         {
-            MySqlCommand command = new MySqlCommand("UPDATE `tuition` SET `StudentId`=@mhs,`SemesterId`=@mhk,`Amount`=@st,`PaidDate`=@nd,`Status`=@tt WHERE `TuitionId`=@ma", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("UPDATE `tuition` SET `StudentId`=@mhs,`SemesterId`=@mhk,`Amount`=@st,`PaidDate`=@nd,`Status`=@tt WHERE `TuitionId`=@ma");
             command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maHP;
             command.Parameters.Add("@mhs", MySqlDbType.Int32).Value = maHS;
             command.Parameters.Add("@mhk", MySqlDbType.Int32).Value = maHK;
             command.Parameters.Add("@st", MySqlDbType.Int32).Value = soTien;
             command.Parameters.Add("@nd", MySqlDbType.Date).Value = ngayDong.HasValue ? (object)ngayDong.Value : DBNull.Value;
             command.Parameters.Add("@tt", MySqlDbType.VarChar).Value = trangThai;
-            return run(command);
+            return run(command, 1062, 1452);
         }
 
         //hàm xoá một dòng học phí
         public bool deleteHocPhi(int maHP)
         {
-            MySqlCommand command = new MySqlCommand("DELETE FROM `tuition` WHERE `TuitionId`=@ma", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("DELETE FROM `tuition` WHERE `TuitionId`=@ma");
             command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maHP;
-            return run(command);
-        }
-
-        //chạy lệnh thêm/sửa/xoá, trùng (học sinh, học kỳ) là lỗi 1062
-        private bool run(MySqlCommand command)
-        {
-            try
-            {
-                connect.openConnect();
-                return command.ExecuteNonQuery() == 1;
-            }
-            catch (MySqlException ex)
-            {
-                if (ex.Number == 1062 || ex.Number == 1452)
-                    return false;
-                throw;
-            }
-            finally
-            {
-                connect.closeConnect();
-            }
-        }
-
-        //hàm chạy câu select bất kỳ
-        public DataTable getList(MySqlCommand command)
-        {
-            command.Connection = connect.getconnection;
-            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
-            DataTable table = new DataTable();
-            adapter.Fill(table);
-            return table;
+            return run(command, 1062, 1452);
         }
 
         //câu select dùng chung: học phí kèm họ tên học sinh, tên lớp, tên học kỳ
@@ -128,11 +96,8 @@ namespace QLDiemTHPT
         //hàm tính tổng tiền đã thu
         public string tongTienDaThu()
         {
-            MySqlCommand command = new MySqlCommand("SELECT IFNULL(SUM(Amount),0) FROM tuition WHERE Status='Paid'", connect.getconnection);
-            connect.openConnect();
-            string tong = command.ExecuteScalar().ToString();
-            connect.closeConnect();
-            return tong;
+            MySqlCommand command = new MySqlCommand("SELECT IFNULL(SUM(Amount),0) FROM tuition WHERE Status='Paid'");
+            return tinhMotGiaTri(command);
         }
 
         //hàm đọc số tiền người dùng nhập, bỏ dấu chấm phẩy phân cách

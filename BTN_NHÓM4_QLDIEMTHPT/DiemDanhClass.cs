@@ -9,10 +9,8 @@ using MySql.Data.MySqlClient;
 namespace QLDiemTHPT
 {
     //Quản lý bảng attendance (điểm danh: Present có mặt, Absent vắng, Late đi muộn)
-    class DiemDanhClass
+    class DiemDanhClass : DuLieuClass
     {
-        DBconnect connect = new DBconnect();
-
         //ba trạng thái điểm danh, dùng để đổ vào combobox
         public static string[] cacTrangThai = { "Present", "Absent", "Late" };
 
@@ -31,62 +29,32 @@ namespace QLDiemTHPT
         //hàm thêm một lượt điểm danh
         public bool insertDiemDanh(int maHS, int maMon, DateTime ngay, string trangThai)
         {
-            MySqlCommand command = new MySqlCommand("INSERT INTO `attendance`(`StudentId`, `CourseId`, `AttendDate`, `Status`) VALUES (@mhs,@mm,@ngay,@tt)", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("INSERT INTO `attendance`(`StudentId`, `CourseId`, `AttendDate`, `Status`) VALUES (@mhs,@mm,@ngay,@tt)");
             command.Parameters.Add("@mhs", MySqlDbType.Int32).Value = maHS;
             command.Parameters.Add("@mm", MySqlDbType.Int32).Value = maMon;
             command.Parameters.Add("@ngay", MySqlDbType.Date).Value = ngay;
             command.Parameters.Add("@tt", MySqlDbType.VarChar).Value = trangThai;
-            return run(command);
+            return run(command, 1062, 1452);
         }
 
         //hàm sửa một lượt điểm danh
         public bool updateDiemDanh(int maDD, int maHS, int maMon, DateTime ngay, string trangThai)
         {
-            MySqlCommand command = new MySqlCommand("UPDATE `attendance` SET `StudentId`=@mhs,`CourseId`=@mm,`AttendDate`=@ngay,`Status`=@tt WHERE `AttendId`=@ma", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("UPDATE `attendance` SET `StudentId`=@mhs,`CourseId`=@mm,`AttendDate`=@ngay,`Status`=@tt WHERE `AttendId`=@ma");
             command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maDD;
             command.Parameters.Add("@mhs", MySqlDbType.Int32).Value = maHS;
             command.Parameters.Add("@mm", MySqlDbType.Int32).Value = maMon;
             command.Parameters.Add("@ngay", MySqlDbType.Date).Value = ngay;
             command.Parameters.Add("@tt", MySqlDbType.VarChar).Value = trangThai;
-            return run(command);
+            return run(command, 1062, 1452);
         }
 
         //hàm xoá một lượt điểm danh
         public bool deleteDiemDanh(int maDD)
         {
-            MySqlCommand command = new MySqlCommand("DELETE FROM `attendance` WHERE `AttendId`=@ma", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("DELETE FROM `attendance` WHERE `AttendId`=@ma");
             command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maDD;
-            return run(command);
-        }
-
-        //chạy lệnh thêm/sửa/xoá, trùng (học sinh, môn, ngày) là lỗi 1062
-        private bool run(MySqlCommand command)
-        {
-            try
-            {
-                connect.openConnect();
-                return command.ExecuteNonQuery() == 1;
-            }
-            catch (MySqlException ex)
-            {
-                if (ex.Number == 1062 || ex.Number == 1452)
-                    return false;
-                throw;
-            }
-            finally
-            {
-                connect.closeConnect();
-            }
-        }
-
-        //hàm chạy câu select bất kỳ
-        public DataTable getList(MySqlCommand command)
-        {
-            command.Connection = connect.getconnection;
-            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
-            DataTable table = new DataTable();
-            adapter.Fill(table);
-            return table;
+            return run(command, 1062, 1452);
         }
 
         //câu select dùng chung: điểm danh kèm họ tên học sinh, tên lớp, tên môn

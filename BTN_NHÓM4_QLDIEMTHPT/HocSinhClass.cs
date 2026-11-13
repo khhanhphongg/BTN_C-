@@ -13,14 +13,12 @@ namespace QLDiemTHPT
      * Hai bảng này đi liền nhau nên để chung một class: thêm học sinh xong là
      * xếp luôn vào lớp.
      */
-    class HocSinhClass
+    class HocSinhClass : DuLieuClass
     {
-        DBconnect connect = new DBconnect();
-
         //hàm thêm học sinh mới rồi xếp vào lớp, trả về mã học sinh vừa thêm (0 nếu lỗi)
         public int insertHocSinh(string ho, string ten, DateTime ngaySinh, string gioiTinh, string dienThoai, string diaChi, byte[] anh, int maLop)
         {
-            MySqlCommand command = new MySqlCommand("INSERT INTO `student`(`StdFirstName`, `StdLastName`, `Birthdate`, `Gender`, `Phone`, `Address`, `Photo`) VALUES (@ten,@ho,@ns,@gt,@dt,@dc,@anh)", connect.getconnection);
+            MySqlCommand command = ganKetNoi(new MySqlCommand("INSERT INTO `student`(`StdFirstName`, `StdLastName`, `Birthdate`, `Gender`, `Phone`, `Address`, `Photo`) VALUES (@ten,@ho,@ns,@gt,@dt,@dc,@anh)"));
             command.Parameters.Add("@ten", MySqlDbType.VarChar).Value = ten;
             command.Parameters.Add("@ho", MySqlDbType.VarChar).Value = ho;
             command.Parameters.Add("@ns", MySqlDbType.Date).Value = ngaySinh;
@@ -35,7 +33,7 @@ namespace QLDiemTHPT
                     return 0;
                 int maHS = (int)command.LastInsertedId;
                 //xếp học sinh mới vào lớp
-                MySqlCommand xepLop = new MySqlCommand("INSERT INTO `student_class`(`StudentId`, `ClassId`) VALUES (@mhs,@ml)", connect.getconnection);
+                MySqlCommand xepLop = ganKetNoi(new MySqlCommand("INSERT INTO `student_class`(`StudentId`, `ClassId`) VALUES (@mhs,@ml)"));
                 xepLop.Parameters.AddWithValue("@mhs", maHS);
                 xepLop.Parameters.AddWithValue("@ml", maLop);
                 xepLop.ExecuteNonQuery();
@@ -50,7 +48,7 @@ namespace QLDiemTHPT
         //hàm sửa học sinh và đổi lớp
         public bool updateHocSinh(int maHS, string ho, string ten, DateTime ngaySinh, string gioiTinh, string dienThoai, string diaChi, byte[] anh, int maLop)
         {
-            MySqlCommand command = new MySqlCommand("UPDATE `student` SET `StdFirstName`=@ten,`StdLastName`=@ho,`Birthdate`=@ns,`Gender`=@gt,`Phone`=@dt,`Address`=@dc,`Photo`=@anh WHERE `StdId`=@ma", connect.getconnection);
+            MySqlCommand command = ganKetNoi(new MySqlCommand("UPDATE `student` SET `StdFirstName`=@ten,`StdLastName`=@ho,`Birthdate`=@ns,`Gender`=@gt,`Phone`=@dt,`Address`=@dc,`Photo`=@anh WHERE `StdId`=@ma"));
             command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maHS;
             command.Parameters.Add("@ten", MySqlDbType.VarChar).Value = ten;
             command.Parameters.Add("@ho", MySqlDbType.VarChar).Value = ho;
@@ -64,7 +62,7 @@ namespace QLDiemTHPT
                 connect.openConnect();
                 bool ok = command.ExecuteNonQuery() == 1;
                 //cập nhật lớp: có dòng rồi thì sửa, chưa có thì thêm
-                MySqlCommand doiLop = new MySqlCommand("INSERT INTO `student_class`(`StudentId`, `ClassId`) VALUES (@mhs,@ml) ON DUPLICATE KEY UPDATE `ClassId`=@ml", connect.getconnection);
+                MySqlCommand doiLop = ganKetNoi(new MySqlCommand("INSERT INTO `student_class`(`StudentId`, `ClassId`) VALUES (@mhs,@ml) ON DUPLICATE KEY UPDATE `ClassId`=@ml"));
                 doiLop.Parameters.AddWithValue("@mhs", maHS);
                 doiLop.Parameters.AddWithValue("@ml", maLop);
                 doiLop.ExecuteNonQuery();
@@ -79,7 +77,7 @@ namespace QLDiemTHPT
         //hàm xoá học sinh, điểm và dòng xếp lớp tự xoá theo (ON DELETE CASCADE)
         public bool deleteHocSinh(int maHS)
         {
-            MySqlCommand command = new MySqlCommand("DELETE FROM `student` WHERE `StdId`=@ma", connect.getconnection);
+            MySqlCommand command = ganKetNoi(new MySqlCommand("DELETE FROM `student` WHERE `StdId`=@ma"));
             command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maHS;
             try
             {
@@ -90,16 +88,6 @@ namespace QLDiemTHPT
             {
                 connect.closeConnect();
             }
-        }
-
-        //hàm chạy câu select bất kỳ
-        public DataTable getList(MySqlCommand command)
-        {
-            command.Connection = connect.getconnection;
-            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
-            DataTable table = new DataTable();
-            adapter.Fill(table);
-            return table;
         }
 
         //câu select dùng chung: học sinh kèm tên lớp
@@ -143,11 +131,7 @@ namespace QLDiemTHPT
         //hàm đếm, truyền câu lệnh count vào
         public string demHocSinh(string cauLenh)
         {
-            MySqlCommand command = new MySqlCommand(cauLenh, connect.getconnection);
-            connect.openConnect();
-            string dem = command.ExecuteScalar().ToString();
-            connect.closeConnect();
-            return dem;
+            return tinhMotGiaTri(cauLenh);
         }
 
         //tổng số học sinh
@@ -171,12 +155,9 @@ namespace QLDiemTHPT
         //số học sinh của một lớp
         public string demTheoLop(string tenLop)
         {
-            MySqlCommand command = new MySqlCommand("SELECT COUNT(*) FROM student_class INNER JOIN class ON student_class.ClassId = class.ClassId WHERE class.ClassName = @tl", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("SELECT COUNT(*) FROM student_class INNER JOIN class ON student_class.ClassId = class.ClassId WHERE class.ClassName = @tl");
             command.Parameters.AddWithValue("@tl", tenLop);
-            connect.openConnect();
-            string dem = command.ExecuteScalar().ToString();
-            connect.closeConnect();
-            return dem;
+            return tinhMotGiaTri(command);
         }
     }
 }

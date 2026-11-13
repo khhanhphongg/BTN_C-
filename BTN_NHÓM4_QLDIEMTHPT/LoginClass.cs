@@ -8,20 +8,8 @@ using MySql.Data.MySqlClient;
 
 namespace QLDiemTHPT
 {
-    class LoginClass
+    class LoginClass : DuLieuClass
     {
-        DBconnect connect = new DBconnect();
-
-        //hàm chạy câu select, trả về DataTable
-        public DataTable getList(MySqlCommand command)
-        {
-            command.Connection = connect.getconnection;
-            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
-            DataTable table = new DataTable();
-            adapter.Fill(table);
-            return table;
-        }
-
         //kiểm tra đăng nhập, đúng thì trả về dòng tài khoản, sai thì trả về null
         public DataRow kiemTraDangNhap(string tenDangNhap, string matKhau)
         {

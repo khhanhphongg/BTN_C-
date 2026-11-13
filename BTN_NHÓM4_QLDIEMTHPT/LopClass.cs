@@ -9,69 +9,37 @@ using MySql.Data.MySqlClient;
 namespace QLDiemTHPT
 {
     //Quản lý bảng class (lớp học, thuộc một khoa và có một giáo viên chủ nhiệm)
-    class LopClass
+    class LopClass : DuLieuClass
     {
-        DBconnect connect = new DBconnect();
-
         //hàm thêm lớp mới
         public bool insertLop(string tenLop, string namHoc, int maKhoa, int maGVCN)
         {
-            MySqlCommand command = new MySqlCommand("INSERT INTO `class`(`ClassName`, `SchoolYear`, `DeptId`, `TeacherId`) VALUES (@tl,@nh,@mk,@mgv)", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("INSERT INTO `class`(`ClassName`, `SchoolYear`, `DeptId`, `TeacherId`) VALUES (@tl,@nh,@mk,@mgv)");
             command.Parameters.Add("@tl", MySqlDbType.VarChar).Value = tenLop;
             command.Parameters.Add("@nh", MySqlDbType.VarChar).Value = namHoc;
             command.Parameters.Add("@mk", MySqlDbType.Int32).Value = maKhoa;
             command.Parameters.Add("@mgv", MySqlDbType.Int32).Value = maGVCN;
-            return run(command);
+            return run(command, 1062, 1451, 1452);
         }
 
         //hàm sửa lớp
         public bool updateLop(int maLop, string tenLop, string namHoc, int maKhoa, int maGVCN)
         {
-            MySqlCommand command = new MySqlCommand("UPDATE `class` SET `ClassName`=@tl,`SchoolYear`=@nh,`DeptId`=@mk,`TeacherId`=@mgv WHERE `ClassId`=@ma", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("UPDATE `class` SET `ClassName`=@tl,`SchoolYear`=@nh,`DeptId`=@mk,`TeacherId`=@mgv WHERE `ClassId`=@ma");
             command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maLop;
             command.Parameters.Add("@tl", MySqlDbType.VarChar).Value = tenLop;
             command.Parameters.Add("@nh", MySqlDbType.VarChar).Value = namHoc;
             command.Parameters.Add("@mk", MySqlDbType.Int32).Value = maKhoa;
             command.Parameters.Add("@mgv", MySqlDbType.Int32).Value = maGVCN;
-            return run(command);
+            return run(command, 1062, 1451, 1452);
         }
 
         //hàm xoá lớp, lớp còn học sinh hoặc còn trong thời khoá biểu thì không xoá được
         public bool deleteLop(int maLop)
         {
-            MySqlCommand command = new MySqlCommand("DELETE FROM `class` WHERE `ClassId`=@ma", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("DELETE FROM `class` WHERE `ClassId`=@ma");
             command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maLop;
-            return run(command);
-        }
-
-        //chạy lệnh thêm/sửa/xoá
-        private bool run(MySqlCommand command)
-        {
-            try
-            {
-                connect.openConnect();
-                return command.ExecuteNonQuery() == 1;
-            }
-            catch (MySqlException ex)
-            {
-                if (ex.Number == 1062 || ex.Number == 1451 || ex.Number == 1452)
-                    return false;
-                throw;
-            }
-            finally
-            {
-                connect.closeConnect();
-            }
-        }
-
-        //hàm chạy câu select bất kỳ
-        public DataTable getList(MySqlCommand command)
-        {
-            command.Connection = connect.getconnection;
-            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
-            DataTable table = new DataTable();
-            adapter.Fill(table);
-            return table;
+            return run(command, 1062, 1451, 1452);
         }
 
         //câu select dùng chung: lớp kèm tên khoa, tên giáo viên chủ nhiệm và số học sinh
@@ -107,11 +75,8 @@ namespace QLDiemTHPT
         //hàm đếm tổng số lớp
         public string tongLop()
         {
-            MySqlCommand command = new MySqlCommand("SELECT COUNT(*) FROM class", connect.getconnection);
-            connect.openConnect();
-            string dem = command.ExecuteScalar().ToString();
-            connect.closeConnect();
-            return dem;
+            MySqlCommand command = new MySqlCommand("SELECT COUNT(*) FROM class");
+            return tinhMotGiaTri(command);
         }
     }
 }

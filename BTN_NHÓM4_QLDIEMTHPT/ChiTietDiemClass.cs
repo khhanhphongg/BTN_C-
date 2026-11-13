@@ -15,17 +15,15 @@ namespace QLDiemTHPT
      * Sau mỗi lần thêm/sửa/xoá, hàm capNhatDiemTB tính lại điểm trung bình môn
      * theo công thức SUM(Diem * HeSo) / SUM(HeSo) rồi ghi vào bảng score.
      */
-    class ChiTietDiemClass
+    class ChiTietDiemClass : DuLieuClass
     {
-        DBconnect connect = new DBconnect();
-
         //bốn loại đầu điểm của bậc THPT, dùng để đổ vào combobox
         public static string[] cacLoaiDiem = { "Miệng", "15 phút", "1 tiết", "Thi" };
 
         //hàm thêm một đầu điểm
         public bool insertChiTiet(int maHS, string tenMon, int maHK, string loaiDiem, double diem, int heSo, string ghiChu)
         {
-            MySqlCommand command = new MySqlCommand("INSERT INTO `diem_chitiet`(`StudentId`, `CourseName`, `SemesterId`, `LoaiDiem`, `Diem`, `HeSo`, `GhiChu`) VALUES (@mhs,@tm,@mhk,@ld,@d,@hs,@gc)", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("INSERT INTO `diem_chitiet`(`StudentId`, `CourseName`, `SemesterId`, `LoaiDiem`, `Diem`, `HeSo`, `GhiChu`) VALUES (@mhs,@tm,@mhk,@ld,@d,@hs,@gc)");
             command.Parameters.Add("@mhs", MySqlDbType.Int32).Value = maHS;
             command.Parameters.Add("@tm", MySqlDbType.VarChar).Value = tenMon;
             command.Parameters.Add("@mhk", MySqlDbType.Int32).Value = maHK;
@@ -44,7 +42,7 @@ namespace QLDiemTHPT
         //hàm sửa một đầu điểm
         public bool updateChiTiet(int maCT, int maHK, string loaiDiem, double diem, int heSo, string ghiChu, int maHS, string tenMon)
         {
-            MySqlCommand command = new MySqlCommand("UPDATE `diem_chitiet` SET `SemesterId`=@mhk,`LoaiDiem`=@ld,`Diem`=@d,`HeSo`=@hs,`GhiChu`=@gc WHERE `MaCT`=@ma", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("UPDATE `diem_chitiet` SET `SemesterId`=@mhk,`LoaiDiem`=@ld,`Diem`=@d,`HeSo`=@hs,`GhiChu`=@gc WHERE `MaCT`=@ma");
             command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maCT;
             command.Parameters.Add("@mhk", MySqlDbType.Int32).Value = maHK;
             command.Parameters.Add("@ld", MySqlDbType.VarChar).Value = loaiDiem;
@@ -62,7 +60,7 @@ namespace QLDiemTHPT
         //hàm xoá một đầu điểm
         public bool deleteChiTiet(int maCT, int maHS, string tenMon)
         {
-            MySqlCommand command = new MySqlCommand("DELETE FROM `diem_chitiet` WHERE `MaCT`=@ma", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("DELETE FROM `diem_chitiet` WHERE `MaCT`=@ma");
             command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maCT;
             if (run(command))
             {
@@ -70,36 +68,6 @@ namespace QLDiemTHPT
                 return true;
             }
             return false;
-        }
-
-        //chạy lệnh thêm/sửa/xoá
-        private bool run(MySqlCommand command)
-        {
-            try
-            {
-                connect.openConnect();
-                return command.ExecuteNonQuery() == 1;
-            }
-            catch (MySqlException ex)
-            {
-                if (ex.Number == 1452)
-                    return false;
-                throw;
-            }
-            finally
-            {
-                connect.closeConnect();
-            }
-        }
-
-        //hàm chạy câu select bất kỳ
-        public DataTable getList(MySqlCommand command)
-        {
-            command.Connection = connect.getconnection;
-            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
-            DataTable table = new DataTable();
-            adapter.Fill(table);
-            return table;
         }
 
         //hàm lấy các đầu điểm của một môn của một học sinh
@@ -142,7 +110,7 @@ namespace QLDiemTHPT
                     tb = Math.Round(tb, 1);
                     hocLuc = xepLoai(tb);
                 }
-                MySqlCommand lenhGhi = new MySqlCommand("UPDATE `score` SET `Score`=@d,`Description`=@hl WHERE `StudentId`=@mhs AND `CourseName`=@tm", connect.getconnection);
+                MySqlCommand lenhGhi = ganKetNoi(new MySqlCommand("UPDATE `score` SET `Score`=@d,`Description`=@hl WHERE `StudentId`=@mhs AND `CourseName`=@tm"));
                 lenhGhi.Parameters.AddWithValue("@d", tb);
                 lenhGhi.Parameters.AddWithValue("@hl", hocLuc);
                 lenhGhi.Parameters.AddWithValue("@mhs", maHS);

@@ -13,20 +13,8 @@ namespace QLDiemTHPT
      * Hàm layDuLieuBaoCao trả về đúng cấu trúc bảng BaoCaoDiem mô tả trong
      * file BaoCaoDiem.xsd, dùng làm nguồn dữ liệu cho Crystal Report.
      */
-    class ThongKeClass
+    class ThongKeClass : DuLieuClass
     {
-        DBconnect connect = new DBconnect();
-
-        //hàm chạy câu select bất kỳ
-        public DataTable getList(MySqlCommand command)
-        {
-            command.Connection = connect.getconnection;
-            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
-            DataTable table = new DataTable();
-            adapter.Fill(table);
-            return table;
-        }
-
         //câu select chi tiết: bảng điểm kèm họ tên, lớp, khoa
         private const string SELECT_CHITIET =
             "SELECT score.StudentId, CONCAT(student.StdLastName,' ',student.StdFirstName) AS HoTen, " +
@@ -145,10 +133,7 @@ namespace QLDiemTHPT
                 "LEFT JOIN student_class ON student.StdId = student_class.StudentId";
             MySqlCommand command = taoLenhLoc(select, maLop, tenMon, hocLuc, tuDiem, denDiem, "");
             command.Connection = connect.getconnection;
-            connect.openConnect();
-            string dem = command.ExecuteScalar().ToString();
-            connect.closeConnect();
-            return dem;
+            return tinhMotGiaTri(command);
         }
 
         //hàm tính điểm trung bình chung theo điều kiện lọc
@@ -159,10 +144,7 @@ namespace QLDiemTHPT
                 "LEFT JOIN student_class ON student.StdId = student_class.StudentId";
             MySqlCommand command = taoLenhLoc(select, maLop, tenMon, hocLuc, tuDiem, denDiem, "");
             command.Connection = connect.getconnection;
-            connect.openConnect();
-            string tb = command.ExecuteScalar().ToString();
-            connect.closeConnect();
-            return tb;
+            return tinhMotGiaTri(command);
         }
 
         /*

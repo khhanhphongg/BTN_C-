@@ -15,56 +15,34 @@ namespace QLDiemTHPT
      * tự động từ các đầu điểm, nên ở form bảng điểm người dùng chỉ mở môn cho
      * học sinh chứ không nhập tay điểm trung bình.
      */
-    class BangDiemClass
+    class BangDiemClass : DuLieuClass
     {
-        DBconnect connect = new DBconnect();
-
         //hàm mở một môn cho học sinh (thêm dòng vào bảng score, điểm ban đầu là 0)
         public bool insertBangDiem(int maHS, string tenMon)
         {
-            MySqlCommand command = new MySqlCommand("INSERT INTO `score`(`StudentId`, `CourseName`, `Score`, `Description`) VALUES (@mhs,@tm,0,'Chưa có điểm')", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("INSERT INTO `score`(`StudentId`, `CourseName`, `Score`, `Description`) VALUES (@mhs,@tm,0,'Chưa có điểm')");
             command.Parameters.Add("@mhs", MySqlDbType.Int32).Value = maHS;
             command.Parameters.Add("@tm", MySqlDbType.VarChar).Value = tenMon;
-            return run(command);
+            return run(command, 1062, 1452);
         }
 
-        //hàm xoá một môn của học sinh, các đầu điểm của môn đó tự xoá theo
+        /*
+         * Hàm xoá một môn của học sinh.
+         * Bảng diem_chitiet trỏ vào student và course chứ không trỏ vào score,
+         * nên xoá một dòng score không tự xoá các đầu điểm của môn đó. Phải
+         * xoá đầu điểm trước, nếu không sẽ còn lại đầu điểm mồ côi.
+         */
         public bool deleteBangDiem(int maHS, string tenMon)
         {
-            MySqlCommand command = new MySqlCommand("DELETE FROM `score` WHERE `StudentId`=@mhs AND `CourseName`=@tm", connect.getconnection);
+            MySqlCommand xoaDauDiem = new MySqlCommand("DELETE FROM `diem_chitiet` WHERE `StudentId`=@mhs AND `CourseName`=@tm");
+            xoaDauDiem.Parameters.Add("@mhs", MySqlDbType.Int32).Value = maHS;
+            xoaDauDiem.Parameters.Add("@tm", MySqlDbType.VarChar).Value = tenMon;
+            runNhieuDong(xoaDauDiem);
+
+            MySqlCommand command = new MySqlCommand("DELETE FROM `score` WHERE `StudentId`=@mhs AND `CourseName`=@tm");
             command.Parameters.Add("@mhs", MySqlDbType.Int32).Value = maHS;
             command.Parameters.Add("@tm", MySqlDbType.VarChar).Value = tenMon;
-            return run(command);
-        }
-
-        //chạy lệnh thêm/xoá, trùng khoá chính (1062) hoặc không có học sinh/môn (1452) thì trả về false
-        private bool run(MySqlCommand command)
-        {
-            try
-            {
-                connect.openConnect();
-                return command.ExecuteNonQuery() == 1;
-            }
-            catch (MySqlException ex)
-            {
-                if (ex.Number == 1062 || ex.Number == 1452)
-                    return false;
-                throw;
-            }
-            finally
-            {
-                connect.closeConnect();
-            }
-        }
-
-        //hàm chạy câu select bất kỳ
-        public DataTable getList(MySqlCommand command)
-        {
-            command.Connection = connect.getconnection;
-            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
-            DataTable table = new DataTable();
-            adapter.Fill(table);
-            return table;
+            return run(command, 1062, 1452);
         }
 
         //câu select dùng chung: bảng điểm kèm họ tên học sinh, tên lớp và số đầu điểm
@@ -111,12 +89,9 @@ namespace QLDiemTHPT
         //hàm tính điểm trung bình tất cả các môn của một học sinh
         public string diemTBHocSinh(int maHS)
         {
-            MySqlCommand command = new MySqlCommand("SELECT IFNULL(ROUND(AVG(Score),2),0) FROM score WHERE StudentId=@mhs", connect.getconnection);
+            MySqlCommand command = new MySqlCommand("SELECT IFNULL(ROUND(AVG(Score),2),0) FROM score WHERE StudentId=@mhs");
             command.Parameters.AddWithValue("@mhs", maHS);
-            connect.openConnect();
-            string tb = command.ExecuteScalar().ToString();
-            connect.closeConnect();
-            return tb;
+            return tinhMotGiaTri(command);
         }
     }
 }
