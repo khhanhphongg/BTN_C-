@@ -1,0 +1,31 @@
+<?xml version="1.0" standalone="yes"?>
+<!--
+  Lược đồ dữ liệu cho Crystal Report (BaoCaoDiem.rpt).
+
+  Trong Visual Studio: mở BaoCaoDiem.rpt > Database Expert >
+  Create New Connection > ADO.NET (XML) > chọn đúng file này >
+  đưa bảng BaoCaoDiem sang bên phải > kéo các cột vào report.
+
+  Tên bảng và tên cột ở đây trùng khít với ThongKeClass.layDuLieuBaoCao().
+-->
+<xs:schema id="DataSetBaoCao" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="DataSetBaoCao" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="BaoCaoDiem">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="StudentId" type="xs:int" minOccurs="0" />
+              <xs:element name="HoTen" type="xs:string" minOccurs="0" />
+              <xs:element name="Lop" type="xs:string" minOccurs="0" />
+              <xs:element name="MonHoc" type="xs:string" minOccurs="0" />
+              <xs:element name="DiemTB" type="xs:double" minOccurs="0" />
+              <xs:element name="HocLuc" type="xs:string" minOccurs="0" />
+              <xs:element name="SoDauDiem" type="xs:int" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

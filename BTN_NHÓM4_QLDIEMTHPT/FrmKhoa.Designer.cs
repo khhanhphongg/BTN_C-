@@ -1,0 +1,281 @@
+namespace QLDiemTHPT
+{
+    partial class FrmKhoa
+    {
+        private System.ComponentModel.IContainer components = null;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        private void InitializeComponent()
+        {
+            this.panel_tieude = new System.Windows.Forms.Panel();
+            this.label_tieude = new System.Windows.Forms.Label();
+            this.panel_nhap = new System.Windows.Forms.Panel();
+            this.label_maKhoa = new System.Windows.Forms.Label();
+            this.textBox_maKhoa = new System.Windows.Forms.TextBox();
+            this.label_tenKhoa = new System.Windows.Forms.Label();
+            this.textBox_tenKhoa = new System.Windows.Forms.TextBox();
+            this.label_moTa = new System.Windows.Forms.Label();
+            this.textBox_moTa = new System.Windows.Forms.TextBox();
+            this.button_them = new System.Windows.Forms.Button();
+            this.button_sua = new System.Windows.Forms.Button();
+            this.button_xoa = new System.Windows.Forms.Button();
+            this.button_lamMoi = new System.Windows.Forms.Button();
+            this.textBox_timKiem = new System.Windows.Forms.TextBox();
+            this.button_timKiem = new System.Windows.Forms.Button();
+            this.DataGridView_khoa = new System.Windows.Forms.DataGridView();
+            this.panel_tieude.SuspendLayout();
+            this.panel_nhap.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_khoa)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // panel_tieude
+            // 
+            this.panel_tieude.BackColor = System.Drawing.Color.White;
+            this.panel_tieude.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel_tieude.Location = new System.Drawing.Point(0, 0);
+            this.panel_tieude.Name = "panel_tieude";
+            this.panel_tieude.Size = new System.Drawing.Size(934, 55);
+            this.panel_tieude.TabIndex = 0;
+            this.panel_tieude.Controls.Add(this.label_tieude);
+            // 
+            // label_tieude
+            // 
+            this.label_tieude.AutoSize = true;
+            this.label_tieude.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_tieude.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(71)))), ((int)(((byte)(160)))));
+            this.label_tieude.Location = new System.Drawing.Point(20, 15);
+            this.label_tieude.Name = "label_tieude";
+            this.label_tieude.Size = new System.Drawing.Size(400, 23);
+            this.label_tieude.TabIndex = 0;
+            this.label_tieude.Text = "QUẢN LÝ KHOA - TỔ BỘ MÔN";
+            // 
+            // panel_nhap
+            // 
+            this.panel_nhap.BackColor = System.Drawing.Color.White;
+            this.panel_nhap.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel_nhap.Location = new System.Drawing.Point(0, 55);
+            this.panel_nhap.Name = "panel_nhap";
+            this.panel_nhap.Size = new System.Drawing.Size(460, 558);
+            this.panel_nhap.TabIndex = 1;
+            this.panel_nhap.Controls.Add(this.label_maKhoa);
+            this.panel_nhap.Controls.Add(this.textBox_maKhoa);
+            this.panel_nhap.Controls.Add(this.label_tenKhoa);
+            this.panel_nhap.Controls.Add(this.textBox_tenKhoa);
+            this.panel_nhap.Controls.Add(this.label_moTa);
+            this.panel_nhap.Controls.Add(this.textBox_moTa);
+            this.panel_nhap.Controls.Add(this.button_them);
+            this.panel_nhap.Controls.Add(this.button_sua);
+            this.panel_nhap.Controls.Add(this.button_xoa);
+            this.panel_nhap.Controls.Add(this.button_lamMoi);
+            // 
+            // label_maKhoa
+            // 
+            this.label_maKhoa.AutoSize = true;
+            this.label_maKhoa.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(71)))), ((int)(((byte)(160)))));
+            this.label_maKhoa.Location = new System.Drawing.Point(15, 16);
+            this.label_maKhoa.Name = "label_maKhoa";
+            this.label_maKhoa.Size = new System.Drawing.Size(150, 21);
+            this.label_maKhoa.TabIndex = 0;
+            this.label_maKhoa.Text = "Mã khoa :";
+            // 
+            // textBox_maKhoa
+            // 
+            this.textBox_maKhoa.Location = new System.Drawing.Point(185, 12);
+            this.textBox_maKhoa.Name = "textBox_maKhoa";
+            this.textBox_maKhoa.Size = new System.Drawing.Size(255, 27);
+            this.textBox_maKhoa.TabIndex = 1;
+            this.textBox_maKhoa.ReadOnly = true;
+            this.textBox_maKhoa.BackColor = System.Drawing.Color.Gainsboro;
+            // 
+            // label_tenKhoa
+            // 
+            this.label_tenKhoa.AutoSize = true;
+            this.label_tenKhoa.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(71)))), ((int)(((byte)(160)))));
+            this.label_tenKhoa.Location = new System.Drawing.Point(15, 56);
+            this.label_tenKhoa.Name = "label_tenKhoa";
+            this.label_tenKhoa.Size = new System.Drawing.Size(150, 21);
+            this.label_tenKhoa.TabIndex = 0;
+            this.label_tenKhoa.Text = "Tên khoa :";
+            // 
+            // textBox_tenKhoa
+            // 
+            this.textBox_tenKhoa.Location = new System.Drawing.Point(185, 52);
+            this.textBox_tenKhoa.Name = "textBox_tenKhoa";
+            this.textBox_tenKhoa.Size = new System.Drawing.Size(255, 27);
+            this.textBox_tenKhoa.TabIndex = 2;
+            // 
+            // label_moTa
+            // 
+            this.label_moTa.AutoSize = true;
+            this.label_moTa.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(71)))), ((int)(((byte)(160)))));
+            this.label_moTa.Location = new System.Drawing.Point(15, 96);
+            this.label_moTa.Name = "label_moTa";
+            this.label_moTa.Size = new System.Drawing.Size(150, 21);
+            this.label_moTa.TabIndex = 0;
+            this.label_moTa.Text = "Mô tả :";
+            // 
+            // textBox_moTa
+            // 
+            this.textBox_moTa.Location = new System.Drawing.Point(185, 92);
+            this.textBox_moTa.Multiline = true;
+            this.textBox_moTa.Name = "textBox_moTa";
+            this.textBox_moTa.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox_moTa.Size = new System.Drawing.Size(255, 55);
+            this.textBox_moTa.TabIndex = 3;
+            // 
+            // button_them
+            // 
+            this.button_them.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(71)))), ((int)(((byte)(160)))));
+            this.button_them.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_them.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_them.ForeColor = System.Drawing.Color.White;
+            this.button_them.Location = new System.Drawing.Point(15, 168);
+            this.button_them.Name = "button_them";
+            this.button_them.Size = new System.Drawing.Size(102, 40);
+            this.button_them.TabIndex = 30;
+            this.button_them.Text = "Thêm";
+            this.button_them.UseVisualStyleBackColor = false;
+            this.button_them.Click += new System.EventHandler(this.button_them_Click);
+            // 
+            // button_sua
+            // 
+            this.button_sua.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(71)))), ((int)(((byte)(160)))));
+            this.button_sua.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_sua.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_sua.ForeColor = System.Drawing.Color.White;
+            this.button_sua.Location = new System.Drawing.Point(123, 168);
+            this.button_sua.Name = "button_sua";
+            this.button_sua.Size = new System.Drawing.Size(102, 40);
+            this.button_sua.TabIndex = 30;
+            this.button_sua.Text = "Sửa";
+            this.button_sua.UseVisualStyleBackColor = false;
+            this.button_sua.Click += new System.EventHandler(this.button_sua_Click);
+            // 
+            // button_xoa
+            // 
+            this.button_xoa.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(71)))), ((int)(((byte)(160)))));
+            this.button_xoa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_xoa.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_xoa.ForeColor = System.Drawing.Color.White;
+            this.button_xoa.Location = new System.Drawing.Point(231, 168);
+            this.button_xoa.Name = "button_xoa";
+            this.button_xoa.Size = new System.Drawing.Size(102, 40);
+            this.button_xoa.TabIndex = 30;
+            this.button_xoa.Text = "Xoá";
+            this.button_xoa.UseVisualStyleBackColor = false;
+            this.button_xoa.Click += new System.EventHandler(this.button_xoa_Click);
+            // 
+            // button_lamMoi
+            // 
+            this.button_lamMoi.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(71)))), ((int)(((byte)(160)))));
+            this.button_lamMoi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_lamMoi.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_lamMoi.ForeColor = System.Drawing.Color.White;
+            this.button_lamMoi.Location = new System.Drawing.Point(339, 168);
+            this.button_lamMoi.Name = "button_lamMoi";
+            this.button_lamMoi.Size = new System.Drawing.Size(102, 40);
+            this.button_lamMoi.TabIndex = 30;
+            this.button_lamMoi.Text = "Làm mới";
+            this.button_lamMoi.UseVisualStyleBackColor = false;
+            this.button_lamMoi.Click += new System.EventHandler(this.button_lamMoi_Click);
+            // 
+            // textBox_timKiem
+            // 
+            this.textBox_timKiem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_timKiem.Location = new System.Drawing.Point(475, 70);
+            this.textBox_timKiem.Name = "textBox_timKiem";
+            this.textBox_timKiem.Size = new System.Drawing.Size(320, 27);
+            this.textBox_timKiem.TabIndex = 40;
+            // 
+            // button_timKiem
+            // 
+            this.button_timKiem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_timKiem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(71)))), ((int)(((byte)(160)))));
+            this.button_timKiem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_timKiem.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_timKiem.ForeColor = System.Drawing.Color.White;
+            this.button_timKiem.Location = new System.Drawing.Point(805, 68);
+            this.button_timKiem.Name = "button_timKiem";
+            this.button_timKiem.Size = new System.Drawing.Size(112, 32);
+            this.button_timKiem.TabIndex = 30;
+            this.button_timKiem.Text = "Tìm kiếm";
+            this.button_timKiem.UseVisualStyleBackColor = false;
+            this.button_timKiem.Click += new System.EventHandler(this.button_timKiem_Click);
+            // 
+            // DataGridView_khoa
+            // 
+            this.DataGridView_khoa.AllowUserToAddRows = false;
+            this.DataGridView_khoa.AllowUserToDeleteRows = false;
+            this.DataGridView_khoa.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.DataGridView_khoa.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DataGridView_khoa.BackgroundColor = System.Drawing.Color.Gainsboro;
+            this.DataGridView_khoa.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.DataGridView_khoa.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.DataGridView_khoa.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            this.DataGridView_khoa.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGridView_khoa.GridColor = System.Drawing.Color.White;
+            this.DataGridView_khoa.Location = new System.Drawing.Point(475, 110);
+            this.DataGridView_khoa.MultiSelect = false;
+            this.DataGridView_khoa.Name = "DataGridView_khoa";
+            this.DataGridView_khoa.ReadOnly = true;
+            this.DataGridView_khoa.RowHeadersVisible = false;
+            this.DataGridView_khoa.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.DataGridView_khoa.Size = new System.Drawing.Size(442, 480);
+            this.DataGridView_khoa.TabIndex = 42;
+            this.DataGridView_khoa.Click += new System.EventHandler(this.DataGridView_khoa_Click);
+            // 
+            // FrmKhoa
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(934, 613);
+            this.Controls.Add(this.DataGridView_khoa);
+            this.Controls.Add(this.button_timKiem);
+            this.Controls.Add(this.textBox_timKiem);
+            this.Controls.Add(this.panel_nhap);
+            this.Controls.Add(this.panel_tieude);
+            this.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Name = "FrmKhoa";
+            this.Text = "FrmKhoa";
+            this.Load += new System.EventHandler(this.FrmKhoa_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_khoa)).EndInit();
+            this.panel_tieude.ResumeLayout(false);
+            this.panel_tieude.PerformLayout();
+            this.panel_nhap.ResumeLayout(false);
+            this.panel_nhap.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Panel panel_tieude;
+        private System.Windows.Forms.Label label_tieude;
+        private System.Windows.Forms.Panel panel_nhap;
+        private System.Windows.Forms.Label label_maKhoa;
+        private System.Windows.Forms.TextBox textBox_maKhoa;
+        private System.Windows.Forms.Label label_tenKhoa;
+        private System.Windows.Forms.TextBox textBox_tenKhoa;
+        private System.Windows.Forms.Label label_moTa;
+        private System.Windows.Forms.TextBox textBox_moTa;
+        private System.Windows.Forms.Button button_them;
+        private System.Windows.Forms.Button button_sua;
+        private System.Windows.Forms.Button button_xoa;
+        private System.Windows.Forms.Button button_lamMoi;
+        private System.Windows.Forms.TextBox textBox_timKiem;
+        private System.Windows.Forms.Button button_timKiem;
+        private System.Windows.Forms.DataGridView DataGridView_khoa;
+    }
+}

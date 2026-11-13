@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A7D3F1B2-5C48-4E67-9A1D-3B8E0C25F740}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>QLDiemTHPT</RootNamespace>
+    <AssemblyName>BTN_NHOM4_QLDIEMTHPT</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- MySQL Connector/NET: cài bằng bộ cài MySQL hoặc NuGet MySql.Data -->
+    <Reference Include="MySql.Data" />
+    <!-- SAP Crystal Reports for Visual Studio: phải cài trước khi build -->
+    <Reference Include="CrystalDecisions.CrystalReports.Engine" />
+    <Reference Include="CrystalDecisions.ReportSource" />
+    <Reference Include="CrystalDecisions.Shared" />
+    <Reference Include="CrystalDecisions.Windows.Forms" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DBconnect.cs" />
+    <Compile Include="LoginClass.cs" />
+    <Compile Include="KhoaClass.cs" />
+    <Compile Include="MonHocClass.cs" />
+    <Compile Include="PhongHocClass.cs" />
+    <Compile Include="HocKyClass.cs" />
+    <Compile Include="LopClass.cs" />
+    <Compile Include="GiaoVienClass.cs" />
+    <Compile Include="HocSinhClass.cs" />
+    <Compile Include="BangDiemClass.cs" />
+    <Compile Include="ChiTietDiemClass.cs" />
+    <Compile Include="ThoiKhoaBieuClass.cs" />
+    <Compile Include="DiemDanhClass.cs" />
+    <Compile Include="HocPhiClass.cs" />
+    <Compile Include="ThongKeClass.cs" />
+    <Compile Include="DGVPrinter.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="FrmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmLogin.Designer.cs">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmMain.Designer.cs">
+      <DependentUpon>FrmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmKhoa.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmKhoa.Designer.cs">
+      <DependentUpon>FrmKhoa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmMonHoc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmMonHoc.Designer.cs">
+      <DependentUpon>FrmMonHoc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmPhongHoc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmPhongHoc.Designer.cs">
+      <DependentUpon>FrmPhongHoc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmHocKy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmHocKy.Designer.cs">
+      <DependentUpon>FrmHocKy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmLop.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmLop.Designer.cs">
+      <DependentUpon>FrmLop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmGiaoVien.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmGiaoVien.Designer.cs">
+      <DependentUpon>FrmGiaoVien.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmHocSinh.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmHocSinh.Designer.cs">
+      <DependentUpon>FrmHocSinh.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmBangDiem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmBangDiem.Designer.cs">
+      <DependentUpon>FrmBangDiem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmChiTietDiem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmChiTietDiem.Designer.cs">
+      <DependentUpon>FrmChiTietDiem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmThoiKhoaBieu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmThoiKhoaBieu.Designer.cs">
+      <DependentUpon>FrmThoiKhoaBieu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmDiemDanh.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmDiemDanh.Designer.cs">
+      <DependentUpon>FrmDiemDanh.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmHocPhi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmHocPhi.Designer.cs">
+      <DependentUpon>FrmHocPhi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmTraCuuThongKe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmTraCuuThongKe.Designer.cs">
+      <DependentUpon>FrmTraCuuThongKe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmBaoCao.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmBaoCao.Designer.cs">
+      <DependentUpon>FrmBaoCao.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FrmLogin.resx">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmMain.resx">
+      <DependentUpon>FrmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmKhoa.resx">
+      <DependentUpon>FrmKhoa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmMonHoc.resx">
+      <DependentUpon>FrmMonHoc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmPhongHoc.resx">
+      <DependentUpon>FrmPhongHoc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmHocKy.resx">
+      <DependentUpon>FrmHocKy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmLop.resx">
+      <DependentUpon>FrmLop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmGiaoVien.resx">
+      <DependentUpon>FrmGiaoVien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmHocSinh.resx">
+      <DependentUpon>FrmHocSinh.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmBangDiem.resx">
+      <DependentUpon>FrmBangDiem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmChiTietDiem.resx">
+      <DependentUpon>FrmChiTietDiem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmThoiKhoaBieu.resx">
+      <DependentUpon>FrmThoiKhoaBieu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmDiemDanh.resx">
+      <DependentUpon>FrmDiemDanh.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmHocPhi.resx">
+      <DependentUpon>FrmHocPhi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmTraCuuThongKe.resx">
+      <DependentUpon>FrmTraCuuThongKe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmBaoCao.resx">
+      <DependentUpon>FrmBaoCao.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="BaoCaoDiem.xsd" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Resources\classroom_50coverpx.png" />
+    <None Include="Resources\classroom_50whitepx.png" />
+    <None Include="Resources\classroomblue_50px.png" />
+    <None Include="Resources\cover31.jpg" />
+    <None Include="Resources\student.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
