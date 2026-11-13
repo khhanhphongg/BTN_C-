@@ -33,14 +33,13 @@ namespace QLDiemTHPT
             hienBang();
         }
 
-        //hàm đổ danh sách lớp lên lưới
         private void hienBang()
         {
             DataGridView_lop.DataSource = lop.getAll();
             datTieuDeCot();
         }
 
-        //hàm đặt tiêu đề cột, hai cột mã để ẩn vì chỉ dùng nội bộ
+        //đặt tiêu đề cột, hai cột mã để ẩn vì chỉ dùng nội bộ
         private void datTieuDeCot()
         {
             if (DataGridView_lop.Columns.Count < 8)
@@ -55,7 +54,6 @@ namespace QLDiemTHPT
             DataGridView_lop.Columns["TeacherId"].Visible = false;
         }
 
-        //hàm kiểm tra dữ liệu bắt buộc
         private bool kiemTra()
         {
             if (textBox_tenLop.Text.Trim() == "" || textBox_namHoc.Text.Trim() == "")

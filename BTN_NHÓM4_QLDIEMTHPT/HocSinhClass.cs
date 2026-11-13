@@ -8,14 +8,10 @@ using MySql.Data.MySqlClient;
 
 namespace QLDiemTHPT
 {
-    /*
-     * Quản lý bảng student (học sinh) và bảng student_class (xếp học sinh vào lớp).
-     * Hai bảng này đi liền nhau nên để chung một class: thêm học sinh xong là
-     * xếp luôn vào lớp.
-     */
+    //Quản lý bảng student (học sinh) và bảng student_class (xếp học sinh vào lớp)
     class HocSinhClass : DuLieuClass
     {
-        //hàm thêm học sinh mới rồi xếp vào lớp, trả về mã học sinh vừa thêm (0 nếu lỗi)
+        //thêm học sinh mới rồi xếp vào lớp, trả về mã học sinh vừa thêm (0 nếu lỗi)
         public int insertHocSinh(string ho, string ten, DateTime ngaySinh, string gioiTinh, string dienThoai, string diaChi, byte[] anh, int maLop)
         {
             MySqlCommand command = ganKetNoi(new MySqlCommand("INSERT INTO `student`(`StdFirstName`, `StdLastName`, `Birthdate`, `Gender`, `Phone`, `Address`, `Photo`) VALUES (@ten,@ho,@ns,@gt,@dt,@dc,@anh)"));
@@ -32,7 +28,6 @@ namespace QLDiemTHPT
                 if (command.ExecuteNonQuery() != 1)
                     return 0;
                 int maHS = (int)command.LastInsertedId;
-                //xếp học sinh mới vào lớp
                 MySqlCommand xepLop = ganKetNoi(new MySqlCommand("INSERT INTO `student_class`(`StudentId`, `ClassId`) VALUES (@mhs,@ml)"));
                 xepLop.Parameters.AddWithValue("@mhs", maHS);
                 xepLop.Parameters.AddWithValue("@ml", maLop);
@@ -45,7 +40,7 @@ namespace QLDiemTHPT
             }
         }
 
-        //hàm sửa học sinh và đổi lớp
+        //sửa học sinh và đổi lớp
         public bool updateHocSinh(int maHS, string ho, string ten, DateTime ngaySinh, string gioiTinh, string dienThoai, string diaChi, byte[] anh, int maLop)
         {
             MySqlCommand command = ganKetNoi(new MySqlCommand("UPDATE `student` SET `StdFirstName`=@ten,`StdLastName`=@ho,`Birthdate`=@ns,`Gender`=@gt,`Phone`=@dt,`Address`=@dc,`Photo`=@anh WHERE `StdId`=@ma"));
@@ -61,8 +56,15 @@ namespace QLDiemTHPT
             {
                 connect.openConnect();
                 bool ok = command.ExecuteNonQuery() == 1;
-                //cập nhật lớp: có dòng rồi thì sửa, chưa có thì thêm
-                MySqlCommand doiLop = ganKetNoi(new MySqlCommand("INSERT INTO `student_class`(`StudentId`, `ClassId`) VALUES (@mhs,@ml) ON DUPLICATE KEY UPDATE `ClassId`=@ml"));
+                //đổi lớp: có dòng xếp lớp rồi thì sửa, chưa có thì thêm mới
+                MySqlCommand demLop = ganKetNoi(new MySqlCommand("SELECT COUNT(*) FROM `student_class` WHERE `StudentId`=@mhs"));
+                demLop.Parameters.AddWithValue("@mhs", maHS);
+                string cauLenhLop;
+                if (Convert.ToInt32(demLop.ExecuteScalar()) > 0)
+                    cauLenhLop = "UPDATE `student_class` SET `ClassId`=@ml WHERE `StudentId`=@mhs";
+                else
+                    cauLenhLop = "INSERT INTO `student_class`(`StudentId`, `ClassId`) VALUES (@mhs,@ml)";
+                MySqlCommand doiLop = ganKetNoi(new MySqlCommand(cauLenhLop));
                 doiLop.Parameters.AddWithValue("@mhs", maHS);
                 doiLop.Parameters.AddWithValue("@ml", maLop);
                 doiLop.ExecuteNonQuery();
@@ -74,7 +76,7 @@ namespace QLDiemTHPT
             }
         }
 
-        //hàm xoá học sinh, điểm và dòng xếp lớp tự xoá theo (ON DELETE CASCADE)
+        //xoá học sinh, điểm và dòng xếp lớp tự xoá theo (ON DELETE CASCADE)
         public bool deleteHocSinh(int maHS)
         {
             MySqlCommand command = ganKetNoi(new MySqlCommand("DELETE FROM `student` WHERE `StdId`=@ma"));
@@ -100,19 +102,18 @@ namespace QLDiemTHPT
             "LEFT JOIN student_class ON student.StdId = student_class.StudentId " +
             "LEFT JOIN class ON student_class.ClassId = class.ClassId";
 
-        //hàm lấy toàn bộ học sinh
         public DataTable getAll()
         {
             return getList(new MySqlCommand(SELECT_HS + " ORDER BY student.StdId"));
         }
 
-        //hàm lấy học sinh cho combobox, hiện họ tên đầy đủ
+        //lấy học sinh cho combobox, hiện họ tên đầy đủ
         public DataTable getComboBox()
         {
             return getList(new MySqlCommand("SELECT `StdId`, CONCAT(`StdLastName`,' ',`StdFirstName`) AS HoTen FROM `student` ORDER BY `StdLastName`"));
         }
 
-        //hàm lấy học sinh của một lớp, dùng cho điểm danh và nhập điểm theo lớp
+        //lấy học sinh của một lớp, dùng cho điểm danh và nhập điểm theo lớp
         public DataTable getHocSinhTheoLop(int maLop)
         {
             MySqlCommand command = new MySqlCommand("SELECT student.StdId, CONCAT(student.StdLastName,' ',student.StdFirstName) AS HoTen FROM student INNER JOIN student_class ON student.StdId = student_class.StudentId WHERE student_class.ClassId=@ml ORDER BY student.StdLastName");
@@ -120,7 +121,7 @@ namespace QLDiemTHPT
             return getList(command);
         }
 
-        //hàm tìm học sinh theo họ tên, địa chỉ, điện thoại hoặc tên lớp
+        //tìm học sinh theo họ tên, địa chỉ, điện thoại hoặc tên lớp
         public DataTable searchHocSinh(string tuKhoa)
         {
             MySqlCommand command = new MySqlCommand(SELECT_HS + " WHERE CONCAT(student.StdLastName, student.StdFirstName, student.Address, student.Phone, IFNULL(class.ClassName,'')) LIKE @s");
@@ -128,31 +129,26 @@ namespace QLDiemTHPT
             return getList(command);
         }
 
-        //hàm đếm, truyền câu lệnh count vào
         public string demHocSinh(string cauLenh)
         {
             return tinhMotGiaTri(cauLenh);
         }
 
-        //tổng số học sinh
         public string tongHocSinh()
         {
             return demHocSinh("SELECT COUNT(*) FROM student");
         }
 
-        //số học sinh nam
         public string hocSinhNam()
         {
-            return demHocSinh("SELECT COUNT(*) FROM student WHERE `Gender`='Male'");
+            return demHocSinh("SELECT COUNT(*) FROM student WHERE `Gender`='Nam'");
         }
 
-        //số học sinh nữ
         public string hocSinhNu()
         {
-            return demHocSinh("SELECT COUNT(*) FROM student WHERE `Gender`='Female'");
+            return demHocSinh("SELECT COUNT(*) FROM student WHERE `Gender`='Nữ'");
         }
 
-        //số học sinh của một lớp
         public string demTheoLop(string tenLop)
         {
             MySqlCommand command = new MySqlCommand("SELECT COUNT(*) FROM student_class INNER JOIN class ON student_class.ClassId = class.ClassId WHERE class.ClassName = @tl");

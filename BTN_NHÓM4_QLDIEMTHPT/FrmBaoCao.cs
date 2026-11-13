@@ -14,13 +14,10 @@ using CrystalDecisions.Shared;
 namespace QLDiemTHPT
 {
     /*
-     * Form xem và in báo cáo bằng Crystal Report.
-     *
-     * Dữ liệu được nạp từ ThongKeClass.layDuLieuBaoCao() rồi đưa vào report
-     * bằng SetDataSource, nên report không cần tự kết nối MySQL.
-     *
-     * File BaoCaoDiem.rpt phải được tạo trong Visual Studio (xem HUONG_DAN.md),
-     * thiết kế dựa trên lược đồ BaoCaoDiem.xsd để tên cột khớp với DataTable.
+     * Form xem và in báo cáo bằng Crystal Report. Dữ liệu lấy từ
+     * ThongKeClass.layDuLieuBaoCao() rồi đưa vào report bằng SetDataSource.
+     * File BaoCaoDiem.rpt phải tạo bằng designer của Visual Studio, xem
+     * hướng dẫn ở file HUONG_DAN.md.
      */
     public partial class FrmBaoCao : Form
     {
@@ -59,7 +56,7 @@ namespace QLDiemTHPT
                     return;
                 }
 
-                //tìm file report, ưu tiên bản nằm cạnh file chạy, không có thì lấy trong thư mục project
+                //tìm file report, ưu tiên bản nằm cạnh file chạy
                 string duongDan = timFileReport("BaoCaoDiem.rpt");
                 if (duongDan == "")
                 {
@@ -75,7 +72,7 @@ namespace QLDiemTHPT
                 report.Load(duongDan);
                 report.SetDataSource(duLieu);
 
-                //đưa các tham số tiêu đề vào report, bỏ qua nếu report chưa khai báo tham số
+                //đưa các tham số tiêu đề vào report
                 datThamSo(report, "TenLop", tenLop);
                 datThamSo(report, "TenMon", tenMon);
                 datThamSo(report, "HocLuc", hocLuc);
@@ -93,40 +90,28 @@ namespace QLDiemTHPT
             }
         }
 
-        //hàm tìm file .rpt ở các vị trí thường gặp
+        //tìm file .rpt: cạnh file chạy, không có thì tìm trong thư mục project
         private string timFileReport(string tenFile)
         {
-            string thuMucChay = Application.StartupPath;
-            string[] cacNoi = {
-                Path.Combine(thuMucChay, tenFile),
-                Path.Combine(thuMucChay, @"..\..\" + tenFile),
-                Path.Combine(thuMucChay, @"..\..\..\" + tenFile)
-            };
-            foreach (string noi in cacNoi)
-            {
-                if (File.Exists(noi))
-                    return Path.GetFullPath(noi);
-            }
+            string duongDan = Path.Combine(Application.StartupPath, tenFile);
+            if (File.Exists(duongDan))
+                return duongDan;
+            duongDan = Path.Combine(Application.StartupPath, @"..\..\" + tenFile);
+            if (File.Exists(duongDan))
+                return duongDan;
             return "";
         }
 
-        //hàm đặt một tham số cho report, report chưa có tham số đó thì bỏ qua
+        //đặt một tham số cho report, report chưa khai báo tham số đó thì bỏ qua
         private void datThamSo(ReportDocument report, string ten, string giaTri)
         {
-            try
+            foreach (ParameterFieldDefinition thamSo in report.DataDefinition.ParameterFields)
             {
-                foreach (ParameterFieldDefinition thamSo in report.DataDefinition.ParameterFields)
+                if (thamSo.ParameterFieldName == ten)
                 {
-                    if (thamSo.ParameterFieldName == ten)
-                    {
-                        report.SetParameterValue(ten, giaTri);
-                        return;
-                    }
+                    report.SetParameterValue(ten, giaTri);
+                    return;
                 }
-            }
-            catch
-            {
-                //report không khai báo tham số này thì không cần làm gì
             }
         }
     }

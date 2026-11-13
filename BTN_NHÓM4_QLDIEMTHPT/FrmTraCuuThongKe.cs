@@ -13,10 +13,9 @@ using DGVPrinterHelper;
 namespace QLDiemTHPT
 {
     /*
-     * Form tra cứu và thống kê tình hình học tập.
-     * Chọn điều kiện lọc ở trên, chọn kiểu xem ở hàng radio, bấm Tra cứu.
-     * Nút "In nhanh lưới" in đúng những gì đang thấy trên lưới.
-     * Nút "Báo cáo Crystal Report" mở FrmBaoCao với cùng điều kiện lọc.
+     * Form tra cứu và thống kê. Chọn điều kiện lọc ở trên, chọn kiểu xem ở
+     * hàng radio rồi bấm Tra cứu. Nút In nhanh lưới in đúng những gì đang
+     * thấy, nút Báo cáo mở FrmBaoCao với cùng điều kiện lọc.
      */
     public partial class FrmTraCuuThongKe : Form
     {
@@ -32,7 +31,7 @@ namespace QLDiemTHPT
 
         private void FrmTraCuuThongKe_Load(object sender, EventArgs e)
         {
-            //combobox lớp: thêm dòng "Tất cả" ở đầu bằng cách nối thêm một dòng vào DataTable
+            //combobox lớp: thêm dòng "Tất cả các lớp" vào đầu danh sách
             DataTable bangLop = lop.getComboBox();
             DataRow dongTatCa = bangLop.NewRow();
             dongTatCa["ClassId"] = 0;
@@ -42,20 +41,18 @@ namespace QLDiemTHPT
             comboBox_lop.DisplayMember = "ClassName";
             comboBox_lop.ValueMember = "ClassId";
 
-            //combobox môn học
             comboBox_mon.Items.Add("Tất cả");
             foreach (DataRow dong in monHoc.getAll().Rows)
                 comboBox_mon.Items.Add(dong["CourseName"].ToString());
             comboBox_mon.SelectedIndex = 0;
 
-            //combobox học lực
             comboBox_hocLuc.Items.AddRange(new string[] { "Tất cả", "Xuất sắc", "Giỏi", "Khá", "Trung bình", "Yếu", "Chưa có điểm" });
             comboBox_hocLuc.SelectedIndex = 0;
 
             traCuu();
         }
 
-        //hàm đọc các điều kiện lọc đang chọn trên form
+        //đọc các điều kiện lọc đang chọn trên form
         private int layMaLop()
         {
             if (comboBox_lop.SelectedValue == null)
@@ -79,7 +76,7 @@ namespace QLDiemTHPT
             return 10;
         }
 
-        //hàm chạy tra cứu theo kiểu xem đang chọn
+        //chạy tra cứu theo kiểu xem đang chọn
         private void traCuu()
         {
             int maLop = layMaLop();
@@ -115,7 +112,7 @@ namespace QLDiemTHPT
             capNhatDaiTong(ketQua.Rows.Count, maLop, mon, hocLuc, tuDiem, denDiem);
         }
 
-        //các bảng thống kê đã đặt tên cột tiếng Việt ngay trong câu SQL,
+        //các bảng thống kê đã có tên cột tiếng Việt trong câu SQL,
         //chỉ bảng tra cứu chi tiết cần đặt tiêu đề cột ở đây
         private void datTieuDeCotChiTiet()
         {
@@ -130,7 +127,7 @@ namespace QLDiemTHPT
             DataGridView_ketQua.Columns["SoDauDiem"].HeaderText = "Số đầu điểm";
         }
 
-        //hàm cập nhật dải tổng hợp màu xanh dưới cùng
+        //cập nhật dải tổng hợp dưới cùng
         private void capNhatDaiTong(int soDong, int maLop, string mon, string hocLuc, double tuDiem, double denDiem)
         {
             label_soLuot.Text = "Số lượt điểm : " + thongKe.demLuotDiem(maLop, mon, hocLuc, tuDiem, denDiem);
@@ -160,8 +157,7 @@ namespace QLDiemTHPT
                 return;
             }
             printer.Title = "TRƯỜNG THPT MDEMY - THỐNG KÊ HỌC TẬP";
-            printer.SubTitle = string.Format("Ngày in: {0:dd/MM/yyyy}", DateTime.Now);
-            printer.SubTitleFormatFlags = StringFormatFlags.LineLimit | StringFormatFlags.NoClip;
+            printer.SubTitle = "Ngày in: " + DateTime.Now.ToString("dd/MM/yyyy");
             printer.PageNumbers = true;
             printer.PageNumberInHeader = false;
             printer.PorportionalColumns = true;

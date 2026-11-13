@@ -24,7 +24,6 @@ namespace QLDiemTHPT
             hienBang();
         }
 
-        //hàm đổ danh sách phòng học lên lưới
         private void hienBang()
         {
             DataGridView_phongHoc.DataSource = phongHoc.getAll();
@@ -40,7 +39,7 @@ namespace QLDiemTHPT
             DataGridView_phongHoc.Columns["Capacity"].HeaderText = "Sức chứa";
         }
 
-        //hàm kiểm tra dữ liệu, sức chứa phải là số nguyên dương
+        //kiểm tra dữ liệu, sức chứa phải là số nguyên dương
         private bool kiemTra(out int sucChua)
         {
             sucChua = 0;

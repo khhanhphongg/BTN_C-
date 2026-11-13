@@ -24,7 +24,6 @@ namespace QLDiemTHPT
             hienBang();
         }
 
-        //hàm đổ danh sách học kỳ lên lưới
         private void hienBang()
         {
             DataGridView_hocKy.DataSource = hocKy.getAll();
@@ -41,7 +40,7 @@ namespace QLDiemTHPT
             DataGridView_hocKy.Columns["EndDate"].HeaderText = "Ngày kết thúc";
         }
 
-        //hàm kiểm tra dữ liệu, ngày kết thúc phải sau ngày bắt đầu
+        //kiểm tra dữ liệu, ngày kết thúc phải sau ngày bắt đầu
         private bool kiemTra()
         {
             if (textBox_tenHK.Text.Trim() == "")

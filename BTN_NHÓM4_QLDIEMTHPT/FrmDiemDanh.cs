@@ -31,15 +31,13 @@ namespace QLDiemTHPT
             comboBox_monHoc.DataSource = monHoc.getAll();
             comboBox_monHoc.DisplayMember = "CourseName";
             comboBox_monHoc.ValueMember = "CourseId";
-            //ba trạng thái điểm danh, hiện tiếng Việt nhưng lưu tiếng Anh vào CSDL
-            foreach (string tt in DiemDanhClass.cacTrangThai)
-                comboBox_trangThai.Items.Add(DiemDanhClass.trangThaiTiengViet(tt));
+            comboBox_trangThai.Items.AddRange(DiemDanhClass.cacTrangThai);
             comboBox_trangThai.SelectedIndex = 0;
             locHocSinh();
             hienBang();
         }
 
-        //hàm lọc học sinh theo lớp đang chọn
+        //lọc học sinh theo lớp đang chọn
         private void locHocSinh()
         {
             if (comboBox_lop.SelectedValue == null)
@@ -54,7 +52,6 @@ namespace QLDiemTHPT
             locHocSinh();
         }
 
-        //hàm đổ danh sách điểm danh lên lưới
         private void hienBang()
         {
             DataGridView_diemDanh.DataSource = diemDanh.getAll();
@@ -75,16 +72,13 @@ namespace QLDiemTHPT
             DataGridView_diemDanh.Columns["CourseId"].Visible = false;
         }
 
-        //hàm đổi trạng thái tiếng Việt đang chọn về tiếng Anh để lưu
         private string layTrangThai()
         {
-            int viTri = comboBox_trangThai.SelectedIndex;
-            if (viTri < 0)
-                viTri = 0;
-            return DiemDanhClass.cacTrangThai[viTri];
+            if (comboBox_trangThai.SelectedIndex < 0)
+                return DiemDanhClass.cacTrangThai[0];
+            return comboBox_trangThai.Text;
         }
 
-        //hàm kiểm tra dữ liệu bắt buộc
         private bool kiemTra()
         {
             if (comboBox_hocSinh.SelectedValue == null)
@@ -192,16 +186,7 @@ namespace QLDiemTHPT
             comboBox_hocSinh.SelectedValue = DataGridView_diemDanh.CurrentRow.Cells["StudentId"].Value;
             comboBox_monHoc.SelectedValue = DataGridView_diemDanh.CurrentRow.Cells["CourseId"].Value;
             dateTimePicker_ngay.Value = Convert.ToDateTime(DataGridView_diemDanh.CurrentRow.Cells["AttendDate"].Value);
-            //đổi trạng thái tiếng Anh về đúng dòng trên combobox
-            string tt = DataGridView_diemDanh.CurrentRow.Cells["Status"].Value.ToString();
-            for (int i = 0; i < DiemDanhClass.cacTrangThai.Length; i++)
-            {
-                if (DiemDanhClass.cacTrangThai[i] == tt)
-                {
-                    comboBox_trangThai.SelectedIndex = i;
-                    break;
-                }
-            }
+            comboBox_trangThai.Text = DataGridView_diemDanh.CurrentRow.Cells["Status"].Value.ToString();
         }
     }
 }

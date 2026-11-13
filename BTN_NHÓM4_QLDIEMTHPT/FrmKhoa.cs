@@ -24,14 +24,12 @@ namespace QLDiemTHPT
             hienBang();
         }
 
-        //hàm đổ danh sách khoa lên lưới
         private void hienBang()
         {
             DataGridView_khoa.DataSource = khoa.getAll();
             datTieuDeCot();
         }
 
-        //hàm đặt tiêu đề cột tiếng Việt
         private void datTieuDeCot()
         {
             if (DataGridView_khoa.Columns.Count < 3)
@@ -41,7 +39,6 @@ namespace QLDiemTHPT
             DataGridView_khoa.Columns["Description"].HeaderText = "Mô tả";
         }
 
-        //hàm kiểm tra dữ liệu bắt buộc
         private bool kiemTra()
         {
             if (textBox_tenKhoa.Text.Trim() == "")

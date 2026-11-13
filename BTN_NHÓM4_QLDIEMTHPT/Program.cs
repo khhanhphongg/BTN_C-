@@ -8,9 +8,7 @@ namespace QLDiemTHPT
 {
     static class Program
     {
-        /// <summary>
-        /// Điểm bắt đầu của chương trình: mở form đăng nhập trước.
-        /// </summary>
+        //chương trình chạy form đăng nhập trước
         [STAThread]
         static void Main()
         {

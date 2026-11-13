@@ -8,28 +8,12 @@ using MySql.Data.MySqlClient;
 
 namespace QLDiemTHPT
 {
-    //Quản lý bảng schedule (thời khoá biểu: môn nào, lớp nào, giáo viên nào, phòng nào, học kỳ nào)
+    //Quản lý bảng schedule (thời khoá biểu)
     class ThoiKhoaBieuClass : DuLieuClass
     {
-        //các thứ trong tuần, dùng để đổ vào combobox
-        public static string[] cacThu = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+        //các thứ trong tuần, lưu dạng "Thứ 2" ... "Thứ 7" để ORDER BY ra đúng thứ tự
+        public static string[] cacThu = { "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7" };
 
-        //hàm đổi tên thứ tiếng Anh trong CSDL sang tiếng Việt để hiện lên form
-        public static string thuTiengViet(string thu)
-        {
-            switch (thu)
-            {
-                case "Monday": return "Thứ hai";
-                case "Tuesday": return "Thứ ba";
-                case "Wednesday": return "Thứ tư";
-                case "Thursday": return "Thứ năm";
-                case "Friday": return "Thứ sáu";
-                case "Saturday": return "Thứ bảy";
-                default: return thu;
-            }
-        }
-
-        //hàm thêm một tiết vào thời khoá biểu
         public bool insertTiet(int maMon, int maLop, int maGV, int maPhong, int maHK, string thu, TimeSpan batDau, TimeSpan ketThuc)
         {
             MySqlCommand command = new MySqlCommand("INSERT INTO `schedule`(`CourseId`, `ClassId`, `TeacherId`, `RoomId`, `SemesterId`, `DayOfWeek`, `StartTime`, `EndTime`) VALUES (@mm,@ml,@mgv,@mp,@mhk,@thu,@bd,@kt)");
@@ -41,10 +25,9 @@ namespace QLDiemTHPT
             command.Parameters.Add("@thu", MySqlDbType.VarChar).Value = thu;
             command.Parameters.Add("@bd", MySqlDbType.Time).Value = batDau;
             command.Parameters.Add("@kt", MySqlDbType.Time).Value = ketThuc;
-            return run(command, 1452);
+            return run(command);
         }
 
-        //hàm sửa một tiết
         public bool updateTiet(int maTiet, int maMon, int maLop, int maGV, int maPhong, int maHK, string thu, TimeSpan batDau, TimeSpan ketThuc)
         {
             MySqlCommand command = new MySqlCommand("UPDATE `schedule` SET `CourseId`=@mm,`ClassId`=@ml,`TeacherId`=@mgv,`RoomId`=@mp,`SemesterId`=@mhk,`DayOfWeek`=@thu,`StartTime`=@bd,`EndTime`=@kt WHERE `ScheduleId`=@ma");
@@ -57,15 +40,14 @@ namespace QLDiemTHPT
             command.Parameters.Add("@thu", MySqlDbType.VarChar).Value = thu;
             command.Parameters.Add("@bd", MySqlDbType.Time).Value = batDau;
             command.Parameters.Add("@kt", MySqlDbType.Time).Value = ketThuc;
-            return run(command, 1452);
+            return run(command);
         }
 
-        //hàm xoá một tiết
         public bool deleteTiet(int maTiet)
         {
             MySqlCommand command = new MySqlCommand("DELETE FROM `schedule` WHERE `ScheduleId`=@ma");
             command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maTiet;
-            return run(command, 1452);
+            return run(command);
         }
 
         //câu select dùng chung: nối 5 bảng để hiện tên thay vì mã
@@ -80,13 +62,12 @@ namespace QLDiemTHPT
             "INNER JOIN room ON schedule.RoomId = room.RoomId " +
             "INNER JOIN semester ON schedule.SemesterId = semester.SemesterId";
 
-        //hàm lấy toàn bộ thời khoá biểu
         public DataTable getAll()
         {
-            return getList(new MySqlCommand(SELECT_TKB + " ORDER BY schedule.SemesterId, FIELD(schedule.`DayOfWeek`,'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'), schedule.StartTime"));
+            return getList(new MySqlCommand(SELECT_TKB + " ORDER BY schedule.SemesterId, schedule.`DayOfWeek`, schedule.StartTime"));
         }
 
-        //hàm tìm theo tên môn, tên lớp, giáo viên hoặc phòng
+        //tìm theo tên môn, tên lớp, giáo viên hoặc phòng
         public DataTable searchTKB(string tuKhoa)
         {
             MySqlCommand command = new MySqlCommand(SELECT_TKB + " WHERE CONCAT(course.CourseName, class.ClassName, teacher.TeacherName, room.RoomName, semester.SemesterName) LIKE @s");
@@ -95,9 +76,9 @@ namespace QLDiemTHPT
         }
 
         /*
-         * Hàm kiểm tra trùng lịch: cùng học kỳ, cùng thứ, giờ bị chồng nhau mà
-         * lại trùng phòng hoặc trùng giáo viên thì không cho lưu.
-         * maTietBoQua dùng khi sửa, để không so chính dòng đang sửa với nó.
+         * Kiểm tra trùng lịch: cùng học kỳ, cùng thứ, giờ chồng nhau mà lại
+         * trùng phòng hoặc trùng giáo viên thì không cho lưu. Tham số
+         * maTietBoQua dùng khi sửa, để không so dòng đang sửa với chính nó.
          */
         public string kiemTraTrungLich(int maPhong, int maGV, int maHK, string thu, TimeSpan batDau, TimeSpan ketThuc, int maTietBoQua)
         {
@@ -125,7 +106,6 @@ namespace QLDiemTHPT
             return "Giáo viên " + dong["TeacherName"].ToString() + " đã có tiết dạy vào giờ này";
         }
 
-        //hàm đếm tổng số tiết trong thời khoá biểu
         public string tongTiet()
         {
             MySqlCommand command = new MySqlCommand("SELECT COUNT(*) FROM schedule");

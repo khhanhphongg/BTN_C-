@@ -22,14 +22,12 @@ namespace QLDiemTHPT
 
         private void FrmGiaoVien_Load(object sender, EventArgs e)
         {
-            //đổ khoa vào combobox
             comboBox_khoa.DataSource = khoa.getAll();
             comboBox_khoa.DisplayMember = "DeptName";
             comboBox_khoa.ValueMember = "DeptId";
             hienBang();
         }
 
-        //hàm đổ danh sách giáo viên lên lưới
         private void hienBang()
         {
             DataGridView_giaoVien.DataSource = giaoVien.getAll();
@@ -48,7 +46,7 @@ namespace QLDiemTHPT
             DataGridView_giaoVien.Columns["DeptId"].Visible = false;
         }
 
-        //hàm kiểm tra dữ liệu, email phải có dấu @
+        //kiểm tra dữ liệu, email phải có dấu @
         private bool kiemTra()
         {
             if (textBox_hoTen.Text.Trim() == "")

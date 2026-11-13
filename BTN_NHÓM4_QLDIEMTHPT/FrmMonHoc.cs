@@ -24,14 +24,12 @@ namespace QLDiemTHPT
             hienBang();
         }
 
-        //hàm đổ danh sách môn học lên lưới
         private void hienBang()
         {
             DataGridView_monHoc.DataSource = monHoc.getAll();
             datTieuDeCot();
         }
 
-        //hàm đặt tiêu đề cột tiếng Việt
         private void datTieuDeCot()
         {
             if (DataGridView_monHoc.Columns.Count < 4)
@@ -42,7 +40,7 @@ namespace QLDiemTHPT
             DataGridView_monHoc.Columns["Description"].HeaderText = "Mô tả";
         }
 
-        //hàm kiểm tra dữ liệu, số tiết phải là số nguyên dương
+        //kiểm tra dữ liệu, số tiết phải là số nguyên dương
         private bool kiemTra(out int soTiet)
         {
             soTiet = 0;

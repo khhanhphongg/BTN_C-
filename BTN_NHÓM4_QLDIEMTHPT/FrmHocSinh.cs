@@ -23,21 +23,19 @@ namespace QLDiemTHPT
 
         private void FrmHocSinh_Load(object sender, EventArgs e)
         {
-            //đổ danh sách lớp vào combobox để xếp lớp cho học sinh
             comboBox_lop.DataSource = lop.getComboBox();
             comboBox_lop.DisplayMember = "ClassName";
             comboBox_lop.ValueMember = "ClassId";
             hienBang();
         }
 
-        //hàm đổ danh sách học sinh lên lưới
         private void hienBang()
         {
             DataGridView_hocSinh.DataSource = hocSinh.getAll();
             datTieuDeCot();
         }
 
-        //hàm đặt tiêu đề cột và cho cột ảnh hiện vừa khung
+        //đặt tiêu đề cột và cho cột ảnh hiện vừa khung
         private void datTieuDeCot()
         {
             if (DataGridView_hocSinh.Columns.Count < 10)
@@ -56,7 +54,6 @@ namespace QLDiemTHPT
             cotAnh.ImageLayout = DataGridViewImageCellLayout.Zoom;
         }
 
-        //hàm chọn ảnh từ máy
         private void button_chonAnh_Click(object sender, EventArgs e)
         {
             OpenFileDialog opf = new OpenFileDialog();
@@ -65,7 +62,7 @@ namespace QLDiemTHPT
                 pictureBox_anh.Image = Image.FromFile(opf.FileName);
         }
 
-        //hàm kiểm tra dữ liệu, tuổi học sinh THPT phải từ 10 đến 25
+        //kiểm tra dữ liệu, tuổi học sinh THPT phải từ 10 đến 25
         private bool kiemTra()
         {
             if (textBox_ho.Text.Trim() == "" || textBox_ten.Text.Trim() == "")
@@ -97,7 +94,7 @@ namespace QLDiemTHPT
             return true;
         }
 
-        //hàm đổi ảnh trong PictureBox thành mảng byte để lưu vào cột LONGBLOB
+        //đổi ảnh trong PictureBox thành mảng byte để lưu vào cột LONGBLOB
         private byte[] layAnh()
         {
             MemoryStream ms = new MemoryStream();
@@ -105,10 +102,11 @@ namespace QLDiemTHPT
             return ms.ToArray();
         }
 
-        //CSDL đang lưu giới tính là Male/Female nên giữ nguyên để không lệch dữ liệu cũ
         private string layGioiTinh()
         {
-            return radioButton_nam.Checked ? "Male" : "Female";
+            if (radioButton_nam.Checked)
+                return "Nam";
+            return "Nữ";
         }
 
         private void button_them_Click(object sender, EventArgs e)
@@ -218,7 +216,7 @@ namespace QLDiemTHPT
             textBox_ho.Text = DataGridView_hocSinh.CurrentRow.Cells["StdLastName"].Value.ToString();
             textBox_ten.Text = DataGridView_hocSinh.CurrentRow.Cells["StdFirstName"].Value.ToString();
             dateTimePicker_ns.Value = Convert.ToDateTime(DataGridView_hocSinh.CurrentRow.Cells["Birthdate"].Value);
-            if (DataGridView_hocSinh.CurrentRow.Cells["Gender"].Value.ToString() == "Male")
+            if (DataGridView_hocSinh.CurrentRow.Cells["Gender"].Value.ToString() == "Nam")
                 radioButton_nam.Checked = true;
             else
                 radioButton_nu.Checked = true;

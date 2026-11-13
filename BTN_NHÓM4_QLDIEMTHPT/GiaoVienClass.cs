@@ -11,7 +11,6 @@ namespace QLDiemTHPT
     //Quản lý bảng teacher (giáo viên, thuộc một khoa)
     class GiaoVienClass : DuLieuClass
     {
-        //hàm thêm giáo viên mới
         public bool insertGiaoVien(string hoTen, string dienThoai, string email, int maKhoa)
         {
             MySqlCommand command = new MySqlCommand("INSERT INTO `teacher`(`TeacherName`, `Phone`, `Email`, `DeptId`) VALUES (@ht,@dt,@em,@mk)");
@@ -19,10 +18,9 @@ namespace QLDiemTHPT
             command.Parameters.Add("@dt", MySqlDbType.VarChar).Value = dienThoai;
             command.Parameters.Add("@em", MySqlDbType.VarChar).Value = email;
             command.Parameters.Add("@mk", MySqlDbType.Int32).Value = maKhoa;
-            return run(command, 1451, 1452);
+            return run(command);
         }
 
-        //hàm sửa giáo viên
         public bool updateGiaoVien(int maGV, string hoTen, string dienThoai, string email, int maKhoa)
         {
             MySqlCommand command = new MySqlCommand("UPDATE `teacher` SET `TeacherName`=@ht,`Phone`=@dt,`Email`=@em,`DeptId`=@mk WHERE `TeacherId`=@ma");
@@ -31,15 +29,15 @@ namespace QLDiemTHPT
             command.Parameters.Add("@dt", MySqlDbType.VarChar).Value = dienThoai;
             command.Parameters.Add("@em", MySqlDbType.VarChar).Value = email;
             command.Parameters.Add("@mk", MySqlDbType.Int32).Value = maKhoa;
-            return run(command, 1451, 1452);
+            return run(command);
         }
 
-        //hàm xoá giáo viên, giáo viên đang chủ nhiệm lớp hoặc có trong thời khoá biểu thì không xoá được
+        //xoá giáo viên, giáo viên đang chủ nhiệm lớp hoặc có trong thời khoá biểu thì không xoá được
         public bool deleteGiaoVien(int maGV)
         {
             MySqlCommand command = new MySqlCommand("DELETE FROM `teacher` WHERE `TeacherId`=@ma");
             command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maGV;
-            return run(command, 1451, 1452);
+            return run(command);
         }
 
         //câu select dùng chung: giáo viên kèm tên khoa
@@ -48,19 +46,17 @@ namespace QLDiemTHPT
             "department.DeptName, teacher.DeptId " +
             "FROM teacher INNER JOIN department ON teacher.DeptId = department.DeptId";
 
-        //hàm lấy toàn bộ giáo viên
         public DataTable getAll()
         {
             return getList(new MySqlCommand(SELECT_GV + " ORDER BY teacher.TeacherId"));
         }
 
-        //hàm lấy giáo viên cho combobox
         public DataTable getComboBox()
         {
             return getList(new MySqlCommand("SELECT `TeacherId`,`TeacherName` FROM `teacher` ORDER BY `TeacherName`"));
         }
 
-        //hàm tìm giáo viên theo tên, điện thoại, email hoặc khoa
+        //tìm giáo viên theo tên, điện thoại, email hoặc khoa
         public DataTable searchGiaoVien(string tuKhoa)
         {
             MySqlCommand command = new MySqlCommand(SELECT_GV + " WHERE CONCAT(teacher.TeacherName, teacher.Phone, teacher.Email, department.DeptName) LIKE @s");
@@ -68,14 +64,12 @@ namespace QLDiemTHPT
             return getList(command);
         }
 
-        //hàm đếm tổng số giáo viên
         public string tongGiaoVien()
         {
             MySqlCommand command = new MySqlCommand("SELECT COUNT(*) FROM teacher");
             return tinhMotGiaTri(command);
         }
 
-        //hàm đếm số giáo viên của một khoa
         public string demTheoKhoa(string tenKhoa)
         {
             MySqlCommand command = new MySqlCommand("SELECT COUNT(*) FROM teacher INNER JOIN department ON teacher.DeptId = department.DeptId WHERE department.DeptName = @tk");

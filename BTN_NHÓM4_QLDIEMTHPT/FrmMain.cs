@@ -37,13 +37,12 @@ namespace QLDiemTHPT
             label_user.Text = hoTenNguoiDung;
             label_role.Text = vaiTroNguoiDung;
             demSoLieu();
-            //đổ danh sách lớp vào combobox trên trang chủ
             comboBox_lop.DataSource = lop.getComboBox();
             comboBox_lop.DisplayMember = "ClassName";
             comboBox_lop.ValueMember = "ClassName";
         }
 
-        //hàm đếm và hiện các số liệu tổng quan trên trang chủ
+        //đếm và hiện các số liệu tổng quan trên trang chủ
         private void demSoLieu()
         {
             label_tongHS.Text = "Tổng học sinh : " + hocSinh.tongHocSinh();
@@ -68,8 +67,6 @@ namespace QLDiemTHPT
             if (dong != null)
                 label_lopDiem.Text = "Điểm TB lớp : " + thongKe.diemTBChung(Convert.ToInt32(dong["ClassId"]), "", "", 0, 10);
         }
-
-        // ================== menu trượt ==================
 
         //ẩn hết các submenu khi mới mở form
         private void anHetSubmenu()
@@ -112,8 +109,7 @@ namespace QLDiemTHPT
             moSubmenu(panel_khacSubmenu);
         }
 
-        // ================== mở form con ==================
-
+        //mở form con trong panel giữa, mỗi lần chỉ mở một form
         private Form formDangMo = null;
         private void moFormCon(Form formCon)
         {

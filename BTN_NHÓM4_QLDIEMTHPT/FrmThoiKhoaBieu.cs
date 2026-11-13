@@ -26,7 +26,6 @@ namespace QLDiemTHPT
 
         private void FrmThoiKhoaBieu_Load(object sender, EventArgs e)
         {
-            //đổ năm combobox khoá ngoại
             comboBox_monHoc.DataSource = monHoc.getAll();
             comboBox_monHoc.DisplayMember = "CourseName";
             comboBox_monHoc.ValueMember = "CourseId";
@@ -42,9 +41,7 @@ namespace QLDiemTHPT
             comboBox_hocKy.DataSource = hocKy.getAll();
             comboBox_hocKy.DisplayMember = "SemesterName";
             comboBox_hocKy.ValueMember = "SemesterId";
-            //các thứ trong tuần, hiện tiếng Việt nhưng lưu tiếng Anh vào CSDL
-            foreach (string thu in ThoiKhoaBieuClass.cacThu)
-                comboBox_thu.Items.Add(ThoiKhoaBieuClass.thuTiengViet(thu));
+            comboBox_thu.Items.AddRange(ThoiKhoaBieuClass.cacThu);
             comboBox_thu.SelectedIndex = 0;
             //giờ mặc định của một tiết đôi
             dateTimePicker_batDau.Value = DateTime.Today.AddHours(7).AddMinutes(30);
@@ -52,14 +49,13 @@ namespace QLDiemTHPT
             hienBang();
         }
 
-        //hàm đổ thời khoá biểu lên lưới
         private void hienBang()
         {
             DataGridView_tkb.DataSource = tkb.getAll();
             datTieuDeCot();
         }
 
-        //hàm đặt tiêu đề cột, các cột mã để ẩn vì chỉ dùng nội bộ
+        //đặt tiêu đề cột, các cột mã để ẩn vì chỉ dùng nội bộ
         private void datTieuDeCot()
         {
             if (DataGridView_tkb.Columns.Count < 14)
@@ -80,16 +76,14 @@ namespace QLDiemTHPT
             DataGridView_tkb.Columns["SemesterId"].Visible = false;
         }
 
-        //hàm đổi thứ tiếng Việt đang chọn trên combobox về tiếng Anh để lưu
         private string layThu()
         {
-            int viTri = comboBox_thu.SelectedIndex;
-            if (viTri < 0)
-                viTri = 0;
-            return ThoiKhoaBieuClass.cacThu[viTri];
+            if (comboBox_thu.SelectedIndex < 0)
+                return ThoiKhoaBieuClass.cacThu[0];
+            return comboBox_thu.Text;
         }
 
-        //hàm kiểm tra dữ liệu và kiểm tra trùng lịch
+        //kiểm tra dữ liệu và kiểm tra trùng lịch
         private bool kiemTra(int maTietBoQua)
         {
             if (comboBox_monHoc.SelectedValue == null || comboBox_lop.SelectedValue == null ||
@@ -207,16 +201,7 @@ namespace QLDiemTHPT
             comboBox_giaoVien.SelectedValue = DataGridView_tkb.CurrentRow.Cells["TeacherId"].Value;
             comboBox_phongHoc.SelectedValue = DataGridView_tkb.CurrentRow.Cells["RoomId"].Value;
             comboBox_hocKy.SelectedValue = DataGridView_tkb.CurrentRow.Cells["SemesterId"].Value;
-            //đổi thứ tiếng Anh trong CSDL về đúng dòng trên combobox
-            string thu = DataGridView_tkb.CurrentRow.Cells["DayOfWeek"].Value.ToString();
-            for (int i = 0; i < ThoiKhoaBieuClass.cacThu.Length; i++)
-            {
-                if (ThoiKhoaBieuClass.cacThu[i] == thu)
-                {
-                    comboBox_thu.SelectedIndex = i;
-                    break;
-                }
-            }
+            comboBox_thu.Text = DataGridView_tkb.CurrentRow.Cells["DayOfWeek"].Value.ToString();
             TimeSpan gioBatDau = (TimeSpan)DataGridView_tkb.CurrentRow.Cells["StartTime"].Value;
             TimeSpan gioKetThuc = (TimeSpan)DataGridView_tkb.CurrentRow.Cells["EndTime"].Value;
             dateTimePicker_batDau.Value = DateTime.Today.Add(gioBatDau);

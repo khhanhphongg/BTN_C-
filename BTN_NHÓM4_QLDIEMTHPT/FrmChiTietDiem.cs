@@ -12,10 +12,9 @@ using MySql.Data.MySqlClient;
 namespace QLDiemTHPT
 {
     /*
-     * Form này quản lý phần CHI TIẾT của bảng điểm: các đầu điểm của một môn.
-     * Cách dùng: bước 1 chọn môn của học sinh ở lưới trên, bước 2 thêm/sửa/xoá
-     * các đầu điểm ở lưới dưới. Sau mỗi lần lưu, điểm trung bình môn được tính
-     * lại và ghi vào bảng score.
+     * Form nhập các đầu điểm của một môn.
+     * Bước 1 chọn môn của học sinh ở lưới trên, bước 2 thêm/sửa/xoá đầu điểm
+     * ở lưới dưới. Mỗi lần lưu, điểm trung bình môn được tính lại.
      */
     public partial class FrmChiTietDiem : Form
     {
@@ -34,14 +33,11 @@ namespace QLDiemTHPT
 
         private void FrmChiTietDiem_Load(object sender, EventArgs e)
         {
-            //đổ học kỳ vào combobox
             comboBox_hocKy.DataSource = hocKy.getAll();
             comboBox_hocKy.DisplayMember = "SemesterName";
             comboBox_hocKy.ValueMember = "SemesterId";
-            //bốn loại đầu điểm
             comboBox_loaiDiem.Items.AddRange(ChiTietDiemClass.cacLoaiDiem);
             comboBox_loaiDiem.SelectedIndex = 0;
-            //hệ số từ 1 đến 3
             comboBox_heSo.Items.Add("1");
             comboBox_heSo.Items.Add("2");
             comboBox_heSo.Items.Add("3");
@@ -49,7 +45,7 @@ namespace QLDiemTHPT
             hienBangDiem();
         }
 
-        //hàm đổ bảng điểm lên lưới trên
+        //đổ bảng điểm lên lưới trên
         private void hienBangDiem()
         {
             DataGridView_bangDiem.DataSource = bangDiem.getAll();
@@ -65,7 +61,7 @@ namespace QLDiemTHPT
             }
         }
 
-        //hàm đổ các đầu điểm của môn đang chọn lên lưới dưới
+        //đổ các đầu điểm của môn đang chọn lên lưới dưới
         private void hienChiTiet()
         {
             if (maHSDangChon == 0)
@@ -109,7 +105,7 @@ namespace QLDiemTHPT
             textBox_ghiChu.Text = DataGridView_chiTiet.CurrentRow.Cells["GhiChu"].Value.ToString();
         }
 
-        //hàm kiểm tra: phải chọn môn trước, điểm phải từ 0 đến 10
+        //kiểm tra: phải chọn môn trước, điểm phải từ 0 đến 10
         private bool kiemTra(out double diem, out int heSo)
         {
             diem = 0;
@@ -137,7 +133,7 @@ namespace QLDiemTHPT
             return true;
         }
 
-        //hàm hiện điểm trung bình môn sau khi lưu
+        //hiện điểm trung bình môn sau khi lưu
         private void baoDiemTB()
         {
             double tb = chiTiet.tinhTrungBinh(maHSDangChon, monDangChon);

@@ -8,11 +8,7 @@ using MySql.Data.MySqlClient;
 
 namespace QLDiemTHPT
 {
-    /*
-     * Lớp này chứa các câu truy vấn tra cứu và thống kê tình hình học tập.
-     * Hàm layDuLieuBaoCao trả về đúng cấu trúc bảng BaoCaoDiem mô tả trong
-     * file BaoCaoDiem.xsd, dùng làm nguồn dữ liệu cho Crystal Report.
-     */
+    //Các câu truy vấn tra cứu và thống kê tình hình học tập
     class ThongKeClass : DuLieuClass
     {
         //câu select chi tiết: bảng điểm kèm họ tên, lớp, khoa
@@ -27,11 +23,9 @@ namespace QLDiemTHPT
             "LEFT JOIN class ON student_class.ClassId = class.ClassId";
 
         /*
-         * Hàm ghép điều kiện lọc dùng chung cho mọi thống kê:
-         *   maLop = 0      -> tất cả các lớp
-         *   tenMon rỗng    -> tất cả các môn
-         *   hocLuc rỗng    -> tất cả học lực
-         *   luôn lọc theo khoảng điểm tuDiem..denDiem
+         * Ghép điều kiện lọc dùng chung cho các hàm thống kê bên dưới.
+         * maLop = 0 là lấy tất cả các lớp, tenMon và hocLuc để rỗng hoặc
+         * để "Tất cả" thì không lọc theo môn, theo học lực.
          */
         private MySqlCommand taoLenhLoc(string select, int maLop, string tenMon, string hocLuc, double tuDiem, double denDiem, string phanCuoi)
         {
@@ -125,32 +119,27 @@ namespace QLDiemTHPT
             return getList(taoLenhLoc(select, maLop, tenMon, hocLuc, tuDiem, denDiem, " GROUP BY student.StdId, student.StdLastName, student.StdFirstName, class.ClassName ORDER BY `Điểm TB` DESC"));
         }
 
-        //hàm đếm số lượt điểm theo điều kiện lọc
+        //đếm số lượt điểm theo điều kiện lọc
         public string demLuotDiem(int maLop, string tenMon, string hocLuc, double tuDiem, double denDiem)
         {
             string select = "SELECT COUNT(*) FROM score " +
                 "INNER JOIN student ON score.StudentId = student.StdId " +
                 "LEFT JOIN student_class ON student.StdId = student_class.StudentId";
-            MySqlCommand command = taoLenhLoc(select, maLop, tenMon, hocLuc, tuDiem, denDiem, "");
-            command.Connection = connect.getconnection;
-            return tinhMotGiaTri(command);
+            return tinhMotGiaTri(taoLenhLoc(select, maLop, tenMon, hocLuc, tuDiem, denDiem, ""));
         }
 
-        //hàm tính điểm trung bình chung theo điều kiện lọc
+        //tính điểm trung bình chung theo điều kiện lọc
         public string diemTBChung(int maLop, string tenMon, string hocLuc, double tuDiem, double denDiem)
         {
             string select = "SELECT IFNULL(ROUND(AVG(score.Score),2),0) FROM score " +
                 "INNER JOIN student ON score.StudentId = student.StdId " +
                 "LEFT JOIN student_class ON student.StdId = student_class.StudentId";
-            MySqlCommand command = taoLenhLoc(select, maLop, tenMon, hocLuc, tuDiem, denDiem, "");
-            command.Connection = connect.getconnection;
-            return tinhMotGiaTri(command);
+            return tinhMotGiaTri(taoLenhLoc(select, maLop, tenMon, hocLuc, tuDiem, denDiem, ""));
         }
 
         /*
-         * Hàm lấy dữ liệu cho Crystal Report.
-         * Tên bảng và tên cột phải trùng khít với file BaoCaoDiem.xsd,
-         * nếu đổi ở đây thì phải đổi cả trong file xsd và thiết kế lại report.
+         * Lấy dữ liệu nguồn cho Crystal Report. Tên bảng và tên cột phải
+         * khớp với file BaoCaoDiem.xsd dùng khi thiết kế report.
          */
         public DataTable layDuLieuBaoCao(int maLop, string tenMon, string hocLuc, double tuDiem, double denDiem)
         {

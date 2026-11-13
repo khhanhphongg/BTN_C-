@@ -29,14 +29,11 @@ namespace QLDiemTHPT
             comboBox_hocKy.DataSource = hocKy.getAll();
             comboBox_hocKy.DisplayMember = "SemesterName";
             comboBox_hocKy.ValueMember = "SemesterId";
-            //hai trạng thái học phí, hiện tiếng Việt nhưng lưu tiếng Anh vào CSDL
-            foreach (string tt in HocPhiClass.cacTrangThai)
-                comboBox_trangThai.Items.Add(HocPhiClass.trangThaiTiengViet(tt));
+            comboBox_trangThai.Items.AddRange(HocPhiClass.cacTrangThai);
             comboBox_trangThai.SelectedIndex = 0;
             hienBang();
         }
 
-        //hàm đổ danh sách học phí lên lưới
         private void hienBang()
         {
             DataGridView_hocPhi.DataSource = hocPhi.getAll();
@@ -60,24 +57,22 @@ namespace QLDiemTHPT
             DataGridView_hocPhi.Columns["Amount"].DefaultCellStyle.Format = "N0";
         }
 
-        //hàm đổi trạng thái tiếng Việt đang chọn về tiếng Anh để lưu
         private string layTrangThai()
         {
-            int viTri = comboBox_trangThai.SelectedIndex;
-            if (viTri < 0)
-                viTri = 0;
-            return HocPhiClass.cacTrangThai[viTri];
+            if (comboBox_trangThai.SelectedIndex < 0)
+                return HocPhiClass.cacTrangThai[0];
+            return comboBox_trangThai.Text;
         }
 
         //chưa đóng thì không lưu ngày đóng
         private DateTime? layNgayDong()
         {
-            if (layTrangThai() == "Paid")
+            if (layTrangThai() == "Đã đóng")
                 return dateTimePicker_ngayDong.Value;
             return null;
         }
 
-        //hàm kiểm tra dữ liệu, số tiền phải là số không âm
+        //kiểm tra dữ liệu, số tiền phải là số không âm
         private bool kiemTra(out int soTien)
         {
             soTien = 0;
@@ -183,15 +178,7 @@ namespace QLDiemTHPT
             //chưa đóng thì cột ngày đóng là null
             if (DataGridView_hocPhi.CurrentRow.Cells["PaidDate"].Value != DBNull.Value)
                 dateTimePicker_ngayDong.Value = Convert.ToDateTime(DataGridView_hocPhi.CurrentRow.Cells["PaidDate"].Value);
-            string tt = DataGridView_hocPhi.CurrentRow.Cells["Status"].Value.ToString();
-            for (int i = 0; i < HocPhiClass.cacTrangThai.Length; i++)
-            {
-                if (HocPhiClass.cacTrangThai[i] == tt)
-                {
-                    comboBox_trangThai.SelectedIndex = i;
-                    break;
-                }
-            }
+            comboBox_trangThai.Text = DataGridView_hocPhi.CurrentRow.Cells["Status"].Value.ToString();
         }
     }
 }

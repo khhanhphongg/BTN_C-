@@ -11,7 +11,6 @@ namespace QLDiemTHPT
     //Quản lý bảng class (lớp học, thuộc một khoa và có một giáo viên chủ nhiệm)
     class LopClass : DuLieuClass
     {
-        //hàm thêm lớp mới
         public bool insertLop(string tenLop, string namHoc, int maKhoa, int maGVCN)
         {
             MySqlCommand command = new MySqlCommand("INSERT INTO `class`(`ClassName`, `SchoolYear`, `DeptId`, `TeacherId`) VALUES (@tl,@nh,@mk,@mgv)");
@@ -19,10 +18,9 @@ namespace QLDiemTHPT
             command.Parameters.Add("@nh", MySqlDbType.VarChar).Value = namHoc;
             command.Parameters.Add("@mk", MySqlDbType.Int32).Value = maKhoa;
             command.Parameters.Add("@mgv", MySqlDbType.Int32).Value = maGVCN;
-            return run(command, 1062, 1451, 1452);
+            return run(command);
         }
 
-        //hàm sửa lớp
         public bool updateLop(int maLop, string tenLop, string namHoc, int maKhoa, int maGVCN)
         {
             MySqlCommand command = new MySqlCommand("UPDATE `class` SET `ClassName`=@tl,`SchoolYear`=@nh,`DeptId`=@mk,`TeacherId`=@mgv WHERE `ClassId`=@ma");
@@ -31,15 +29,15 @@ namespace QLDiemTHPT
             command.Parameters.Add("@nh", MySqlDbType.VarChar).Value = namHoc;
             command.Parameters.Add("@mk", MySqlDbType.Int32).Value = maKhoa;
             command.Parameters.Add("@mgv", MySqlDbType.Int32).Value = maGVCN;
-            return run(command, 1062, 1451, 1452);
+            return run(command);
         }
 
-        //hàm xoá lớp, lớp còn học sinh hoặc còn trong thời khoá biểu thì không xoá được
+        //xoá lớp, lớp còn học sinh hoặc còn trong thời khoá biểu thì không xoá được
         public bool deleteLop(int maLop)
         {
             MySqlCommand command = new MySqlCommand("DELETE FROM `class` WHERE `ClassId`=@ma");
             command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maLop;
-            return run(command, 1062, 1451, 1452);
+            return run(command);
         }
 
         //câu select dùng chung: lớp kèm tên khoa, tên giáo viên chủ nhiệm và số học sinh
@@ -52,19 +50,18 @@ namespace QLDiemTHPT
             "INNER JOIN department ON class.DeptId = department.DeptId " +
             "LEFT JOIN teacher ON class.TeacherId = teacher.TeacherId";
 
-        //hàm lấy toàn bộ lớp
         public DataTable getAll()
         {
             return getList(new MySqlCommand(SELECT_LOP + " ORDER BY class.ClassId"));
         }
 
-        //hàm lấy lớp cho combobox (chỉ mã và tên)
+        //lấy lớp cho combobox (chỉ mã và tên)
         public DataTable getComboBox()
         {
             return getList(new MySqlCommand("SELECT `ClassId`,`ClassName` FROM `class` ORDER BY `ClassName`"));
         }
 
-        //hàm tìm lớp theo tên lớp, năm học, khoa hoặc giáo viên chủ nhiệm
+        //tìm lớp theo tên lớp, năm học, khoa hoặc giáo viên chủ nhiệm
         public DataTable searchLop(string tuKhoa)
         {
             MySqlCommand command = new MySqlCommand(SELECT_LOP + " WHERE CONCAT(class.ClassName, class.SchoolYear, department.DeptName, IFNULL(teacher.TeacherName,'')) LIKE @s");
@@ -72,7 +69,6 @@ namespace QLDiemTHPT
             return getList(command);
         }
 
-        //hàm đếm tổng số lớp
         public string tongLop()
         {
             MySqlCommand command = new MySqlCommand("SELECT COUNT(*) FROM class");

@@ -12,9 +12,8 @@ using MySql.Data.MySqlClient;
 namespace QLDiemTHPT
 {
     /*
-     * Form này quản lý phần ĐẦU của bảng điểm: mở môn học cho học sinh.
-     * Điểm trung bình môn và học lực chỉ để xem, không nhập tay được, vì hai
-     * cột đó do form Chi tiết điểm tính ra từ các đầu điểm.
+     * Form mở môn học cho học sinh. Điểm trung bình môn và học lực chỉ để
+     * xem, không nhập tay được, vì do form Chi tiết điểm tính ra.
      */
     public partial class FrmBangDiem : Form
     {
@@ -28,7 +27,6 @@ namespace QLDiemTHPT
 
         private void FrmBangDiem_Load(object sender, EventArgs e)
         {
-            //đổ học sinh và môn học vào combobox
             comboBox_hocSinh.DataSource = hocSinh.getComboBox();
             comboBox_hocSinh.DisplayMember = "HoTen";
             comboBox_hocSinh.ValueMember = "StdId";
@@ -38,7 +36,6 @@ namespace QLDiemTHPT
             hienBang();
         }
 
-        //hàm đổ bảng điểm lên lưới
         private void hienBang()
         {
             DataGridView_bangDiem.DataSource = bangDiem.getAll();
@@ -58,7 +55,6 @@ namespace QLDiemTHPT
             DataGridView_bangDiem.Columns["SoDauDiem"].HeaderText = "Số đầu điểm";
         }
 
-        //mở một môn mới cho học sinh đang chọn
         private void button_them_Click(object sender, EventArgs e)
         {
             if (comboBox_hocSinh.SelectedValue == null || comboBox_monHoc.SelectedValue == null)
