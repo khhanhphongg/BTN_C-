@@ -1,17 +1,37 @@
-USE master;
-GO
-
-IF DB_ID('studentdb') IS NOT NULL
-    DROP DATABASE studentdb;
-GO
-
-CREATE DATABASE studentdb;
+﻿CREATE DATABASE studentdb;
 GO
 
 USE studentdb;
 GO
 
--- Học sinh
+CREATE TABLE department (
+    DeptId INT IDENTITY(1,1) PRIMARY KEY,
+    DeptName NVARCHAR(100) NOT NULL UNIQUE,
+    Description NVARCHAR(200)
+);
+GO
+
+CREATE TABLE teacher (
+    TeacherId INT IDENTITY(1,1) PRIMARY KEY,
+    TeacherName NVARCHAR(100) NOT NULL,
+    Phone NVARCHAR(20),
+    Email NVARCHAR(100),
+    DeptId INT NOT NULL,
+    FOREIGN KEY (DeptId) REFERENCES department(DeptId)
+);
+GO
+
+CREATE TABLE class (
+    ClassId INT IDENTITY(1,1) PRIMARY KEY,
+    ClassName NVARCHAR(50) NOT NULL UNIQUE,
+    SchoolYear NVARCHAR(20) NOT NULL,
+    DeptId INT NOT NULL,
+    TeacherId INT,
+    FOREIGN KEY (DeptId) REFERENCES department(DeptId),
+    FOREIGN KEY (TeacherId) REFERENCES teacher(TeacherId)
+);
+GO
+
 CREATE TABLE student (
     StdId INT IDENTITY(1,1) PRIMARY KEY,
     StdFirstName NVARCHAR(50) NOT NULL,
@@ -24,7 +44,14 @@ CREATE TABLE student (
 );
 GO
 
--- Môn học
+CREATE TABLE student_class (
+    StudentId INT PRIMARY KEY,
+    ClassId INT NOT NULL,
+    FOREIGN KEY (StudentId) REFERENCES student(StdId) ON DELETE CASCADE,
+    FOREIGN KEY (ClassId) REFERENCES class(ClassId)
+);
+GO
+
 CREATE TABLE course (
     CourseId INT IDENTITY(1,1) PRIMARY KEY,
     CourseName NVARCHAR(100) NOT NULL UNIQUE,
@@ -33,7 +60,14 @@ CREATE TABLE course (
 );
 GO
 
--- Điểm trung bình môn
+CREATE TABLE semester (
+    SemesterId INT IDENTITY(1,1) PRIMARY KEY,
+    SemesterName NVARCHAR(50) NOT NULL UNIQUE,
+    StartDate DATE NOT NULL,
+    EndDate DATE NOT NULL
+);
+GO
+
 CREATE TABLE score (
     StudentId INT NOT NULL,
     CourseName NVARCHAR(100) NOT NULL,
@@ -45,47 +79,21 @@ CREATE TABLE score (
 );
 GO
 
--- Khoa
-CREATE TABLE department (
-    DeptId INT IDENTITY(1,1) PRIMARY KEY,
-    DeptName NVARCHAR(100) NOT NULL UNIQUE,
-    Description NVARCHAR(200)
-);
-GO
-
--- Giáo viên
-CREATE TABLE teacher (
-    TeacherId INT IDENTITY(1,1) PRIMARY KEY,
-    TeacherName NVARCHAR(100) NOT NULL,
-    Phone NVARCHAR(20),
-    Email NVARCHAR(100),
-    DeptId INT NOT NULL,
-    FOREIGN KEY (DeptId) REFERENCES department(DeptId)
-);
-GO
-
--- Lớp
-CREATE TABLE class (
-    ClassId INT IDENTITY(1,1) PRIMARY KEY,
-    ClassName NVARCHAR(50) NOT NULL UNIQUE,
-    SchoolYear NVARCHAR(20) NOT NULL,
-    DeptId INT NOT NULL,
-    TeacherId INT,
-    FOREIGN KEY (DeptId) REFERENCES department(DeptId),
-    FOREIGN KEY (TeacherId) REFERENCES teacher(TeacherId)
-);
-GO
-
--- Học sinh thuộc lớp nào
-CREATE TABLE student_class (
-    StudentId INT PRIMARY KEY,
-    ClassId INT NOT NULL,
+CREATE TABLE diem_chitiet (
+    MaCT INT IDENTITY(1,1) PRIMARY KEY,
+    StudentId INT NOT NULL,
+    CourseName NVARCHAR(100) NOT NULL,
+    SemesterId INT NOT NULL,
+    LoaiDiem NVARCHAR(20) NOT NULL,
+    Diem FLOAT NOT NULL,
+    HeSo INT NOT NULL DEFAULT 1,
+    GhiChu NVARCHAR(200),
     FOREIGN KEY (StudentId) REFERENCES student(StdId) ON DELETE CASCADE,
-    FOREIGN KEY (ClassId) REFERENCES class(ClassId)
+    FOREIGN KEY (CourseName) REFERENCES course(CourseName) ON UPDATE CASCADE,
+    FOREIGN KEY (SemesterId) REFERENCES semester(SemesterId)
 );
 GO
 
--- Phòng học
 CREATE TABLE room (
     RoomId INT IDENTITY(1,1) PRIMARY KEY,
     RoomName NVARCHAR(50) NOT NULL UNIQUE,
@@ -93,16 +101,6 @@ CREATE TABLE room (
 );
 GO
 
--- Học kỳ
-CREATE TABLE semester (
-    SemesterId INT IDENTITY(1,1) PRIMARY KEY,
-    SemesterName NVARCHAR(50) NOT NULL UNIQUE,
-    StartDate DATE NOT NULL,
-    EndDate DATE NOT NULL
-);
-GO
-
--- Thời khoá biểu
 CREATE TABLE schedule (
     ScheduleId INT IDENTITY(1,1) PRIMARY KEY,
     CourseId INT NOT NULL,
@@ -121,7 +119,6 @@ CREATE TABLE schedule (
 );
 GO
 
--- Điểm danh
 CREATE TABLE attendance (
     AttendId INT IDENTITY(1,1) PRIMARY KEY,
     StudentId INT NOT NULL,
@@ -134,7 +131,6 @@ CREATE TABLE attendance (
 );
 GO
 
--- Học phí
 CREATE TABLE tuition (
     TuitionId INT IDENTITY(1,1) PRIMARY KEY,
     StudentId INT NOT NULL,
@@ -148,14 +144,35 @@ CREATE TABLE tuition (
 );
 GO
 
--- Dữ liệu mẫu
-INSERT INTO course (CourseName, CourseHour, Description) VALUES
-(N'Lập trình .NET', 60, N'Lập trình WinForms với C#'),
-(N'Cơ sở dữ liệu', 45, N'Thiết kế và truy vấn CSDL'),
-(N'Lập trình Web', 45, N'HTML, CSS, JavaScript'),
-(N'Mạng máy tính', 45, N'Mô hình OSI và TCP/IP'),
-(N'Toán rời rạc', 30, N'Logic, tập hợp và đồ thị'),
-(N'Cấu trúc dữ liệu', 45, N'Danh sách, cây và thuật toán sắp xếp');
+CREATE TABLE login (
+    MaND INT IDENTITY(1,1) PRIMARY KEY,
+    TenDangNhap NVARCHAR(50) NOT NULL UNIQUE,
+    MatKhau NVARCHAR(50) NOT NULL,
+    HoTen NVARCHAR(100) NOT NULL,
+    VaiTro NVARCHAR(20) NOT NULL
+);
+GO
+
+INSERT INTO department (DeptName, Description) VALUES
+(N'Công nghệ thông tin', N'Lập trình, cơ sở dữ liệu, mạng máy tính'),
+(N'Toán - Tin ứng dụng', N'Toán rời rạc, cấu trúc dữ liệu'),
+(N'Ngoại ngữ', N'Tiếng Anh chuyên ngành');
+GO
+
+INSERT INTO teacher (TeacherName, Phone, Email, DeptId) VALUES
+(N'Nguyễn Văn Minh', '0912345678', 'minh.nv@mdemy.edu.vn', 1),
+(N'Trần Thị Lan', '0983214567', 'lan.tt@mdemy.edu.vn', 1),
+(N'Lê Quốc Bảo', '0905678123', 'bao.lq@mdemy.edu.vn', 1),
+(N'Phạm Thu Hằng', '0936781245', 'hang.pt@mdemy.edu.vn', 2),
+(N'Hoàng Đức Thịnh', '0978123456', 'thinh.hd@mdemy.edu.vn', 2),
+(N'Vũ Ngọc Anh', '0941236789', 'anh.vn@mdemy.edu.vn', 3);
+GO
+
+INSERT INTO class (ClassName, SchoolYear, DeptId, TeacherId) VALUES
+(N'CNTT23A', N'2023-2027', 1, 1),
+(N'CNTT23B', N'2023-2027', 1, 2),
+(N'CNTT23C', N'2023-2027', 1, 3),
+(N'TTUD23A', N'2023-2027', 2, 4);
 GO
 
 DECLARE @photo VARBINARY(MAX) = 0x89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF61000000017352474200AECE1CE90000000467414D410000B18F0BFC6105000000097048597300000EC300000EC301C76FA8640000001D49444154384F63F09A70F33F2598015D80543C6AC0A801A3060C160300B218B21FF4C5F6E30000000049454E44AE426082;
@@ -191,6 +208,28 @@ INSERT INTO student (StdFirstName, StdLastName, Birthdate, Gender, Phone, Addres
 (N'Thùy Dương', N'Kiều', '2004-03-31', N'Nữ', '0949335495', N'17 Lê Thánh Tôn, Quận 1, TP.HCM', @photo),
 (N'Văn Hậu', N'Đoàn', '2006-09-12', N'Nam', '0916233145', N'49 Nguyễn Tri Phương, TP. Huế', @photo),
 (N'Bích Phượng', N'Thái', '2005-11-25', N'Nữ', '0916139710', N'22 Ba Tháng Hai, Ninh Kiều, Cần Thơ', @photo);
+GO
+
+INSERT INTO student_class (StudentId, ClassId) VALUES
+(1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1), (8, 1),
+(9, 2), (10, 2), (11, 2), (12, 2), (13, 2), (14, 2), (15, 2), (16, 2),
+(17, 3), (18, 3), (19, 3), (20, 3), (21, 3), (22, 3), (23, 3), (24, 4),
+(25, 4), (26, 4), (27, 4), (28, 4), (29, 4), (30, 4);
+GO
+
+INSERT INTO course (CourseName, CourseHour, Description) VALUES
+(N'Lập trình .NET', 60, N'Lập trình WinForms với C#'),
+(N'Cơ sở dữ liệu', 45, N'Thiết kế và truy vấn CSDL'),
+(N'Lập trình Web', 45, N'HTML, CSS, JavaScript'),
+(N'Mạng máy tính', 45, N'Mô hình OSI và TCP/IP'),
+(N'Toán rời rạc', 30, N'Logic, tập hợp và đồ thị'),
+(N'Cấu trúc dữ liệu', 45, N'Danh sách, cây và thuật toán sắp xếp');
+GO
+
+INSERT INTO semester (SemesterName, StartDate, EndDate) VALUES
+(N'Học kỳ 1 - 2025-2026', '2025-09-01', '2026-01-15'),
+(N'Học kỳ 2 - 2025-2026', '2026-02-01', '2026-06-15'),
+(N'Học kỳ 1 - 2026-2027', '2026-09-01', '2027-01-15');
 GO
 
 INSERT INTO score (StudentId, CourseName, Score, Description) VALUES
@@ -300,33 +339,10 @@ INSERT INTO score (StudentId, CourseName, Score, Description) VALUES
 (30, N'Cấu trúc dữ liệu', 8, N'Giỏi');
 GO
 
-INSERT INTO department (DeptName, Description) VALUES
-(N'Công nghệ thông tin', N'Lập trình, cơ sở dữ liệu, mạng máy tính'),
-(N'Toán - Tin ứng dụng', N'Toán rời rạc, cấu trúc dữ liệu'),
-(N'Ngoại ngữ', N'Tiếng Anh chuyên ngành');
-GO
-
-INSERT INTO teacher (TeacherName, Phone, Email, DeptId) VALUES
-(N'Nguyễn Văn Minh', '0912345678', 'minh.nv@mdemy.edu.vn', 1),
-(N'Trần Thị Lan', '0983214567', 'lan.tt@mdemy.edu.vn', 1),
-(N'Lê Quốc Bảo', '0905678123', 'bao.lq@mdemy.edu.vn', 1),
-(N'Phạm Thu Hằng', '0936781245', 'hang.pt@mdemy.edu.vn', 2),
-(N'Hoàng Đức Thịnh', '0978123456', 'thinh.hd@mdemy.edu.vn', 2),
-(N'Vũ Ngọc Anh', '0941236789', 'anh.vn@mdemy.edu.vn', 3);
-GO
-
-INSERT INTO class (ClassName, SchoolYear, DeptId, TeacherId) VALUES
-(N'CNTT23A', N'2023-2027', 1, 1),
-(N'CNTT23B', N'2023-2027', 1, 2),
-(N'CNTT23C', N'2023-2027', 1, 3),
-(N'TTUD23A', N'2023-2027', 2, 4);
-GO
-
-INSERT INTO student_class (StudentId, ClassId) VALUES
-(1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1), (8, 1),
-(9, 2), (10, 2), (11, 2), (12, 2), (13, 2), (14, 2), (15, 2), (16, 2),
-(17, 3), (18, 3), (19, 3), (20, 3), (21, 3), (22, 3), (23, 3), (24, 4),
-(25, 4), (26, 4), (27, 4), (28, 4), (29, 4), (30, 4);
+INSERT INTO diem_chitiet (StudentId, CourseName, SemesterId, LoaiDiem, Diem, HeSo, GhiChu)
+SELECT StudentId, CourseName, 3, N'Thi', Score, 1, N'Thi cuối kỳ'
+FROM score
+ORDER BY StudentId, CourseName;
 GO
 
 INSERT INTO room (RoomName, Capacity) VALUES
@@ -336,12 +352,6 @@ INSERT INTO room (RoomName, Capacity) VALUES
 (N'B202', 50),
 (N'LAB1', 30),
 (N'LAB2', 30);
-GO
-
-INSERT INTO semester (SemesterName, StartDate, EndDate) VALUES
-(N'Học kỳ 1 - 2025-2026', '2025-09-01', '2026-01-15'),
-(N'Học kỳ 2 - 2025-2026', '2026-02-01', '2026-06-15'),
-(N'Học kỳ 1 - 2026-2027', '2026-09-01', '2027-01-15');
 GO
 
 INSERT INTO schedule (CourseId, ClassId, TeacherId, RoomId, SemesterId, DayOfWeek, StartTime, EndTime) VALUES
@@ -416,40 +426,8 @@ INSERT INTO tuition (StudentId, SemesterId, Amount, PaidDate, Status) VALUES
 (10, 3, 8500000, '2026-09-10', N'Đã đóng');
 GO
 
--- Tài khoản đăng nhập
-CREATE TABLE login (
-    MaND INT IDENTITY(1,1) PRIMARY KEY,
-    TenDangNhap NVARCHAR(50) NOT NULL UNIQUE,
-    MatKhau NVARCHAR(50) NOT NULL,
-    HoTen NVARCHAR(100) NOT NULL,
-    VaiTro NVARCHAR(20) NOT NULL
-);
-GO
-
 INSERT INTO login (TenDangNhap, MatKhau, HoTen, VaiTro) VALUES
 (N'admin', N'admin123', N'Quản trị hệ thống', N'Admin'),
 (N'giaovien', N'123456', N'Nguyễn Văn Minh', N'Giáo viên'),
 (N'vanphong', N'123456', N'Trần Thị Lan', N'Văn phòng');
-GO
-
--- Các đầu điểm của từng môn
-CREATE TABLE diem_chitiet (
-    MaCT INT IDENTITY(1,1) PRIMARY KEY,
-    StudentId INT NOT NULL,
-    CourseName NVARCHAR(100) NOT NULL,
-    SemesterId INT NOT NULL,
-    LoaiDiem NVARCHAR(20) NOT NULL,
-    Diem FLOAT NOT NULL,
-    HeSo INT NOT NULL DEFAULT 1,
-    GhiChu NVARCHAR(200),
-    FOREIGN KEY (StudentId) REFERENCES student(StdId) ON DELETE CASCADE,
-    FOREIGN KEY (CourseName) REFERENCES course(CourseName) ON UPDATE CASCADE,
-    FOREIGN KEY (SemesterId) REFERENCES semester(SemesterId)
-);
-GO
-
--- Lấy điểm trong score làm điểm thi
-INSERT INTO diem_chitiet (StudentId, CourseName, SemesterId, LoaiDiem, Diem, HeSo, GhiChu)
-SELECT StudentId, CourseName, 3, N'Thi', Score, 1, N'Thi cuối kỳ'
-FROM score;
 GO
