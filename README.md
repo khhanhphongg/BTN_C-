@@ -1,175 +1,215 @@
-# BTN_NHÓM4_QLDIEMTHPT - Hệ thống quản lý điểm học sinh THPT
+# Hướng dẫn cài đặt và chạy — BTN Nhóm 4, Quản lý điểm THPT
 
-Bài tập nhóm môn Lập trình .NET. Viết bằng C# WinForms (.NET Framework 4.7.2),
-cơ sở dữ liệu MySQL `studentdb`, báo cáo bằng Crystal Reports.
+Tài liệu này dành cho thành viên nhóm cần dựng môi trường để build và chạy project trên một máy mới.
 
-## 1. Cần cài gì trước
+Project là **C# WinForms, .NET Framework 4.7.2**, dữ liệu lưu trên **SQL Server**, báo cáo in bằng **SAP Crystal Reports**.
 
-| Phần mềm | Dùng để làm gì |
-|---|---|
-| XAMPP (MySQL) | chạy cơ sở dữ liệu studentdb |
-| MySQL Connector/NET | để C# nối được MySQL |
-| SAP Crystal Reports for Visual Studio | để build và xem báo cáo |
+> **Project đã được chuyển từ MySQL sang SQL Server.** Bản MySQL gốc còn nguyên ở thư mục `BTN_C--main_BACKUP_MySQL` cạnh thư mục project, nếu cần đối chiếu. Chi tiết những gì đã đổi xem mục 8.
 
-Crystal Reports tải ở bản "SAP Crystal Reports developer version for Microsoft
-Visual Studio". Chưa cài thì project báo lỗi thiếu 4 reference
-`CrystalDecisions.*` và không build được.
+---
 
-## 2. Chuẩn bị cơ sở dữ liệu
+## 1. Những thứ phải cài trước khi build
 
-1. Bật XAMPP, chạy Apache và MySQL
-2. Mở http://localhost/phpmyadmin
-3. Vào tab SQL, dán cả file `capnhat_studentdb.sql` rồi bấm Go
-   (không cần chọn CSDL trước)
+| # | Phần mềm | Dùng cho | Bắt buộc |
+|---|---|---|---|
+| 1 | Visual Studio 2022 (workload *.NET desktop development*) | Build + designer của Crystal Report | Có |
+| 2 | SQL Server 2022 (bản nào cũng được, kể cả Express) + SSMS | Cơ sở dữ liệu `studentdb` | Có |
+| 3 | SAP Crystal Reports for Visual Studio — **SP 32 trở lên** | 4 reference `CrystalDecisions.*` | Có |
 
-File đó tạo đủ 14 bảng: 12 bảng gốc của studentdb kèm dữ liệu mẫu, cộng
-`login` và `diem_chitiet`. Nó cũng chuyển các dòng điểm có sẵn thành đầu điểm
-"Thi" để điểm trung bình tính ra khớp với điểm cũ, và đổi các giá trị tiếng
-Anh của bản studentdb cũ (`Male`, `Monday`, `Present`, `Paid`...) sang tiếng
-Việt.
+Không cần cài driver cơ sở dữ liệu riêng: project dùng `System.Data.SqlClient`, nằm sẵn trong .NET Framework.
 
-Chạy lại nhiều lần không sao: lệnh tạo bảng đều có `IF NOT EXISTS`, lệnh thêm
-dữ liệu đều là `INSERT IGNORE` và có khoá chính tường minh, nên dữ liệu không
-bị nhân bản.
+> **Không dùng Crystal Reports 9.2.** Bản 9.2 ra năm 2003, assembly build cho .NET Framework 1.0/1.1, không load được vào project .NET 4.7.2 này; phần tích hợp designer của nó cũng chỉ viết cho Visual Studio .NET 2002/2003. Phiên bản đầu tiên tích hợp được vào VS 2022 (ứng dụng 64-bit) là **CR for VS Service Pack 32**.
+>
+> Nếu môn học bắt buộc file `.rpt` phải tạo bằng designer 9.2: định dạng `.rpt` tương thích xuôi, nên vẫn vẽ được ở 9.2 rồi để runtime SP 32+ `Load()` file đó. Riêng bước chọn nguồn dữ liệu ADO.NET (XML) cần kiểm tra lại, vì hỗ trợ .NET của CR 9 còn sơ khai.
 
-Bảng `user` cũ không dùng nữa vì chỉ có username và password, `login` thay thế.
-CSDL cũ nào còn bảng đó thì bỏ dấu `--` ở dòng `DROP TABLE IF EXISTS user;`
-gần cuối file rồi chạy lại.
+> **Chú ý về bitness.** File `.csproj` không khai báo `PlatformTarget`, nên mặc định AnyCPU + Prefer32Bit, tức app chạy **32-bit**. Nhưng runtime 32-bit của Crystal đã ngừng phát hành từ tháng 12/2025 — SP 39 là bản cuối còn cả x86 và x64, SP 40 chỉ còn x64. Chọn một trong hai:
+>
+> - Cài **SP 39 bản x86**, giữ nguyên project.
+> - Cài **SP 40 x64**, rồi vào Project Properties → Build, bỏ tick `Prefer 32-bit`.
+>
+> Lệch bitness thì build qua nhưng lúc chạy báo `Could not load file or assembly 'CrystalDecisions...'`. Kiểm tra lại bitness của từng SP trên trang tải của SAP trước khi cài.
 
-## 3. Mở và chạy project
+---
 
-1. Mở `BTN_NHÓM4_QLDIEMTHPT.sln` bằng Visual Studio
-2. Nếu reference `MySql.Data` bị dấu chấm than vàng: chuột phải project,
-   Manage NuGet Packages, cài `MySql.Data`
-3. Bấm F5
+## 2. Dựng cơ sở dữ liệu
 
-Tài khoản đăng nhập:
+1. Mở **SQL Server Management Studio (SSMS)**, kết nối tới server của bạn.
+2. File → Open → File, chọn `student_db.sql` ở thư mục gốc repo.
+3. Bấm **Execute (F5)**. Script tự `CREATE DATABASE studentdb` nếu chưa có, nên không cần tạo trước.
+4. Kiểm tra: database `studentdb` phải có **14 bảng** — `student`, `teacher`, `class`, `student_class`, `course`, `department`, `room`, `semester`, `schedule`, `score`, `diem_chitiet`, `attendance`, `tuition`, `login`.
+
+Script chạy lại nhiều lần không sao: mỗi khối `INSERT` đều có kiểm tra bảng đã có dữ liệu chưa.
+
+**Tài khoản đăng nhập có sẵn:**
 
 | Tên đăng nhập | Mật khẩu | Vai trò |
 |---|---|---|
-| admin | admin123 | Admin |
-| giaovien | 123456 | Giáo viên |
-| vanphong | 123456 | Văn phòng |
+| `admin` | `admin123` | Admin |
+| `giaovien` | `123456` | Giáo viên |
+| `vanphong` | `123456` | Văn phòng |
 
-## 4. Tạo file báo cáo Crystal Report
+### Chuỗi kết nối
 
-File `.rpt` là định dạng nhị phân, chỉ tạo được bằng designer trong Visual
-Studio nên phần này phải làm tay một lần.
+Khai báo trong `BTN_NHÓM4_QLDIEMTHPT/DBconnect.cs` — **đây là nơi duy nhất**, sửa chỗ này là xong, không phải sửa chỗ nào khác:
 
-1. Chuột phải project, Add > New Item > Reporting > Crystal Reports,
-   đặt tên đúng là `BaoCaoDiem.rpt`
-2. Hộp thoại Crystal Reports Gallery: chọn As a Blank Report, OK
-3. Trong Field Explorer, chuột phải Database Fields > Database Expert
-4. Create New Connection > ADO.NET (XML), bấm nút "..." chọn file
-   `BaoCaoDiem.xsd` trong thư mục project, Finish
-5. Đưa bảng BaoCaoDiem từ cột trái sang cột phải, OK
-6. Kéo các cột từ Field Explorer vào vùng Details: `HoTen`, `Lop`, `MonHoc`,
-   `DiemTB`, `HocLuc`. Muốn đẹp hơn thì kéo thêm tiêu đề vào Page Header
-7. Chọn file `BaoCaoDiem.rpt` trong Solution Explorer, cửa sổ Properties đặt
-   Copy to Output Directory = Copy always
+```csharp
+Data Source=localhost;Initial Catalog=studentdb;Integrated Security=True
+```
 
-Xong thì vào form Tra cứu - Thống kê, bấm nút Báo cáo Crystal Report.
+Các biến thể thường gặp:
 
-Muốn report có tiêu đề động thì trong Field Explorer chuột phải
-Parameter Fields > New, tạo tham số kiểu String tên đúng một trong các tên
-`TenLop`, `TenMon`, `HocLuc`, `KhoangDiem`, `NgayIn` rồi kéo vào Page Header.
-Code đã truyền giá trị vào, report không khai báo tham số nào thì cũng không lỗi.
-
-Chưa tạo file `.rpt` thì nút In nhanh lưới vẫn in được (dùng DGVPrinter), nút
-Báo cáo Crystal Report sẽ hiện thông báo nhắc tạo file.
-
-## 5. Đối chiếu với yêu cầu của đề
-
-| Yêu cầu của đề | Đã làm ở đâu |
+| Trường hợp | Chuỗi kết nối |
 |---|---|
-| 1. Tạo project | `BTN_NHÓM4_QLDIEMTHPT.sln` |
-| 2. Kết nối CSDL qua Class, viết các thủ tục xử lý | `DBconnect.cs` + 14 class nghiệp vụ |
-| 3. Tạo FrmMain nối với các form | `FrmMain.cs`, menu trượt 4 nhóm |
-| 4. Bổ sung bảng LOGIN, viết form Login | bảng `login` + `FrmLogin.cs` |
-| 5a. Quản lý danh mục | `FrmKhoa`, `FrmMonHoc`, `FrmPhongHoc`, `FrmHocKy`, `FrmLop` |
-| 5b. Quản lý thông tin học sinh | `FrmHocSinh.cs`, kèm ảnh và xếp lớp |
-| 5c. Quản lý thông tin giáo viên | `FrmGiaoVien.cs` |
-| 5d. Quản lý bảng điểm | `FrmBangDiem.cs` |
-| 5e. Chi tiết điểm và xếp loại | `FrmChiTietDiem.cs` |
-| 5f. Tra cứu và thống kê | `FrmTraCuuThongKe.cs`, 5 kiểu xem |
-| 5g. Báo cáo | `FrmBaoCao.cs` + `BaoCaoDiem.xsd` |
+| Named instance (SQLEXPRESS) | `Data Source=.\SQLEXPRESS;Initial Catalog=studentdb;Integrated Security=True` |
+| Đăng nhập bằng tài khoản SQL | `Data Source=localhost;Initial Catalog=studentdb;User ID=sa;Password=matkhau` |
+| LocalDB đi kèm Visual Studio | `Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=studentdb;Integrated Security=True` |
 
-Ngoài ra còn 3 form cho các bảng còn lại của CSDL: `FrmThoiKhoaBieu`,
-`FrmDiemDanh`, `FrmHocPhi`.
+---
 
-## 6. Bảng điểm chia làm hai bảng
+## 3. Build project
 
-```
-score                               điểm trung bình môn + học lực
-  StudentId + CourseName
-     |
-     +-- diem_chitiet               từng đầu điểm
-         Miệng    8.0  hệ số 1
-         15 phút  7.5  hệ số 1
-         1 tiết   9.0  hệ số 2
-         Thi      8.5  hệ số 3
-         Điểm TB = SUM(Diem * HeSo) / SUM(HeSo) = 8.4 -> Giỏi
-```
+1. Mở `BTN_NHÓM4_QLDIEMTHPT.sln` bằng Visual Studio 2022.
+2. Build → Rebuild Solution.
+3. Nếu báo thiếu `CrystalDecisions.*` → chưa cài mục 3 ở trên.
 
-Form Bảng điểm mở môn cho học sinh, form Chi tiết điểm nhập từng đầu điểm.
-Mỗi lần thêm, sửa hoặc xoá đầu điểm thì hàm `ChiTietDiemClass.capNhatDiemTB()`
-tính lại rồi ghi vào `score.Score` và `score.Description`. Vì vậy điểm trung
-bình môn không nhập tay được.
+---
 
-Thang xếp loại: từ 9 Xuất sắc, từ 8 Giỏi, từ 6.5 Khá, từ 5 Trung bình, còn lại Yếu.
+## 4. Crystal Report — tạo file `BaoCaoDiem.rpt`
 
-## 7. Mấy chỗ cần biết khi đọc code
+**File `BaoCaoDiem.rpt` chưa có trong repo và phải tự tạo bằng designer của Visual Studio.** Repo chỉ có `BaoCaoDiem.xsd` (schema của dataset, dùng làm nguồn dữ liệu khi thiết kế).
 
-- CSDL lưu thẳng tiếng Việt: giới tính `Nam`/`Nữ`, điểm danh `Có mặt`/`Vắng`/
-  `Đi muộn`, học phí `Đã đóng`/`Chưa đóng`. Form đọc ghi đúng chuỗi đó, không
-  phải đổi qua lại.
-- Thứ trong `schedule` lưu dạng `Thứ 2` đến `Thứ 7`. Viết bằng số nên câu
-  `ORDER BY DayOfWeek` cho ra đúng thứ tự thứ hai đến thứ bảy, không cần hàm
-  `FIELD()` của MySQL.
-- `student.StdLastName` là họ, `StdFirstName` là tên, ngược với tên cột nhưng
-  dữ liệu cũ đang lưu như vậy nên giữ nguyên.
-- Thời khoá biểu có kiểm tra trùng lịch: không cho hai lớp dùng một phòng cùng
-  giờ, cũng không cho một giáo viên dạy hai nơi cùng giờ
-  (`ThoiKhoaBieuClass.kiemTraTrungLich()`).
-- Mọi câu lệnh SQL đều dùng tham số `@ten` nên không bị SQL injection.
-- `diem_chitiet` trỏ khoá ngoại vào `student` và `course`, không trỏ vào
-  `score`, để đổi tên môn học thì cả hai bảng cùng được cập nhật. Bù lại
-  `BangDiemClass.deleteBangDiem()` phải tự xoá các đầu điểm trước khi xoá dòng
-  `score`.
-- Chuỗi kết nối nằm ở một chỗ duy nhất là `DBconnect.cs`. Máy nào đặt mật khẩu
-  root cho MySQL thì sửa ở đó.
+Trước khi tạo, chương trình vẫn chạy bình thường — chỉ khi bấm nút **Báo cáo** ở form Tra cứu thống kê thì hiện hộp thoại "Chưa có file BaoCaoDiem.rpt" rồi đóng form lại, không crash.
 
-## 8. Danh sách file
+### Bản vẽ layout chi tiết
 
-```
-BTN_NHÓM4_QLDIEMTHPT.sln
-capnhat_studentdb.sql          script tạo CSDL và dữ liệu mẫu
-HUONG_DAN.md                   file này
-BTN_NHÓM4_QLDIEMTHPT/
-    DBconnect.cs               kết nối MySQL
-    DuLieuClass.cs             lớp cơ sở, 14 class dưới đây đều kế thừa
-    LoginClass.cs              đăng nhập
-    KhoaClass.cs               department
-    MonHocClass.cs             course
-    PhongHocClass.cs           room
-    HocKyClass.cs              semester
-    LopClass.cs                class
-    GiaoVienClass.cs           teacher
-    HocSinhClass.cs            student + student_class
-    BangDiemClass.cs           score
-    ChiTietDiemClass.cs        diem_chitiet, tính điểm trung bình môn
-    ThoiKhoaBieuClass.cs       schedule, kiểm tra trùng lịch
-    DiemDanhClass.cs           attendance
-    HocPhiClass.cs             tuition
-    ThongKeClass.cs            tra cứu, thống kê, dữ liệu cho báo cáo
-    DGVPrinter.cs              thư viện in lưới
-    BaoCaoDiem.xsd             lược đồ để thiết kế Crystal Report
-    FrmLogin, FrmMain và 14 form nghiệp vụ
-    Resources/                 ảnh dùng cho giao diện
-```
+Bản vẽ đầy đủ — toạ độ từng cột, chiều cao từng band, 5 tham số, 4 formula field, thứ tự thao tác và các cạm bẫy:
 
-## 9. Chưa làm
+**https://claude.ai/artifact/GNbv2TTx3RTkqV5DwppbYj**
 
-- File `BaoCaoDiem.rpt`, phải tạo tay trong Visual Studio, xem mục 4
-- Mật khẩu trong bảng `login` còn để dạng chữ thường, chưa mã hoá
-- Chưa phân quyền theo vai trò, cả 3 tài khoản đều thấy đủ menu
+### Tóm tắt những gì phải khớp
+
+Report lấy dữ liệu qua `report.SetDataSource(duLieu)` trong `FrmBaoCao.cs`, với `duLieu` là `DataTable` trả về từ `ThongKeClass.layDuLieuBaoCao()`. Vì vậy:
+
+- **Nguồn dữ liệu trong designer phải là `BaoCaoDiem.xsd`** (Database Expert → Create New Connection → ADO.NET (XML)). **Không** nối report trực tiếp vào SQL Server, nếu không Crystal sẽ giữ connection riêng và đòi đăng nhập database khi chạy.
+- **Tên bảng trong report phải là `BaoCaoDiem`**, vì code đặt `table.TableName = "BaoCaoDiem"`. Lệch tên thì `SetDataSource` vẫn chạy nhưng report ra trắng, không báo lỗi.
+
+Bảy field, tên đã đối chiếu khớp giữa SQL và xsd:
+
+| Field | Kiểu | Nguồn trong `SELECT_CHITIET` |
+|---|---|---|
+| `StudentId` | int | `score.StudentId` |
+| `HoTen` | string | `CONCAT(StdLastName,' ',StdFirstName)` |
+| `Lop` | string | `ISNULL(class.ClassName,N'Chưa xếp lớp')` |
+| `MonHoc` | string | `score.CourseName` |
+| `DiemTB` | double | `score.Score` |
+| `HocLuc` | string | `score.Description` |
+| `SoDauDiem` | int | `COUNT(*)` từ `diem_chitiet` |
+
+Năm tham số, **tất cả kiểu String** (kể cả `NgayIn`, vì code truyền vào chuỗi đã format sẵn):
+
+`TenLop` · `TenMon` · `HocLuc` · `KhoangDiem` · `NgayIn`
+
+> Hàm `datThamSo()` trong `FrmBaoCao.cs` bỏ qua im lặng tham số không tìm thấy trong report. Gõ sai tên thì không có lỗi nào hiện ra, chỉ là tiêu đề để trống — rất khó phát hiện.
+
+### Đặt file đúng chỗ
+
+Hàm `timFileReport()` tìm `BaoCaoDiem.rpt` theo thứ tự:
+
+1. Cạnh file `.exe` (tức `bin\Debug\`)
+2. `..\..\BaoCaoDiem.rpt` — từ `bin\Debug` thì đây chính là thư mục project
+
+Nên chỉ cần file `.rpt` nằm trong thư mục project là chạy được. Muốn chắc hơn thì chọn file trong Solution Explorer → Properties → `Copy to Output Directory` = **Copy always**.
+
+> Đừng thêm `<None Include="BaoCaoDiem.rpt">` vào `.csproj` bằng tay khi file chưa tồn tại — build sẽ fail ở task Copy. Để Visual Studio tự ghi mục đó khi bạn đặt property.
+
+---
+
+## 5. Chạy thử
+
+1. F5.
+2. Đăng nhập `admin` / `admin123`.
+3. Menu → Tra cứu thống kê → chọn lớp, môn, khoảng điểm → **Tra cứu** để xem dữ liệu trên lưới.
+4. Bấm **Báo cáo** để mở Crystal Report với đúng điều kiện lọc vừa chọn.
+
+---
+
+## 6. Lỗi thường gặp
+
+| Hiện tượng | Nguyên nhân |
+|---|---|
+| "Không kết nối được cơ sở dữ liệu studentdb" | SQL Server chưa chạy, tên instance sai, hoặc chưa chạy script tạo CSDL |
+| `A network-related or instance-specific error` | Sai `Data Source`. Thử `.\SQLEXPRESS` hoặc `(localdb)\MSSQLLocalDB` |
+| `Login failed for user` | Dùng Windows Authentication nhưng account Windows chưa được cấp quyền trên SQL Server, hoặc sai mật khẩu `sa` |
+| Build lỗi thiếu `CrystalDecisions.*` | Chưa cài SAP Crystal Reports for Visual Studio |
+| `Could not load file or assembly 'CrystalDecisions...'` lúc chạy | Bitness của runtime lệch với app, hoặc đang dùng Crystal 9.2 — xem mục 1 |
+| Crystal không xuất hiện trong menu Add New Item của VS 2022 | Cài SP 31 trở xuống, cần SP 32+ |
+| "Chưa có file BaoCaoDiem.rpt" | Chưa tạo report, xem mục 4 |
+| Report mở ra nhưng trắng, chỉ có tiêu đề | Tên bảng trong report không phải `BaoCaoDiem` |
+| Report mở ra nhưng tiêu đề trống | Tên tham số trong report gõ sai |
+| Crystal đòi đăng nhập database khi chạy | Report nối trực tiếp vào SQL Server thay vì qua `BaoCaoDiem.xsd` |
+| Chữ tiếng Việt hiện thành dấu hỏi | Cột đang là `VARCHAR` thay vì `NVARCHAR`, hoặc câu SQL thiếu tiền tố `N` trước chuỗi |
+
+---
+
+## 7. Ghi chú về cấu trúc code
+
+Kiến trúc 2 lớp:
+
+- `DuLieuClass.cs` — lớp cơ sở, gom `getList()` / `run()` / `tinhMotGiaTri()`. Mọi lớp nghiệp vụ kế thừa từ đây.
+- `*Class.cs` — một lớp cho mỗi bảng (`HocSinhClass`, `GiaoVienClass`, `ThongKeClass`...).
+- `Frm*.cs` — 15 form, treo dưới `FrmMain`.
+- `DBconnect.cs` — nơi duy nhất khai báo chuỗi kết nối.
+- `DGVPrinter.cs` — thư viện in `DataGridView` của bên thứ ba, dùng ở `FrmTraCuuThongKe`.
+
+Luồng khởi động: `Program.cs` → `FrmLogin` → kiểm tra bảng `login` → truyền `HoTen` + `VaiTro` sang `FrmMain`.
+
+> **Điểm có thể bị trừ điểm:** mật khẩu trong bảng `login` lưu dạng plaintext, `LoginClass.kiemTraDangNhap()` so sánh trực tiếp `MatKhau=@p` chứ không hash. Các câu truy vấn đều đã dùng parameter nên không bị SQL injection, chỉ riêng chỗ lưu mật khẩu là chưa an toàn.
+
+---
+
+## 8. Những gì đã đổi khi chuyển từ MySQL sang SQL Server
+
+31 file `.cs` đã được sửa. `DGVPrinter.cs` không bị ảnh hưởng vì không chứa code truy cập CSDL.
+
+### Trong code C#
+
+| MySQL | SQL Server |
+|---|---|
+| `using MySql.Data.MySqlClient;` | `using System.Data.SqlClient;` |
+| `MySqlCommand`, `MySqlConnection`, `MySqlDataAdapter`, `MySqlException` | `SqlCommand`, `SqlConnection`, `SqlDataAdapter`, `SqlException` |
+| `MySqlDbType.Int32` | `SqlDbType.Int` |
+| `MySqlDbType.VarChar` | `SqlDbType.NVarChar` |
+| `MySqlDbType.Double` | `SqlDbType.Float` |
+| `MySqlDbType.Blob` | `SqlDbType.VarBinary` |
+| `MySqlDbType.Date` / `.Time` | `SqlDbType.Date` / `.Time` |
+| `command.LastInsertedId` | `SELECT CAST(SCOPE_IDENTITY() AS INT)` + `ExecuteScalar()` |
+
+### Trong câu SQL
+
+| MySQL | SQL Server |
+|---|---|
+| `` `tên` `` | `[tên]` |
+| `IFNULL(...)` | `ISNULL(...)` |
+| `'chuỗi tiếng Việt'` | `N'chuỗi tiếng Việt'` |
+| `CONCAT(...)` | giữ nguyên (SQL Server 2012+ có `CONCAT`) |
+
+### Trong file SQL tạo CSDL
+
+File tạo CSDL: `student_db.sql`. Bản MySQL gốc chỉ còn trong thư mục backup.
+
+| MySQL | SQL Server |
+|---|---|
+| `AUTO_INCREMENT` | `IDENTITY(1,1)` |
+| `VARCHAR(n)` | `NVARCHAR(n)` |
+| `DOUBLE` | `FLOAT` |
+| `LONGBLOB` | `VARBINARY(MAX)` |
+| `X'89504E...'` | `0x89504E...` |
+| `CREATE TABLE IF NOT EXISTS` | `IF OBJECT_ID('x','U') IS NULL CREATE TABLE` |
+| `INSERT IGNORE` | `IF NOT EXISTS (...)` + `SET IDENTITY_INSERT ON/OFF` |
+| `SET @photo = ...` | `DECLARE @photo VARBINARY(MAX) = ...` |
+
+### Một khác biệt về ràng buộc cần biết
+
+Ở bản MySQL, bảng `diem_chitiet` có khoá ngoại tới `course(CourseName)` với `ON UPDATE CASCADE ON DELETE CASCADE`. SQL Server không cho phép nhiều đường cascade cùng dẫn tới một bảng, nên khoá ngoại này **chỉ còn `ON UPDATE CASCADE`**.
+
+Hệ quả: xoá một môn học trong bảng `course` sẽ không tự xoá các đầu điểm của môn đó trong `diem_chitiet` — SQL Server sẽ báo lỗi ràng buộc. Muốn xoá môn học thì xoá đầu điểm của nó trước. Đổi tên môn học vẫn cascade bình thường như cũ.
