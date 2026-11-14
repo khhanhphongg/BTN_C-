@@ -31,7 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <!-- SAP Crystal Reports for Visual Studio: phải cài trước khi build -->
     <Reference Include="CrystalDecisions.CrystalReports.Engine" />
     <Reference Include="CrystalDecisions.ReportSource" />
     <Reference Include="CrystalDecisions.Shared" />
