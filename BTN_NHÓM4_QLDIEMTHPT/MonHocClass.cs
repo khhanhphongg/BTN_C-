@@ -31,6 +31,10 @@ namespace QLDiemTHPT
 
         public bool deleteMonHoc(int maMon)
         {
+            SqlCommand xoaDauDiem = new SqlCommand("DELETE FROM [diem_chitiet] WHERE [CourseName] IN (SELECT [CourseName] FROM [course] WHERE [CourseId]=@ma)");
+            xoaDauDiem.Parameters.Add("@ma", SqlDbType.Int).Value = maMon;
+            runNhieuDong(xoaDauDiem);
+
             SqlCommand command = new SqlCommand("DELETE FROM [course] WHERE [CourseId]=@ma");
             command.Parameters.Add("@ma", SqlDbType.Int).Value = maMon;
             return run(command);

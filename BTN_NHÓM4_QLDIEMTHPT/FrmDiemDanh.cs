@@ -24,12 +24,12 @@ namespace QLDiemTHPT
 
         private void FrmDiemDanh_Load(object sender, EventArgs e)
         {
-            comboBox_lop.DataSource = lop.getComboBox();
             comboBox_lop.DisplayMember = "ClassName";
             comboBox_lop.ValueMember = "ClassId";
-            comboBox_monHoc.DataSource = monHoc.getAll();
+            comboBox_lop.DataSource = lop.getComboBox();
             comboBox_monHoc.DisplayMember = "CourseName";
             comboBox_monHoc.ValueMember = "CourseId";
+            comboBox_monHoc.DataSource = monHoc.getAll();
             comboBox_trangThai.Items.AddRange(DiemDanhClass.cacTrangThai);
             comboBox_trangThai.SelectedIndex = 0;
             locHocSinh();
@@ -40,9 +40,9 @@ namespace QLDiemTHPT
         {
             if (comboBox_lop.SelectedValue == null)
                 return;
-            comboBox_hocSinh.DataSource = hocSinh.getHocSinhTheoLop(Convert.ToInt32(comboBox_lop.SelectedValue));
             comboBox_hocSinh.DisplayMember = "HoTen";
             comboBox_hocSinh.ValueMember = "StdId";
+            comboBox_hocSinh.DataSource = hocSinh.getHocSinhTheoLop(Convert.ToInt32(comboBox_lop.SelectedValue));
         }
 
         private void comboBox_lop_SelectedIndexChanged(object sender, EventArgs e)

@@ -52,7 +52,7 @@ namespace QLDiemTHPT
                 if (duongDan == "")
                 {
                     MessageBox.Show("Chưa có file BaoCaoDiem.rpt." + Environment.NewLine + Environment.NewLine +
-                        "Hãy tạo report trong Visual Studio theo hướng dẫn ở file HUONG_DAN.md (mục Crystal Report), " +
+                        "Hãy tạo report trong Visual Studio theo hướng dẫn ở file README.md (mục 4), " +
                         "rồi để thuộc tính Copy to Output Directory của file .rpt là Copy always.",
                         "Thiếu file báo cáo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     this.Close();
