@@ -12,11 +12,6 @@ using DGVPrinterHelper;
 
 namespace QLDiemTHPT
 {
-    /*
-     * Form tra cứu và thống kê. Chọn điều kiện lọc ở trên, chọn kiểu xem ở
-     * hàng radio rồi bấm Tra cứu. Nút In nhanh lưới in đúng những gì đang
-     * thấy, nút Báo cáo mở FrmBaoCao với cùng điều kiện lọc.
-     */
     public partial class FrmTraCuuThongKe : Form
     {
         ThongKeClass thongKe = new ThongKeClass();
@@ -31,7 +26,6 @@ namespace QLDiemTHPT
 
         private void FrmTraCuuThongKe_Load(object sender, EventArgs e)
         {
-            //combobox lớp: thêm dòng "Tất cả các lớp" vào đầu danh sách
             DataTable bangLop = lop.getComboBox();
             DataRow dongTatCa = bangLop.NewRow();
             dongTatCa["ClassId"] = 0;
@@ -52,7 +46,6 @@ namespace QLDiemTHPT
             traCuu();
         }
 
-        //đọc các điều kiện lọc đang chọn trên form
         private int layMaLop()
         {
             if (comboBox_lop.SelectedValue == null)
@@ -76,7 +69,6 @@ namespace QLDiemTHPT
             return 10;
         }
 
-        //chạy tra cứu theo kiểu xem đang chọn
         private void traCuu()
         {
             int maLop = layMaLop();
@@ -112,8 +104,6 @@ namespace QLDiemTHPT
             capNhatDaiTong(ketQua.Rows.Count, maLop, mon, hocLuc, tuDiem, denDiem);
         }
 
-        //các bảng thống kê đã có tên cột tiếng Việt trong câu SQL,
-        //chỉ bảng tra cứu chi tiết cần đặt tiêu đề cột ở đây
         private void datTieuDeCotChiTiet()
         {
             if (DataGridView_ketQua.Columns.Count < 7)
@@ -127,7 +117,6 @@ namespace QLDiemTHPT
             DataGridView_ketQua.Columns["SoDauDiem"].HeaderText = "Số đầu điểm";
         }
 
-        //cập nhật dải tổng hợp dưới cùng
         private void capNhatDaiTong(int soDong, int maLop, string mon, string hocLuc, double tuDiem, double denDiem)
         {
             label_soLuot.Text = "Số lượt điểm : " + thongKe.demLuotDiem(maLop, mon, hocLuc, tuDiem, denDiem);
@@ -140,7 +129,6 @@ namespace QLDiemTHPT
             traCuu();
         }
 
-        //đổi kiểu xem thì tra cứu lại luôn
         private void radioButton_kieu_CheckedChanged(object sender, EventArgs e)
         {
             RadioButton rb = sender as RadioButton;
@@ -148,7 +136,6 @@ namespace QLDiemTHPT
                 traCuu();
         }
 
-        //in nhanh đúng những gì đang thấy trên lưới
         private void button_inNhanh_Click(object sender, EventArgs e)
         {
             if (DataGridView_ketQua.Rows.Count == 0)
@@ -168,7 +155,6 @@ namespace QLDiemTHPT
             printer.PrintDataGridView(DataGridView_ketQua);
         }
 
-        //mở báo cáo Crystal Report với đúng điều kiện lọc đang chọn
         private void button_baoCao_Click(object sender, EventArgs e)
         {
             double tuDiem = layTuDiem();

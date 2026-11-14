@@ -46,7 +46,6 @@ namespace QLDiemTHPT
             DataGridView_giaoVien.Columns["DeptId"].Visible = false;
         }
 
-        //kiểm tra dữ liệu, email phải có dấu @
         private bool kiemTra()
         {
             if (textBox_hoTen.Text.Trim() == "")

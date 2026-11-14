@@ -8,7 +8,6 @@ using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
-    //Quản lý bảng semester (học kỳ)
     class HocKyClass : DuLieuClass
     {
         public bool insertHocKy(string tenHK, DateTime batDau, DateTime ketThuc)
@@ -30,7 +29,6 @@ namespace QLDiemTHPT
             return run(command);
         }
 
-        //xoá học kỳ, học kỳ đang có điểm, thời khoá biểu hoặc học phí thì không xoá được
         public bool deleteHocKy(int maHK)
         {
             SqlCommand command = new SqlCommand("DELETE FROM [semester] WHERE [SemesterId]=@ma");

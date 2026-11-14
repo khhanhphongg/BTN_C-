@@ -8,7 +8,6 @@ using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
-    //Quản lý bảng course (danh mục môn học)
     class MonHocClass : DuLieuClass
     {
         public bool insertMonHoc(string tenMon, int soTiet, string moTa)
@@ -20,7 +19,6 @@ namespace QLDiemTHPT
             return run(command);
         }
 
-        //sửa môn học, đổi tên môn thì điểm trong bảng score tự đổi theo (ON UPDATE CASCADE)
         public bool updateMonHoc(int maMon, string tenMon, int soTiet, string moTa)
         {
             SqlCommand command = new SqlCommand("UPDATE [course] SET [CourseName]=@tm,[CourseHour]=@st,[Description]=@mt WHERE [CourseId]=@ma");
@@ -31,7 +29,6 @@ namespace QLDiemTHPT
             return run(command);
         }
 
-        //xoá môn học, điểm của môn đó cũng bị xoá theo (ON DELETE CASCADE)
         public bool deleteMonHoc(int maMon)
         {
             SqlCommand command = new SqlCommand("DELETE FROM [course] WHERE [CourseId]=@ma");

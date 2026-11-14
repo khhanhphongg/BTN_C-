@@ -35,7 +35,6 @@ namespace QLDiemTHPT
             datTieuDeCot();
         }
 
-        //đặt tiêu đề cột và cho cột ảnh hiện vừa khung
         private void datTieuDeCot()
         {
             if (DataGridView_hocSinh.Columns.Count < 10)
@@ -62,7 +61,6 @@ namespace QLDiemTHPT
                 pictureBox_anh.Image = Image.FromFile(opf.FileName);
         }
 
-        //kiểm tra dữ liệu, tuổi học sinh THPT phải từ 10 đến 25
         private bool kiemTra()
         {
             if (textBox_ho.Text.Trim() == "" || textBox_ten.Text.Trim() == "")
@@ -94,7 +92,6 @@ namespace QLDiemTHPT
             return true;
         }
 
-        //đổi ảnh trong PictureBox thành mảng byte để lưu vào cột LONGBLOB
         private byte[] layAnh()
         {
             MemoryStream ms = new MemoryStream();
@@ -207,7 +204,6 @@ namespace QLDiemTHPT
             datTieuDeCot();
         }
 
-        //click vào một dòng thì đổ dữ liệu lên các ô nhập
         private void DataGridView_hocSinh_Click(object sender, EventArgs e)
         {
             if (DataGridView_hocSinh.CurrentRow == null || DataGridView_hocSinh.CurrentRow.Cells[0].Value == null)
@@ -222,11 +218,9 @@ namespace QLDiemTHPT
                 radioButton_nu.Checked = true;
             textBox_dienThoai.Text = DataGridView_hocSinh.CurrentRow.Cells["Phone"].Value.ToString();
             textBox_diaChi.Text = DataGridView_hocSinh.CurrentRow.Cells["Address"].Value.ToString();
-            //học sinh chưa xếp lớp thì cột ClassId là 0
             int maLop = Convert.ToInt32(DataGridView_hocSinh.CurrentRow.Cells["ClassId"].Value);
             if (maLop > 0)
                 comboBox_lop.SelectedValue = maLop;
-            //đọc ảnh từ cột LONGBLOB ra PictureBox
             if (DataGridView_hocSinh.CurrentRow.Cells["Photo"].Value != DBNull.Value)
             {
                 byte[] anh = (byte[])DataGridView_hocSinh.CurrentRow.Cells["Photo"].Value;

@@ -8,7 +8,6 @@ using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
-    //Quản lý bảng class (lớp học, thuộc một khoa và có một giáo viên chủ nhiệm)
     class LopClass : DuLieuClass
     {
         public bool insertLop(string tenLop, string namHoc, int maKhoa, int maGVCN)
@@ -32,7 +31,6 @@ namespace QLDiemTHPT
             return run(command);
         }
 
-        //xoá lớp, lớp còn học sinh hoặc còn trong thời khoá biểu thì không xoá được
         public bool deleteLop(int maLop)
         {
             SqlCommand command = new SqlCommand("DELETE FROM [class] WHERE [ClassId]=@ma");
@@ -40,7 +38,6 @@ namespace QLDiemTHPT
             return run(command);
         }
 
-        //câu select dùng chung: lớp kèm tên khoa, tên giáo viên chủ nhiệm và số học sinh
         private const string SELECT_LOP =
             "SELECT class.ClassId, class.ClassName, class.SchoolYear, department.DeptName, " +
             "ISNULL(teacher.TeacherName,N'Chưa phân công') AS TeacherName, " +
@@ -55,13 +52,11 @@ namespace QLDiemTHPT
             return getList(new SqlCommand(SELECT_LOP + " ORDER BY class.ClassId"));
         }
 
-        //lấy lớp cho combobox (chỉ mã và tên)
         public DataTable getComboBox()
         {
             return getList(new SqlCommand("SELECT [ClassId],[ClassName] FROM [class] ORDER BY [ClassName]"));
         }
 
-        //tìm lớp theo tên lớp, năm học, khoa hoặc giáo viên chủ nhiệm
         public DataTable searchLop(string tuKhoa)
         {
             SqlCommand command = new SqlCommand(SELECT_LOP + " WHERE CONCAT(class.ClassName, class.SchoolYear, department.DeptName, ISNULL(teacher.TeacherName,'')) LIKE @s");

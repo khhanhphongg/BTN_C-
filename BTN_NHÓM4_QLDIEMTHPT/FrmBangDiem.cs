@@ -11,10 +11,6 @@ using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
-    /*
-     * Form mở môn học cho học sinh. Điểm trung bình môn và học lực chỉ để
-     * xem, không nhập tay được, vì do form Chi tiết điểm tính ra.
-     */
     public partial class FrmBangDiem : Form
     {
         BangDiemClass bangDiem = new BangDiemClass();
@@ -81,7 +77,6 @@ namespace QLDiemTHPT
             }
         }
 
-        //xoá một môn của học sinh, các đầu điểm của môn cũng mất theo
         private void button_xoa_Click(object sender, EventArgs e)
         {
             if (DataGridView_bangDiem.CurrentRow == null || DataGridView_bangDiem.CurrentRow.Cells[0].Value == null)
@@ -124,7 +119,6 @@ namespace QLDiemTHPT
             datTieuDeCot();
         }
 
-        //click vào một dòng thì đổ lên các ô để xem
         private void DataGridView_bangDiem_Click(object sender, EventArgs e)
         {
             if (DataGridView_bangDiem.CurrentRow == null || DataGridView_bangDiem.CurrentRow.Cells[0].Value == null)

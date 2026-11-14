@@ -13,17 +13,10 @@ using CrystalDecisions.Shared;
 
 namespace QLDiemTHPT
 {
-    /*
-     * Form xem và in báo cáo bằng Crystal Report. Dữ liệu lấy từ
-     * ThongKeClass.layDuLieuBaoCao() rồi đưa vào report bằng SetDataSource.
-     * File BaoCaoDiem.rpt phải tạo bằng designer của Visual Studio, xem
-     * hướng dẫn ở file HUONG_DAN.md.
-     */
     public partial class FrmBaoCao : Form
     {
         ThongKeClass thongKe = new ThongKeClass();
 
-        //các điều kiện lọc nhận từ form tra cứu
         int maLop;
         string tenLop;
         string tenMon;
@@ -47,7 +40,6 @@ namespace QLDiemTHPT
         {
             try
             {
-                //lấy dữ liệu theo đúng điều kiện lọc của form tra cứu
                 DataTable duLieu = thongKe.layDuLieuBaoCao(maLop, tenMon, hocLuc, tuDiem, denDiem);
                 if (duLieu.Rows.Count == 0)
                 {
@@ -56,7 +48,6 @@ namespace QLDiemTHPT
                     return;
                 }
 
-                //tìm file report, ưu tiên bản nằm cạnh file chạy
                 string duongDan = timFileReport("BaoCaoDiem.rpt");
                 if (duongDan == "")
                 {
@@ -72,7 +63,6 @@ namespace QLDiemTHPT
                 report.Load(duongDan);
                 report.SetDataSource(duLieu);
 
-                //đưa các tham số tiêu đề vào report
                 datThamSo(report, "TenLop", tenLop);
                 datThamSo(report, "TenMon", tenMon);
                 datThamSo(report, "HocLuc", hocLuc);
@@ -90,7 +80,6 @@ namespace QLDiemTHPT
             }
         }
 
-        //tìm file .rpt: cạnh file chạy, không có thì tìm trong thư mục project
         private string timFileReport(string tenFile)
         {
             string duongDan = Path.Combine(Application.StartupPath, tenFile);
@@ -102,7 +91,6 @@ namespace QLDiemTHPT
             return "";
         }
 
-        //đặt một tham số cho report, report chưa khai báo tham số đó thì bỏ qua
         private void datThamSo(ReportDocument report, string ten, string giaTri)
         {
             foreach (ParameterFieldDefinition thamSo in report.DataDefinition.ParameterFields)

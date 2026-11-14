@@ -7,7 +7,6 @@ using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
-    //Lớp tạo kết nối tới CSDL SQL Server studentdb
     class DBconnect
     {
         SqlConnection connect = new SqlConnection("Data Source=localhost,1433;Initial Catalog=studentdb;Integrated Security=True");

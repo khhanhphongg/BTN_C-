@@ -124,7 +124,6 @@ namespace QLDiemTHPT
             datTieuDeCot();
         }
 
-        //click vào một dòng thì đổ dữ liệu lên các ô nhập
         private void DataGridView_khoa_Click(object sender, EventArgs e)
         {
             if (DataGridView_khoa.CurrentRow == null || DataGridView_khoa.CurrentRow.Cells[0].Value == null)

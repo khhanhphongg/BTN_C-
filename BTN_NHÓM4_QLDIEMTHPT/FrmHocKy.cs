@@ -40,7 +40,6 @@ namespace QLDiemTHPT
             DataGridView_hocKy.Columns["EndDate"].HeaderText = "Ngày kết thúc";
         }
 
-        //kiểm tra dữ liệu, ngày kết thúc phải sau ngày bắt đầu
         private bool kiemTra()
         {
             if (textBox_tenHK.Text.Trim() == "")

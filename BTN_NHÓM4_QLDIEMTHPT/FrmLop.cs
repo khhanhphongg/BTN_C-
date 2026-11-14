@@ -23,7 +23,6 @@ namespace QLDiemTHPT
 
         private void FrmLop_Load(object sender, EventArgs e)
         {
-            //đổ khoa và giáo viên vào combobox, ValueMember là mã để lấy khoá ngoại khi lưu
             comboBox_khoa.DataSource = khoa.getAll();
             comboBox_khoa.DisplayMember = "DeptName";
             comboBox_khoa.ValueMember = "DeptId";
@@ -39,7 +38,6 @@ namespace QLDiemTHPT
             datTieuDeCot();
         }
 
-        //đặt tiêu đề cột, hai cột mã để ẩn vì chỉ dùng nội bộ
         private void datTieuDeCot()
         {
             if (DataGridView_lop.Columns.Count < 8)
@@ -158,7 +156,6 @@ namespace QLDiemTHPT
             textBox_tenLop.Text = DataGridView_lop.CurrentRow.Cells["ClassName"].Value.ToString();
             textBox_namHoc.Text = DataGridView_lop.CurrentRow.Cells["SchoolYear"].Value.ToString();
             comboBox_khoa.SelectedValue = DataGridView_lop.CurrentRow.Cells["DeptId"].Value;
-            //lớp có thể chưa phân công chủ nhiệm, khi đó cột TeacherId là null
             if (DataGridView_lop.CurrentRow.Cells["TeacherId"].Value != DBNull.Value)
                 comboBox_gvcn.SelectedValue = DataGridView_lop.CurrentRow.Cells["TeacherId"].Value;
         }

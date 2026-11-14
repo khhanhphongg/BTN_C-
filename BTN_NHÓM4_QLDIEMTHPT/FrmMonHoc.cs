@@ -40,7 +40,6 @@ namespace QLDiemTHPT
             DataGridView_monHoc.Columns["Description"].HeaderText = "Mô tả";
         }
 
-        //kiểm tra dữ liệu, số tiết phải là số nguyên dương
         private bool kiemTra(out int soTiet)
         {
             soTiet = 0;
@@ -134,7 +133,6 @@ namespace QLDiemTHPT
             datTieuDeCot();
         }
 
-        //click vào một dòng thì đổ dữ liệu lên các ô nhập
         private void DataGridView_monHoc_Click(object sender, EventArgs e)
         {
             if (DataGridView_monHoc.CurrentRow == null || DataGridView_monHoc.CurrentRow.Cells[0].Value == null)

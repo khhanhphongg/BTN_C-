@@ -43,7 +43,6 @@ namespace QLDiemTHPT
             comboBox_hocKy.ValueMember = "SemesterId";
             comboBox_thu.Items.AddRange(ThoiKhoaBieuClass.cacThu);
             comboBox_thu.SelectedIndex = 0;
-            //giờ mặc định của một tiết đôi
             dateTimePicker_batDau.Value = DateTime.Today.AddHours(7).AddMinutes(30);
             dateTimePicker_ketThuc.Value = DateTime.Today.AddHours(9).AddMinutes(30);
             hienBang();
@@ -55,7 +54,6 @@ namespace QLDiemTHPT
             datTieuDeCot();
         }
 
-        //đặt tiêu đề cột, các cột mã để ẩn vì chỉ dùng nội bộ
         private void datTieuDeCot()
         {
             if (DataGridView_tkb.Columns.Count < 14)
@@ -83,7 +81,6 @@ namespace QLDiemTHPT
             return comboBox_thu.Text;
         }
 
-        //kiểm tra dữ liệu và kiểm tra trùng lịch
         private bool kiemTra(int maTietBoQua)
         {
             if (comboBox_monHoc.SelectedValue == null || comboBox_lop.SelectedValue == null ||
@@ -98,7 +95,6 @@ namespace QLDiemTHPT
                 MessageBox.Show("Giờ kết thúc phải sau giờ bắt đầu", "Giờ không hợp lệ", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            //không cho hai lớp dùng chung một phòng hoặc một giáo viên dạy hai nơi cùng giờ
             string loi = tkb.kiemTraTrungLich(Convert.ToInt32(comboBox_phongHoc.SelectedValue),
                 Convert.ToInt32(comboBox_giaoVien.SelectedValue), Convert.ToInt32(comboBox_hocKy.SelectedValue),
                 layThu(), dateTimePicker_batDau.Value.TimeOfDay, dateTimePicker_ketThuc.Value.TimeOfDay, maTietBoQua);
@@ -190,7 +186,6 @@ namespace QLDiemTHPT
             datTieuDeCot();
         }
 
-        //click vào một dòng thì đổ dữ liệu lên các ô nhập
         private void DataGridView_tkb_Click(object sender, EventArgs e)
         {
             if (DataGridView_tkb.CurrentRow == null || DataGridView_tkb.CurrentRow.Cells[0].Value == null)

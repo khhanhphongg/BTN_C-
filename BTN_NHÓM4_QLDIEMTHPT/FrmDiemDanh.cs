@@ -24,7 +24,6 @@ namespace QLDiemTHPT
 
         private void FrmDiemDanh_Load(object sender, EventArgs e)
         {
-            //chọn lớp trước rồi mới lọc ra học sinh của lớp đó
             comboBox_lop.DataSource = lop.getComboBox();
             comboBox_lop.DisplayMember = "ClassName";
             comboBox_lop.ValueMember = "ClassId";
@@ -37,7 +36,6 @@ namespace QLDiemTHPT
             hienBang();
         }
 
-        //lọc học sinh theo lớp đang chọn
         private void locHocSinh()
         {
             if (comboBox_lop.SelectedValue == null)
@@ -174,13 +172,11 @@ namespace QLDiemTHPT
             datTieuDeCot();
         }
 
-        //click vào một dòng thì đổ dữ liệu lên các ô nhập
         private void DataGridView_diemDanh_Click(object sender, EventArgs e)
         {
             if (DataGridView_diemDanh.CurrentRow == null || DataGridView_diemDanh.CurrentRow.Cells[0].Value == null)
                 return;
             textBox_maDD.Text = DataGridView_diemDanh.CurrentRow.Cells["AttendId"].Value.ToString();
-            //chọn đúng lớp của học sinh rồi lọc lại danh sách học sinh
             comboBox_lop.Text = DataGridView_diemDanh.CurrentRow.Cells["ClassName"].Value.ToString();
             locHocSinh();
             comboBox_hocSinh.SelectedValue = DataGridView_diemDanh.CurrentRow.Cells["StudentId"].Value;

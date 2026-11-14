@@ -8,10 +8,8 @@ using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
-    //Quản lý bảng student (học sinh) và bảng student_class (xếp học sinh vào lớp)
     class HocSinhClass : DuLieuClass
     {
-        //thêm học sinh mới rồi xếp vào lớp, trả về mã học sinh vừa thêm (0 nếu lỗi)
         public int insertHocSinh(string ho, string ten, DateTime ngaySinh, string gioiTinh, string dienThoai, string diaChi, byte[] anh, int maLop)
         {
             SqlCommand command = ganKetNoi(new SqlCommand("INSERT INTO [student]([StdFirstName], [StdLastName], [Birthdate], [Gender], [Phone], [Address], [Photo]) VALUES (@ten,@ho,@ns,@gt,@dt,@dc,@anh); SELECT CAST(SCOPE_IDENTITY() AS INT);"));
@@ -25,7 +23,6 @@ namespace QLDiemTHPT
             try
             {
                 connect.openConnect();
-                //lấy mã vừa sinh bằng SCOPE_IDENTITY() ở cuối câu INSERT
                 object ketQua = command.ExecuteScalar();
                 if (ketQua == null || ketQua == DBNull.Value)
                     return 0;
@@ -42,7 +39,6 @@ namespace QLDiemTHPT
             }
         }
 
-        //sửa học sinh và đổi lớp
         public bool updateHocSinh(int maHS, string ho, string ten, DateTime ngaySinh, string gioiTinh, string dienThoai, string diaChi, byte[] anh, int maLop)
         {
             SqlCommand command = ganKetNoi(new SqlCommand("UPDATE [student] SET [StdFirstName]=@ten,[StdLastName]=@ho,[Birthdate]=@ns,[Gender]=@gt,[Phone]=@dt,[Address]=@dc,[Photo]=@anh WHERE [StdId]=@ma"));
@@ -58,7 +54,6 @@ namespace QLDiemTHPT
             {
                 connect.openConnect();
                 bool ok = command.ExecuteNonQuery() == 1;
-                //đổi lớp: có dòng xếp lớp rồi thì sửa, chưa có thì thêm mới
                 SqlCommand demLop = ganKetNoi(new SqlCommand("SELECT COUNT(*) FROM [student_class] WHERE [StudentId]=@mhs"));
                 demLop.Parameters.AddWithValue("@mhs", maHS);
                 string cauLenhLop;
@@ -78,7 +73,6 @@ namespace QLDiemTHPT
             }
         }
 
-        //xoá học sinh, điểm và dòng xếp lớp tự xoá theo (ON DELETE CASCADE)
         public bool deleteHocSinh(int maHS)
         {
             SqlCommand command = ganKetNoi(new SqlCommand("DELETE FROM [student] WHERE [StdId]=@ma"));
@@ -94,7 +88,6 @@ namespace QLDiemTHPT
             }
         }
 
-        //câu select dùng chung: học sinh kèm tên lớp
         private const string SELECT_HS =
             "SELECT student.StdId, student.StdLastName, student.StdFirstName, student.Birthdate, " +
             "student.Gender, student.Phone, student.Address, " +
@@ -109,21 +102,18 @@ namespace QLDiemTHPT
             return getList(new SqlCommand(SELECT_HS + " ORDER BY student.StdId"));
         }
 
-        //lấy học sinh cho combobox, hiện họ tên đầy đủ
         public DataTable getComboBox()
         {
-            return getList(new SqlCommand("SELECT [StdId], CONCAT([StdLastName],' N',[StdFirstName]) AS HoTen FROM [student] ORDER BY [StdLastName]"));
+            return getList(new SqlCommand("SELECT [StdId], CONCAT([StdLastName],' ',[StdFirstName]) AS HoTen FROM [student] ORDER BY [StdLastName]"));
         }
 
-        //lấy học sinh của một lớp, dùng cho điểm danh và nhập điểm theo lớp
         public DataTable getHocSinhTheoLop(int maLop)
         {
-            SqlCommand command = new SqlCommand("SELECT student.StdId, CONCAT(student.StdLastName,' N',student.StdFirstName) AS HoTen FROM student INNER JOIN student_class ON student.StdId = student_class.StudentId WHERE student_class.ClassId=@ml ORDER BY student.StdLastName");
+            SqlCommand command = new SqlCommand("SELECT student.StdId, CONCAT(student.StdLastName,' ',student.StdFirstName) AS HoTen FROM student INNER JOIN student_class ON student.StdId = student_class.StudentId WHERE student_class.ClassId=@ml ORDER BY student.StdLastName");
             command.Parameters.AddWithValue("@ml", maLop);
             return getList(command);
         }
 
-        //tìm học sinh theo họ tên, địa chỉ, điện thoại hoặc tên lớp
         public DataTable searchHocSinh(string tuKhoa)
         {
             SqlCommand command = new SqlCommand(SELECT_HS + " WHERE CONCAT(student.StdLastName, student.StdFirstName, student.Address, student.Phone, ISNULL(class.ClassName,'')) LIKE @s");

@@ -11,18 +11,12 @@ using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
-    /*
-     * Form nhập các đầu điểm của một môn.
-     * Bước 1 chọn môn của học sinh ở lưới trên, bước 2 thêm/sửa/xoá đầu điểm
-     * ở lưới dưới. Mỗi lần lưu, điểm trung bình môn được tính lại.
-     */
     public partial class FrmChiTietDiem : Form
     {
         ChiTietDiemClass chiTiet = new ChiTietDiemClass();
         BangDiemClass bangDiem = new BangDiemClass();
         HocKyClass hocKy = new HocKyClass();
 
-        //môn đang chọn ở lưới trên
         int maHSDangChon = 0;
         string monDangChon = "";
 
@@ -45,7 +39,6 @@ namespace QLDiemTHPT
             hienBangDiem();
         }
 
-        //đổ bảng điểm lên lưới trên
         private void hienBangDiem()
         {
             DataGridView_bangDiem.DataSource = bangDiem.getAll();
@@ -61,7 +54,6 @@ namespace QLDiemTHPT
             }
         }
 
-        //đổ các đầu điểm của môn đang chọn lên lưới dưới
         private void hienChiTiet()
         {
             if (maHSDangChon == 0)
@@ -79,7 +71,6 @@ namespace QLDiemTHPT
             }
         }
 
-        //bước 1: chọn môn của học sinh ở lưới trên
         private void DataGridView_bangDiem_Click(object sender, EventArgs e)
         {
             if (DataGridView_bangDiem.CurrentRow == null || DataGridView_bangDiem.CurrentRow.Cells[0].Value == null)
@@ -92,7 +83,6 @@ namespace QLDiemTHPT
             hienChiTiet();
         }
 
-        //chọn một đầu điểm ở lưới dưới để sửa
         private void DataGridView_chiTiet_Click(object sender, EventArgs e)
         {
             if (DataGridView_chiTiet.CurrentRow == null || DataGridView_chiTiet.CurrentRow.Cells[0].Value == null)
@@ -105,7 +95,6 @@ namespace QLDiemTHPT
             textBox_ghiChu.Text = DataGridView_chiTiet.CurrentRow.Cells["GhiChu"].Value.ToString();
         }
 
-        //kiểm tra: phải chọn môn trước, điểm phải từ 0 đến 10
         private bool kiemTra(out double diem, out int heSo)
         {
             diem = 0;
@@ -133,7 +122,6 @@ namespace QLDiemTHPT
             return true;
         }
 
-        //hiện điểm trung bình môn sau khi lưu
         private void baoDiemTB()
         {
             double tb = chiTiet.tinhTrungBinh(maHSDangChon, monDangChon);
@@ -219,7 +207,6 @@ namespace QLDiemTHPT
             comboBox_heSo.SelectedIndex = 0;
         }
 
-        //tìm trong lưới trên theo họ tên học sinh, lớp hoặc môn
         private void button_timKiem_Click(object sender, EventArgs e)
         {
             DataGridView_bangDiem.DataSource = bangDiem.searchBangDiem(textBox_timKiem.Text.Trim());

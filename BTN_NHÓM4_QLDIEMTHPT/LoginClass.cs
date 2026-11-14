@@ -10,7 +10,6 @@ namespace QLDiemTHPT
 {
     class LoginClass : DuLieuClass
     {
-        //kiểm tra đăng nhập, đúng thì trả về dòng tài khoản, sai thì trả về null
         public DataRow kiemTraDangNhap(string tenDangNhap, string matKhau)
         {
             SqlCommand command = new SqlCommand("SELECT * FROM [login] WHERE [TenDangNhap]=@u AND [MatKhau]=@p");

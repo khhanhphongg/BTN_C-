@@ -19,7 +19,6 @@ namespace QLDiemTHPT
             InitializeComponent();
         }
 
-        //nhãn X ở góc phải để thoát chương trình
         private void label_dong_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -35,7 +34,6 @@ namespace QLDiemTHPT
             label_dong.ForeColor = Color.Transparent;
         }
 
-        //bấm Enter ở ô mật khẩu thì đăng nhập luôn
         private void textBox_matKhau_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -62,7 +60,6 @@ namespace QLDiemTHPT
             }
             if (nguoiDung != null)
             {
-                //truyền họ tên và vai trò sang form chính để hiện lên dải người dùng
                 FrmMain main = new FrmMain(nguoiDung["HoTen"].ToString(), nguoiDung["VaiTro"].ToString());
                 this.Hide();
                 main.Show();

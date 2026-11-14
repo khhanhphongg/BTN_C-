@@ -39,7 +39,6 @@ namespace QLDiemTHPT
             DataGridView_phongHoc.Columns["Capacity"].HeaderText = "Sức chứa";
         }
 
-        //kiểm tra dữ liệu, sức chứa phải là số nguyên dương
         private bool kiemTra(out int sucChua)
         {
             sucChua = 0;

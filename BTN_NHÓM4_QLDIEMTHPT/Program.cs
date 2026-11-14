@@ -8,7 +8,6 @@ namespace QLDiemTHPT
 {
     static class Program
     {
-        //chương trình chạy form đăng nhập trước
         [STAThread]
         static void Main()
         {

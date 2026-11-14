@@ -8,7 +8,6 @@ using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
-    //Quản lý bảng department (khoa / tổ bộ môn)
     class KhoaClass : DuLieuClass
     {
         public bool insertKhoa(string tenKhoa, string moTa)
@@ -28,7 +27,6 @@ namespace QLDiemTHPT
             return run(command);
         }
 
-        //xoá khoa, khoa còn giáo viên hoặc lớp thì không xoá được
         public bool deleteKhoa(int maKhoa)
         {
             SqlCommand command = new SqlCommand("DELETE FROM [department] WHERE [DeptId]=@ma");

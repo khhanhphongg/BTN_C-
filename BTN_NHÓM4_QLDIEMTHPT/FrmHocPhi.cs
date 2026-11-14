@@ -53,7 +53,6 @@ namespace QLDiemTHPT
             DataGridView_hocPhi.Columns["Status"].HeaderText = "Trạng thái";
             DataGridView_hocPhi.Columns["StudentId"].Visible = false;
             DataGridView_hocPhi.Columns["SemesterId"].Visible = false;
-            //hiện số tiền có dấu phân cách nghìn cho dễ đọc
             DataGridView_hocPhi.Columns["Amount"].DefaultCellStyle.Format = "N0";
         }
 
@@ -64,7 +63,6 @@ namespace QLDiemTHPT
             return comboBox_trangThai.Text;
         }
 
-        //chưa đóng thì không lưu ngày đóng
         private DateTime? layNgayDong()
         {
             if (layTrangThai() == "Đã đóng")
@@ -72,7 +70,6 @@ namespace QLDiemTHPT
             return null;
         }
 
-        //kiểm tra dữ liệu, số tiền phải là số không âm
         private bool kiemTra(out int soTien)
         {
             soTien = 0;
@@ -166,7 +163,6 @@ namespace QLDiemTHPT
             datTieuDeCot();
         }
 
-        //click vào một dòng thì đổ dữ liệu lên các ô nhập
         private void DataGridView_hocPhi_Click(object sender, EventArgs e)
         {
             if (DataGridView_hocPhi.CurrentRow == null || DataGridView_hocPhi.CurrentRow.Cells[0].Value == null)
@@ -175,7 +171,6 @@ namespace QLDiemTHPT
             comboBox_hocSinh.SelectedValue = DataGridView_hocPhi.CurrentRow.Cells["StudentId"].Value;
             comboBox_hocKy.SelectedValue = DataGridView_hocPhi.CurrentRow.Cells["SemesterId"].Value;
             textBox_soTien.Text = DataGridView_hocPhi.CurrentRow.Cells["Amount"].Value.ToString();
-            //chưa đóng thì cột ngày đóng là null
             if (DataGridView_hocPhi.CurrentRow.Cells["PaidDate"].Value != DBNull.Value)
                 dateTimePicker_ngayDong.Value = Convert.ToDateTime(DataGridView_hocPhi.CurrentRow.Cells["PaidDate"].Value);
             comboBox_trangThai.Text = DataGridView_hocPhi.CurrentRow.Cells["Status"].Value.ToString();

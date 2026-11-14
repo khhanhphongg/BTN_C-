@@ -20,7 +20,6 @@ namespace QLDiemTHPT
         ThoiKhoaBieuClass tkb = new ThoiKhoaBieuClass();
         ThongKeClass thongKe = new ThongKeClass();
 
-        //lưu người đang đăng nhập để hiện lên dải người dùng
         string hoTenNguoiDung = "";
         string vaiTroNguoiDung = "";
 
@@ -42,7 +41,6 @@ namespace QLDiemTHPT
             comboBox_lop.ValueMember = "ClassName";
         }
 
-        //đếm và hiện các số liệu tổng quan trên trang chủ
         private void demSoLieu()
         {
             label_tongHS.Text = "Tổng học sinh : " + hocSinh.tongHocSinh();
@@ -55,20 +53,17 @@ namespace QLDiemTHPT
             label_diemTBTruong.Text = "Điểm TB toàn trường : " + thongKe.diemTBChung(0, "", "", 0, 10);
         }
 
-        //khi chọn một lớp thì hiện số học sinh và điểm trung bình của lớp đó
         private void comboBox_lop_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBox_lop.SelectedValue == null)
                 return;
             string tenLop = comboBox_lop.Text;
             label_lopHS.Text = "Học sinh : " + hocSinh.demTheoLop(tenLop);
-            //lấy mã lớp đang chọn để tính điểm trung bình của lớp
             DataRowView dong = comboBox_lop.SelectedItem as DataRowView;
             if (dong != null)
                 label_lopDiem.Text = "Điểm TB lớp : " + thongKe.diemTBChung(Convert.ToInt32(dong["ClassId"]), "", "", 0, 10);
         }
 
-        //ẩn hết các submenu khi mới mở form
         private void anHetSubmenu()
         {
             panel_dmSubmenu.Visible = false;
@@ -77,7 +72,6 @@ namespace QLDiemTHPT
             panel_khacSubmenu.Visible = false;
         }
 
-        //bấm vào một nhóm thì mở submenu của nhóm đó và đóng các nhóm khác
         private void moSubmenu(Panel submenu)
         {
             if (submenu.Visible == false)
@@ -109,7 +103,6 @@ namespace QLDiemTHPT
             moSubmenu(panel_khacSubmenu);
         }
 
-        //mở form con trong panel giữa, mỗi lần chỉ mở một form
         private Form formDangMo = null;
         private void moFormCon(Form formCon)
         {
@@ -126,7 +119,6 @@ namespace QLDiemTHPT
             anHetSubmenu();
         }
 
-        //nhóm Danh mục
         private void button_khoa_Click(object sender, EventArgs e)
         {
             moFormCon(new FrmKhoa());
@@ -152,7 +144,6 @@ namespace QLDiemTHPT
             moFormCon(new FrmLop());
         }
 
-        //nhóm Học sinh - Giáo viên
         private void button_giaoVien_Click(object sender, EventArgs e)
         {
             moFormCon(new FrmGiaoVien());
@@ -163,7 +154,6 @@ namespace QLDiemTHPT
             moFormCon(new FrmHocSinh());
         }
 
-        //nhóm Quản lý điểm
         private void button_bangDiem_Click(object sender, EventArgs e)
         {
             moFormCon(new FrmBangDiem());
@@ -174,7 +164,6 @@ namespace QLDiemTHPT
             moFormCon(new FrmChiTietDiem());
         }
 
-        //nhóm Lớp - Trường
         private void button_tkb_Click(object sender, EventArgs e)
         {
             moFormCon(new FrmThoiKhoaBieu());
@@ -190,13 +179,11 @@ namespace QLDiemTHPT
             moFormCon(new FrmHocPhi());
         }
 
-        //tra cứu và thống kê
         private void button_thongKe_Click(object sender, EventArgs e)
         {
             moFormCon(new FrmTraCuuThongKe());
         }
 
-        //về trang chủ: đóng form con và đếm lại số liệu
         private void button_trangChu_Click(object sender, EventArgs e)
         {
             if (formDangMo != null)
@@ -209,7 +196,6 @@ namespace QLDiemTHPT
             demSoLieu();
         }
 
-        //đăng xuất: quay về form đăng nhập
         private void button_dangXuat_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Bạn có chắc muốn đăng xuất?", "Đăng xuất", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)

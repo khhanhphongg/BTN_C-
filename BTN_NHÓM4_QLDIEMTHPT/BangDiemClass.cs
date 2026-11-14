@@ -8,14 +8,8 @@ using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
-    /*
-     * Quản lý bảng score. Mỗi dòng là một môn của một học sinh, cột Score là
-     * điểm trung bình môn, cột Description là học lực. Hai cột này do
-     * ChiTietDiemClass tính từ các đầu điểm nên không nhập tay.
-     */
     class BangDiemClass : DuLieuClass
     {
-        //mở một môn cho học sinh, điểm ban đầu là 0
         public bool insertBangDiem(int maHS, string tenMon)
         {
             SqlCommand command = new SqlCommand("INSERT INTO [score]([StudentId], [CourseName], [Score], [Description]) VALUES (@mhs,@tm,0,N'Chưa có điểm')");
@@ -24,7 +18,6 @@ namespace QLDiemTHPT
             return run(command);
         }
 
-        //xoá một môn của học sinh, phải xoá các đầu điểm của môn trước
         public bool deleteBangDiem(int maHS, string tenMon)
         {
             SqlCommand xoaDauDiem = new SqlCommand("DELETE FROM [diem_chitiet] WHERE [StudentId]=@mhs AND [CourseName]=@tm");
@@ -38,7 +31,6 @@ namespace QLDiemTHPT
             return run(command);
         }
 
-        //câu select dùng chung: bảng điểm kèm họ tên học sinh, tên lớp và số đầu điểm
         private const string SELECT_BD =
             "SELECT score.StudentId, CONCAT(student.StdLastName,' ',student.StdFirstName) AS HoTen, " +
             "ISNULL(class.ClassName,N'Chưa xếp lớp') AS ClassName, score.CourseName, score.Score, score.Description, " +
@@ -53,7 +45,6 @@ namespace QLDiemTHPT
             return getList(new SqlCommand(SELECT_BD + " ORDER BY score.StudentId, score.CourseName"));
         }
 
-        //tìm theo họ tên học sinh, tên lớp, tên môn hoặc học lực
         public DataTable searchBangDiem(string tuKhoa)
         {
             SqlCommand command = new SqlCommand(SELECT_BD + " WHERE CONCAT(student.StdLastName, student.StdFirstName, ISNULL(class.ClassName,''), score.CourseName, score.Description) LIKE @s ORDER BY score.StudentId");

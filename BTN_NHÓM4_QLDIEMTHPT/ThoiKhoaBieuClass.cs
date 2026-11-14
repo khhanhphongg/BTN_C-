@@ -8,10 +8,8 @@ using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
-    //Quản lý bảng schedule (thời khoá biểu)
     class ThoiKhoaBieuClass : DuLieuClass
     {
-        //các thứ trong tuần, lưu dạng "Thứ 2" ... "Thứ 7" để ORDER BY ra đúng thứ tự
         public static string[] cacThu = { "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7" };
 
         public bool insertTiet(int maMon, int maLop, int maGV, int maPhong, int maHK, string thu, TimeSpan batDau, TimeSpan ketThuc)
@@ -50,7 +48,6 @@ namespace QLDiemTHPT
             return run(command);
         }
 
-        //câu select dùng chung: nối 5 bảng để hiện tên thay vì mã
         private const string SELECT_TKB =
             "SELECT schedule.ScheduleId, course.CourseName, class.ClassName, teacher.TeacherName, " +
             "room.RoomName, semester.SemesterName, schedule.[DayOfWeek], schedule.StartTime, schedule.EndTime, " +
@@ -67,7 +64,6 @@ namespace QLDiemTHPT
             return getList(new SqlCommand(SELECT_TKB + " ORDER BY schedule.SemesterId, schedule.[DayOfWeek], schedule.StartTime"));
         }
 
-        //tìm theo tên môn, tên lớp, giáo viên hoặc phòng
         public DataTable searchTKB(string tuKhoa)
         {
             SqlCommand command = new SqlCommand(SELECT_TKB + " WHERE CONCAT(course.CourseName, class.ClassName, teacher.TeacherName, room.RoomName, semester.SemesterName) LIKE @s");
@@ -75,11 +71,6 @@ namespace QLDiemTHPT
             return getList(command);
         }
 
-        /*
-         * Kiểm tra trùng lịch: cùng học kỳ, cùng thứ, giờ chồng nhau mà lại
-         * trùng phòng hoặc trùng giáo viên thì không cho lưu. Tham số
-         * maTietBoQua dùng khi sửa, để không so dòng đang sửa với chính nó.
-         */
         public string kiemTraTrungLich(int maPhong, int maGV, int maHK, string thu, TimeSpan batDau, TimeSpan ketThuc, int maTietBoQua)
         {
             SqlCommand command = new SqlCommand(

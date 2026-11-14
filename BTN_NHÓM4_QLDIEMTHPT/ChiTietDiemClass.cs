@@ -9,11 +9,6 @@ using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
-    /*
-     * Quản lý bảng diem_chitiet. Mỗi dòng là một đầu điểm (miệng, 15 phút,
-     * 1 tiết, thi) và có hệ số riêng. Sau mỗi lần thêm/sửa/xoá, hàm
-     * capNhatDiemTB tính lại điểm trung bình môn rồi ghi vào bảng score.
-     */
     class ChiTietDiemClass : DuLieuClass
     {
         public static string[] cacLoaiDiem = { "Miệng", "15 phút", "1 tiết", "Thi" };
@@ -77,13 +72,11 @@ namespace QLDiemTHPT
             return getList(command);
         }
 
-        //tính điểm trung bình môn = SUM(Diem * HeSo) / SUM(HeSo)
         public double tinhTrungBinh(int maHS, string tenMon)
         {
             return tinhTrungBinh(getChiTiet(maHS, tenMon));
         }
 
-        //tính điểm trung bình từ bảng đầu điểm đã lấy sẵn
         private double tinhTrungBinh(DataTable table)
         {
             double tongDiem = 0;
@@ -98,11 +91,9 @@ namespace QLDiemTHPT
             return Math.Round(tongDiem / tongHeSo, 1);
         }
 
-        //tính lại điểm trung bình môn và học lực rồi ghi vào bảng score
         public void capNhatDiemTB(int maHS, string tenMon)
         {
             DataTable table = getChiTiet(maHS, tenMon);
-            //môn chưa có đầu điểm nào thì để điểm 0
             double tb = 0;
             string hocLuc = "Chưa có điểm";
             if (table.Rows.Count > 0)
@@ -118,7 +109,6 @@ namespace QLDiemTHPT
             runNhieuDong(command);
         }
 
-        //xếp loại học lực theo điểm trung bình môn
         public static string xepLoai(double diem)
         {
             if (diem >= 9) return "Xuất sắc";
@@ -128,7 +118,6 @@ namespace QLDiemTHPT
             return "Yếu";
         }
 
-        //đọc điểm người dùng nhập, nhận cả 8.5 và 8,5, phải từ 0 đến 10
         public static bool tryParseDiem(string text, out double value)
         {
             value = 0;

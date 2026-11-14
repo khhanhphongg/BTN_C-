@@ -8,7 +8,6 @@ using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
-    //Quản lý bảng teacher (giáo viên, thuộc một khoa)
     class GiaoVienClass : DuLieuClass
     {
         public bool insertGiaoVien(string hoTen, string dienThoai, string email, int maKhoa)
@@ -32,7 +31,6 @@ namespace QLDiemTHPT
             return run(command);
         }
 
-        //xoá giáo viên, giáo viên đang chủ nhiệm lớp hoặc có trong thời khoá biểu thì không xoá được
         public bool deleteGiaoVien(int maGV)
         {
             SqlCommand command = new SqlCommand("DELETE FROM [teacher] WHERE [TeacherId]=@ma");
@@ -40,7 +38,6 @@ namespace QLDiemTHPT
             return run(command);
         }
 
-        //câu select dùng chung: giáo viên kèm tên khoa
         private const string SELECT_GV =
             "SELECT teacher.TeacherId, teacher.TeacherName, teacher.Phone, teacher.Email, " +
             "department.DeptName, teacher.DeptId " +
@@ -56,7 +53,6 @@ namespace QLDiemTHPT
             return getList(new SqlCommand("SELECT [TeacherId],[TeacherName] FROM [teacher] ORDER BY [TeacherName]"));
         }
 
-        //tìm giáo viên theo tên, điện thoại, email hoặc khoa
         public DataTable searchGiaoVien(string tuKhoa)
         {
             SqlCommand command = new SqlCommand(SELECT_GV + " WHERE CONCAT(teacher.TeacherName, teacher.Phone, teacher.Email, department.DeptName) LIKE @s");
