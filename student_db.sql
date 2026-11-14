@@ -1,39 +1,11 @@
-﻿-- =====================================================================
---  BTN_NHÓM4_QLDIEMTHPT - Cơ sở dữ liệu studentdb (SQL Server)
---
---  Cách chạy: mở SQL Server Management Studio (SSMS), File > Open > File
---  chọn file này, rồi bấm Execute (F5). Không cần tạo CSDL trước,
---  file tự tạo studentdb nếu chưa có.
---
---  Bản T-SQL này chuyển từ bản MySQL cũ. Những chỗ đã đổi:
---    `tên`              -> [tên]
---    AUTO_INCREMENT     -> IDENTITY(1,1)
---    VARCHAR            -> NVARCHAR  (để lưu tiếng Việt)
---    'chuỗi tiếng Việt' -> N'chuỗi tiếng Việt'
---    DOUBLE             -> FLOAT
---    LONGBLOB           -> VARBINARY(MAX)
---    X'89504E...'       -> 0x89504E...
---    CREATE TABLE IF NOT EXISTS -> IF OBJECT_ID(...) IS NULL CREATE TABLE
---    INSERT IGNORE      -> IF NOT EXISTS (...) + SET IDENTITY_INSERT
---
---  File chạy lại nhiều lần không sao: mỗi khối INSERT đều có kiểm tra
---  bảng đã có dữ liệu chưa.
---
---  Gồm 14 bảng: 12 bảng gốc kèm dữ liệu mẫu (phần A), thêm hai bảng
---  login và diem_chitiet (phần B), đổi dữ liệu tiếng Anh của bản cũ sang
---  tiếng Việt (phần C).
--- =====================================================================
-
-IF DB_ID('studentdb') IS NULL
+﻿IF DB_ID('studentdb') IS NULL
     CREATE DATABASE studentdb;
 GO
 
 USE studentdb;
 GO
 
--- =====================================================================
---  PHẦN A - 12 BẢNG GỐC
--- =====================================================================
+-- Tạo bảng
 
 IF OBJECT_ID('student', 'U') IS NULL
 CREATE TABLE [student] (
@@ -77,7 +49,7 @@ CREATE TABLE [department] (
 );
 GO
 
--- Giáo viên, mỗi người thuộc một khoa
+-- Giáo viên
 IF OBJECT_ID('teacher', 'U') IS NULL
 CREATE TABLE [teacher] (
     TeacherId INT IDENTITY(1,1) PRIMARY KEY,
@@ -89,7 +61,7 @@ CREATE TABLE [teacher] (
 );
 GO
 
--- Lớp, thuộc một khoa và có một giáo viên chủ nhiệm
+-- Lớp
 IF OBJECT_ID('class', 'U') IS NULL
 CREATE TABLE [class] (
     ClassId INT IDENTITY(1,1) PRIMARY KEY,
@@ -102,7 +74,7 @@ CREATE TABLE [class] (
 );
 GO
 
--- Mỗi học sinh thuộc một lớp
+-- Học sinh - lớp
 IF OBJECT_ID('student_class', 'U') IS NULL
 CREATE TABLE [student_class] (
     StudentId INT PRIMARY KEY,
@@ -129,7 +101,7 @@ CREATE TABLE [semester] (
 );
 GO
 
--- Thời khoá biểu: môn nào, lớp nào, giáo viên nào, phòng nào, thứ mấy, mấy giờ
+-- Thời khoá biểu
 IF OBJECT_ID('schedule', 'U') IS NULL
 CREATE TABLE [schedule] (
     ScheduleId INT IDENTITY(1,1) PRIMARY KEY,
@@ -149,7 +121,7 @@ CREATE TABLE [schedule] (
 );
 GO
 
--- Điểm danh: Có mặt, Vắng, Đi muộn
+-- Điểm danh
 IF OBJECT_ID('attendance', 'U') IS NULL
 CREATE TABLE [attendance] (
     AttendId INT IDENTITY(1,1) PRIMARY KEY,
@@ -163,7 +135,7 @@ CREATE TABLE [attendance] (
 );
 GO
 
--- Học phí mỗi học kỳ: Đã đóng, Chưa đóng
+-- Học phí
 IF OBJECT_ID('tuition', 'U') IS NULL
 CREATE TABLE [tuition] (
     TuitionId INT IDENTITY(1,1) PRIMARY KEY,
@@ -178,9 +150,7 @@ CREATE TABLE [tuition] (
 );
 GO
 
--- ---------------------------------------------------------------------
---  Dữ liệu mẫu
--- ---------------------------------------------------------------------
+-- Dữ liệu mẫu
 
 IF NOT EXISTS (SELECT 1 FROM [course])
 BEGIN
@@ -493,12 +463,7 @@ INSERT INTO [tuition] ([StudentId], [SemesterId], [Amount], [PaidDate], [Status]
 (10, 3, 8500000, '2026-09-10', N'Đã đóng');
 GO
 
--- =====================================================================
---  PHẦN B - 2 BẢNG BỔ SUNG
--- =====================================================================
-
--- Bảng login: thêm họ tên và vai trò để form chính hiện được người đang
--- đăng nhập. Bảng [user] cũ chỉ có username và password nên không dùng nữa.
+-- Tài khoản
 IF OBJECT_ID('login', 'U') IS NULL
 CREATE TABLE [login] (
     MaND INT IDENTITY(1,1) PRIMARY KEY,
@@ -520,13 +485,7 @@ BEGIN
 END
 GO
 
--- Bảng diem_chitiet: mỗi môn của mỗi học sinh có nhiều đầu điểm (miệng,
--- 15 phút, 1 tiết, thi), mỗi đầu điểm một hệ số. Điểm trung bình môn
--- = SUM(Diem * HeSo) / SUM(HeSo), chương trình tính rồi ghi vào score.
---
--- Lưu ý: khoá ngoại trỏ vào course(CourseName) với ON DELETE CASCADE sẽ
--- tạo nhiều đường cascade cùng tới student. SQL Server không cho phép,
--- nên FK tới course ở bảng này chỉ ON UPDATE CASCADE (khác bản MySQL).
+-- Điểm chi tiết
 IF OBJECT_ID('diem_chitiet', 'U') IS NULL
 CREATE TABLE [diem_chitiet] (
     MaCT INT IDENTITY(1,1) PRIMARY KEY,
@@ -543,8 +502,7 @@ CREATE TABLE [diem_chitiet] (
 );
 GO
 
--- Chuyển các dòng điểm có sẵn trong score thành đầu điểm "Thi" để điểm
--- trung bình tính ra khớp với điểm cũ.
+-- Chuyển điểm cũ
 INSERT INTO [diem_chitiet] (StudentId, CourseName, SemesterId, LoaiDiem, Diem, HeSo, GhiChu)
 SELECT score.StudentId, score.CourseName, 3, N'Thi', score.Score, 1, N'Chuyển từ dữ liệu điểm cũ'
 FROM score
@@ -554,15 +512,7 @@ WHERE NOT EXISTS (
 );
 GO
 
--- CSDL cũ nào vẫn còn bảng [user] thì bỏ dấu -- ở dòng dưới rồi chạy lại
--- DROP TABLE [user];
-
--- =====================================================================
---  PHẦN C - ĐỔI DỮ LIỆU CŨ SANG TIẾNG VIỆT
---  Chương trình lưu thẳng tiếng Việt vào CSDL. Mấy câu dưới đây đổi nốt
---  các giá trị tiếng Anh của bản studentdb cũ, chạy lại cũng không sao
---  vì không còn dòng nào khớp nữa.
--- =====================================================================
+-- Đổi dữ liệu cũ sang tiếng Việt
 UPDATE [student] SET [Gender] = N'Nam' WHERE [Gender] = N'Male';
 UPDATE [student] SET [Gender] = N'Nữ'  WHERE [Gender] = N'Female';
 
