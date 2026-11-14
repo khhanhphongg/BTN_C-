@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
@@ -13,37 +13,37 @@ namespace QLDiemTHPT
     {
         public bool insertLop(string tenLop, string namHoc, int maKhoa, int maGVCN)
         {
-            MySqlCommand command = new MySqlCommand("INSERT INTO `class`(`ClassName`, `SchoolYear`, `DeptId`, `TeacherId`) VALUES (@tl,@nh,@mk,@mgv)");
-            command.Parameters.Add("@tl", MySqlDbType.VarChar).Value = tenLop;
-            command.Parameters.Add("@nh", MySqlDbType.VarChar).Value = namHoc;
-            command.Parameters.Add("@mk", MySqlDbType.Int32).Value = maKhoa;
-            command.Parameters.Add("@mgv", MySqlDbType.Int32).Value = maGVCN;
+            SqlCommand command = new SqlCommand("INSERT INTO [class]([ClassName], [SchoolYear], [DeptId], [TeacherId]) VALUES (@tl,@nh,@mk,@mgv)");
+            command.Parameters.Add("@tl", SqlDbType.NVarChar).Value = tenLop;
+            command.Parameters.Add("@nh", SqlDbType.NVarChar).Value = namHoc;
+            command.Parameters.Add("@mk", SqlDbType.Int).Value = maKhoa;
+            command.Parameters.Add("@mgv", SqlDbType.Int).Value = maGVCN;
             return run(command);
         }
 
         public bool updateLop(int maLop, string tenLop, string namHoc, int maKhoa, int maGVCN)
         {
-            MySqlCommand command = new MySqlCommand("UPDATE `class` SET `ClassName`=@tl,`SchoolYear`=@nh,`DeptId`=@mk,`TeacherId`=@mgv WHERE `ClassId`=@ma");
-            command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maLop;
-            command.Parameters.Add("@tl", MySqlDbType.VarChar).Value = tenLop;
-            command.Parameters.Add("@nh", MySqlDbType.VarChar).Value = namHoc;
-            command.Parameters.Add("@mk", MySqlDbType.Int32).Value = maKhoa;
-            command.Parameters.Add("@mgv", MySqlDbType.Int32).Value = maGVCN;
+            SqlCommand command = new SqlCommand("UPDATE [class] SET [ClassName]=@tl,[SchoolYear]=@nh,[DeptId]=@mk,[TeacherId]=@mgv WHERE [ClassId]=@ma");
+            command.Parameters.Add("@ma", SqlDbType.Int).Value = maLop;
+            command.Parameters.Add("@tl", SqlDbType.NVarChar).Value = tenLop;
+            command.Parameters.Add("@nh", SqlDbType.NVarChar).Value = namHoc;
+            command.Parameters.Add("@mk", SqlDbType.Int).Value = maKhoa;
+            command.Parameters.Add("@mgv", SqlDbType.Int).Value = maGVCN;
             return run(command);
         }
 
         //xoá lớp, lớp còn học sinh hoặc còn trong thời khoá biểu thì không xoá được
         public bool deleteLop(int maLop)
         {
-            MySqlCommand command = new MySqlCommand("DELETE FROM `class` WHERE `ClassId`=@ma");
-            command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maLop;
+            SqlCommand command = new SqlCommand("DELETE FROM [class] WHERE [ClassId]=@ma");
+            command.Parameters.Add("@ma", SqlDbType.Int).Value = maLop;
             return run(command);
         }
 
         //câu select dùng chung: lớp kèm tên khoa, tên giáo viên chủ nhiệm và số học sinh
         private const string SELECT_LOP =
             "SELECT class.ClassId, class.ClassName, class.SchoolYear, department.DeptName, " +
-            "IFNULL(teacher.TeacherName,'Chưa phân công') AS TeacherName, " +
+            "ISNULL(teacher.TeacherName,N'Chưa phân công') AS TeacherName, " +
             "(SELECT COUNT(*) FROM student_class WHERE student_class.ClassId = class.ClassId) AS SoHocSinh, " +
             "class.DeptId, class.TeacherId " +
             "FROM class " +
@@ -52,26 +52,26 @@ namespace QLDiemTHPT
 
         public DataTable getAll()
         {
-            return getList(new MySqlCommand(SELECT_LOP + " ORDER BY class.ClassId"));
+            return getList(new SqlCommand(SELECT_LOP + " ORDER BY class.ClassId"));
         }
 
         //lấy lớp cho combobox (chỉ mã và tên)
         public DataTable getComboBox()
         {
-            return getList(new MySqlCommand("SELECT `ClassId`,`ClassName` FROM `class` ORDER BY `ClassName`"));
+            return getList(new SqlCommand("SELECT [ClassId],[ClassName] FROM [class] ORDER BY [ClassName]"));
         }
 
         //tìm lớp theo tên lớp, năm học, khoa hoặc giáo viên chủ nhiệm
         public DataTable searchLop(string tuKhoa)
         {
-            MySqlCommand command = new MySqlCommand(SELECT_LOP + " WHERE CONCAT(class.ClassName, class.SchoolYear, department.DeptName, IFNULL(teacher.TeacherName,'')) LIKE @s");
+            SqlCommand command = new SqlCommand(SELECT_LOP + " WHERE CONCAT(class.ClassName, class.SchoolYear, department.DeptName, ISNULL(teacher.TeacherName,'')) LIKE @s");
             command.Parameters.AddWithValue("@s", "%" + tuKhoa + "%");
             return getList(command);
         }
 
         public string tongLop()
         {
-            MySqlCommand command = new MySqlCommand("SELECT COUNT(*) FROM class");
+            SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM class");
             return tinhMotGiaTri(command);
         }
     }

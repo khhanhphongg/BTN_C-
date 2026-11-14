@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
@@ -13,44 +13,44 @@ namespace QLDiemTHPT
     {
         public bool insertKhoa(string tenKhoa, string moTa)
         {
-            MySqlCommand command = new MySqlCommand("INSERT INTO `department`(`DeptName`, `Description`) VALUES (@tk,@mt)");
-            command.Parameters.Add("@tk", MySqlDbType.VarChar).Value = tenKhoa;
-            command.Parameters.Add("@mt", MySqlDbType.VarChar).Value = moTa;
+            SqlCommand command = new SqlCommand("INSERT INTO [department]([DeptName], [Description]) VALUES (@tk,@mt)");
+            command.Parameters.Add("@tk", SqlDbType.NVarChar).Value = tenKhoa;
+            command.Parameters.Add("@mt", SqlDbType.NVarChar).Value = moTa;
             return run(command);
         }
 
         public bool updateKhoa(int maKhoa, string tenKhoa, string moTa)
         {
-            MySqlCommand command = new MySqlCommand("UPDATE `department` SET `DeptName`=@tk,`Description`=@mt WHERE `DeptId`=@ma");
-            command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maKhoa;
-            command.Parameters.Add("@tk", MySqlDbType.VarChar).Value = tenKhoa;
-            command.Parameters.Add("@mt", MySqlDbType.VarChar).Value = moTa;
+            SqlCommand command = new SqlCommand("UPDATE [department] SET [DeptName]=@tk,[Description]=@mt WHERE [DeptId]=@ma");
+            command.Parameters.Add("@ma", SqlDbType.Int).Value = maKhoa;
+            command.Parameters.Add("@tk", SqlDbType.NVarChar).Value = tenKhoa;
+            command.Parameters.Add("@mt", SqlDbType.NVarChar).Value = moTa;
             return run(command);
         }
 
         //xoá khoa, khoa còn giáo viên hoặc lớp thì không xoá được
         public bool deleteKhoa(int maKhoa)
         {
-            MySqlCommand command = new MySqlCommand("DELETE FROM `department` WHERE `DeptId`=@ma");
-            command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maKhoa;
+            SqlCommand command = new SqlCommand("DELETE FROM [department] WHERE [DeptId]=@ma");
+            command.Parameters.Add("@ma", SqlDbType.Int).Value = maKhoa;
             return run(command);
         }
 
         public DataTable getAll()
         {
-            return getList(new MySqlCommand("SELECT * FROM `department` ORDER BY `DeptId`"));
+            return getList(new SqlCommand("SELECT * FROM [department] ORDER BY [DeptId]"));
         }
 
         public DataTable searchKhoa(string tuKhoa)
         {
-            MySqlCommand command = new MySqlCommand("SELECT * FROM `department` WHERE CONCAT(`DeptName`,`Description`) LIKE @s");
+            SqlCommand command = new SqlCommand("SELECT * FROM [department] WHERE CONCAT([DeptName],[Description]) LIKE @s");
             command.Parameters.AddWithValue("@s", "%" + tuKhoa + "%");
             return getList(command);
         }
 
         public string tongKhoa()
         {
-            MySqlCommand command = new MySqlCommand("SELECT COUNT(*) FROM department");
+            SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM department");
             return tinhMotGiaTri(command);
         }
     }

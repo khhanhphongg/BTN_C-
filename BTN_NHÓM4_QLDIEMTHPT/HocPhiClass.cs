@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
@@ -17,44 +17,44 @@ namespace QLDiemTHPT
         //thêm một dòng học phí, chưa đóng thì ngày đóng để trống
         public bool insertHocPhi(int maHS, int maHK, int soTien, DateTime? ngayDong, string trangThai)
         {
-            MySqlCommand command = new MySqlCommand("INSERT INTO `tuition`(`StudentId`, `SemesterId`, `Amount`, `PaidDate`, `Status`) VALUES (@mhs,@mhk,@st,@nd,@tt)");
-            command.Parameters.Add("@mhs", MySqlDbType.Int32).Value = maHS;
-            command.Parameters.Add("@mhk", MySqlDbType.Int32).Value = maHK;
-            command.Parameters.Add("@st", MySqlDbType.Int32).Value = soTien;
-            command.Parameters.Add("@tt", MySqlDbType.VarChar).Value = trangThai;
+            SqlCommand command = new SqlCommand("INSERT INTO [tuition]([StudentId], [SemesterId], [Amount], [PaidDate], [Status]) VALUES (@mhs,@mhk,@st,@nd,@tt)");
+            command.Parameters.Add("@mhs", SqlDbType.Int).Value = maHS;
+            command.Parameters.Add("@mhk", SqlDbType.Int).Value = maHK;
+            command.Parameters.Add("@st", SqlDbType.Int).Value = soTien;
+            command.Parameters.Add("@tt", SqlDbType.NVarChar).Value = trangThai;
             if (ngayDong.HasValue)
-                command.Parameters.Add("@nd", MySqlDbType.Date).Value = ngayDong.Value;
+                command.Parameters.Add("@nd", SqlDbType.Date).Value = ngayDong.Value;
             else
-                command.Parameters.Add("@nd", MySqlDbType.Date).Value = DBNull.Value;
+                command.Parameters.Add("@nd", SqlDbType.Date).Value = DBNull.Value;
             return run(command);
         }
 
         public bool updateHocPhi(int maHP, int maHS, int maHK, int soTien, DateTime? ngayDong, string trangThai)
         {
-            MySqlCommand command = new MySqlCommand("UPDATE `tuition` SET `StudentId`=@mhs,`SemesterId`=@mhk,`Amount`=@st,`PaidDate`=@nd,`Status`=@tt WHERE `TuitionId`=@ma");
-            command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maHP;
-            command.Parameters.Add("@mhs", MySqlDbType.Int32).Value = maHS;
-            command.Parameters.Add("@mhk", MySqlDbType.Int32).Value = maHK;
-            command.Parameters.Add("@st", MySqlDbType.Int32).Value = soTien;
-            command.Parameters.Add("@tt", MySqlDbType.VarChar).Value = trangThai;
+            SqlCommand command = new SqlCommand("UPDATE [tuition] SET [StudentId]=@mhs,[SemesterId]=@mhk,[Amount]=@st,[PaidDate]=@nd,[Status]=@tt WHERE [TuitionId]=@ma");
+            command.Parameters.Add("@ma", SqlDbType.Int).Value = maHP;
+            command.Parameters.Add("@mhs", SqlDbType.Int).Value = maHS;
+            command.Parameters.Add("@mhk", SqlDbType.Int).Value = maHK;
+            command.Parameters.Add("@st", SqlDbType.Int).Value = soTien;
+            command.Parameters.Add("@tt", SqlDbType.NVarChar).Value = trangThai;
             if (ngayDong.HasValue)
-                command.Parameters.Add("@nd", MySqlDbType.Date).Value = ngayDong.Value;
+                command.Parameters.Add("@nd", SqlDbType.Date).Value = ngayDong.Value;
             else
-                command.Parameters.Add("@nd", MySqlDbType.Date).Value = DBNull.Value;
+                command.Parameters.Add("@nd", SqlDbType.Date).Value = DBNull.Value;
             return run(command);
         }
 
         public bool deleteHocPhi(int maHP)
         {
-            MySqlCommand command = new MySqlCommand("DELETE FROM `tuition` WHERE `TuitionId`=@ma");
-            command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maHP;
+            SqlCommand command = new SqlCommand("DELETE FROM [tuition] WHERE [TuitionId]=@ma");
+            command.Parameters.Add("@ma", SqlDbType.Int).Value = maHP;
             return run(command);
         }
 
         //câu select dùng chung: học phí kèm họ tên học sinh, tên lớp, tên học kỳ
         private const string SELECT_HP =
             "SELECT tuition.TuitionId, CONCAT(student.StdLastName,' ',student.StdFirstName) AS HoTen, " +
-            "IFNULL(class.ClassName,'Chưa xếp lớp') AS ClassName, semester.SemesterName, " +
+            "ISNULL(class.ClassName,N'Chưa xếp lớp') AS ClassName, semester.SemesterName, " +
             "tuition.Amount, tuition.PaidDate, tuition.Status, tuition.StudentId, tuition.SemesterId " +
             "FROM tuition " +
             "INNER JOIN student ON tuition.StudentId = student.StdId " +
@@ -64,13 +64,13 @@ namespace QLDiemTHPT
 
         public DataTable getAll()
         {
-            return getList(new MySqlCommand(SELECT_HP + " ORDER BY tuition.SemesterId DESC, tuition.TuitionId"));
+            return getList(new SqlCommand(SELECT_HP + " ORDER BY tuition.SemesterId DESC, tuition.TuitionId"));
         }
 
         //tìm theo họ tên, lớp, học kỳ hoặc trạng thái
         public DataTable searchHocPhi(string tuKhoa)
         {
-            MySqlCommand command = new MySqlCommand(SELECT_HP + " WHERE CONCAT(student.StdLastName, student.StdFirstName, IFNULL(class.ClassName,''), semester.SemesterName, tuition.Status) LIKE @s");
+            SqlCommand command = new SqlCommand(SELECT_HP + " WHERE CONCAT(student.StdLastName, student.StdFirstName, ISNULL(class.ClassName,'N'), semester.SemesterName, tuition.Status) LIKE @s");
             command.Parameters.AddWithValue("@s", "%" + tuKhoa + "%");
             return getList(command);
         }
@@ -78,19 +78,19 @@ namespace QLDiemTHPT
         //thống kê thu học phí theo học kỳ
         public DataTable thongKeHocPhi()
         {
-            return getList(new MySqlCommand(
-                "SELECT semester.SemesterName AS `Học kỳ`, COUNT(*) AS `Số học sinh`, " +
-                "SUM(CASE WHEN tuition.Status='Đã đóng' THEN 1 ELSE 0 END) AS `Đã đóng`, " +
-                "SUM(CASE WHEN tuition.Status='Chưa đóng' THEN 1 ELSE 0 END) AS `Chưa đóng`, " +
-                "SUM(CASE WHEN tuition.Status='Đã đóng' THEN tuition.Amount ELSE 0 END) AS `Tiền đã thu`, " +
-                "SUM(CASE WHEN tuition.Status='Chưa đóng' THEN tuition.Amount ELSE 0 END) AS `Tiền còn nợ` " +
+            return getList(new SqlCommand(
+                "SELECT semester.SemesterName AS [Học kỳ], COUNT(*) AS [Số học sinh], " +
+                "SUM(CASE WHEN tuition.Status='Đã đóngN' THEN 1 ELSE 0 END) AS [Đã đóng], " +
+                "SUM(CASE WHEN tuition.Status='Chưa đóngN' THEN 1 ELSE 0 END) AS [Chưa đóng], " +
+                "SUM(CASE WHEN tuition.Status='Đã đóngN' THEN tuition.Amount ELSE 0 END) AS [Tiền đã thu], " +
+                "SUM(CASE WHEN tuition.Status='Chưa đóngN' THEN tuition.Amount ELSE 0 END) AS [Tiền còn nợ] " +
                 "FROM tuition INNER JOIN semester ON tuition.SemesterId = semester.SemesterId " +
                 "GROUP BY semester.SemesterId, semester.SemesterName ORDER BY semester.SemesterId"));
         }
 
         public string tongTienDaThu()
         {
-            MySqlCommand command = new MySqlCommand("SELECT IFNULL(SUM(Amount),0) FROM tuition WHERE Status='Đã đóng'");
+            SqlCommand command = new SqlCommand("SELECT ISNULL(SUM(Amount),0) FROM tuition WHERE Status='Đã đóng'");
             return tinhMotGiaTri(command);
         }
 

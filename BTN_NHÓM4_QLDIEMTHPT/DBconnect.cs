@@ -1,18 +1,18 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
-    //Lớp tạo kết nối tới CSDL MySQL studentdb
+    //Lớp tạo kết nối tới CSDL SQL Server studentdb
     class DBconnect
     {
-        MySqlConnection connect = new MySqlConnection("datasource=localhost;port=3306;username=root;password=;database=studentdb;charset=utf8mb4");
+        SqlConnection connect = new SqlConnection("Data Source=localhost,1433;Initial Catalog=studentdb;Integrated Security=True");
 
-        public MySqlConnection getconnection
+        public SqlConnection getconnection
         {
             get
             {

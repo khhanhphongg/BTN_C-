@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
@@ -20,14 +20,14 @@ namespace QLDiemTHPT
 
         public bool insertChiTiet(int maHS, string tenMon, int maHK, string loaiDiem, double diem, int heSo, string ghiChu)
         {
-            MySqlCommand command = new MySqlCommand("INSERT INTO `diem_chitiet`(`StudentId`, `CourseName`, `SemesterId`, `LoaiDiem`, `Diem`, `HeSo`, `GhiChu`) VALUES (@mhs,@tm,@mhk,@ld,@d,@hs,@gc)");
-            command.Parameters.Add("@mhs", MySqlDbType.Int32).Value = maHS;
-            command.Parameters.Add("@tm", MySqlDbType.VarChar).Value = tenMon;
-            command.Parameters.Add("@mhk", MySqlDbType.Int32).Value = maHK;
-            command.Parameters.Add("@ld", MySqlDbType.VarChar).Value = loaiDiem;
-            command.Parameters.Add("@d", MySqlDbType.Double).Value = diem;
-            command.Parameters.Add("@hs", MySqlDbType.Int32).Value = heSo;
-            command.Parameters.Add("@gc", MySqlDbType.VarChar).Value = ghiChu;
+            SqlCommand command = new SqlCommand("INSERT INTO [diem_chitiet]([StudentId], [CourseName], [SemesterId], [LoaiDiem], [Diem], [HeSo], [GhiChu]) VALUES (@mhs,@tm,@mhk,@ld,@d,@hs,@gc)");
+            command.Parameters.Add("@mhs", SqlDbType.Int).Value = maHS;
+            command.Parameters.Add("@tm", SqlDbType.NVarChar).Value = tenMon;
+            command.Parameters.Add("@mhk", SqlDbType.Int).Value = maHK;
+            command.Parameters.Add("@ld", SqlDbType.NVarChar).Value = loaiDiem;
+            command.Parameters.Add("@d", SqlDbType.Float).Value = diem;
+            command.Parameters.Add("@hs", SqlDbType.Int).Value = heSo;
+            command.Parameters.Add("@gc", SqlDbType.NVarChar).Value = ghiChu;
             if (run(command))
             {
                 capNhatDiemTB(maHS, tenMon);
@@ -38,13 +38,13 @@ namespace QLDiemTHPT
 
         public bool updateChiTiet(int maCT, int maHK, string loaiDiem, double diem, int heSo, string ghiChu, int maHS, string tenMon)
         {
-            MySqlCommand command = new MySqlCommand("UPDATE `diem_chitiet` SET `SemesterId`=@mhk,`LoaiDiem`=@ld,`Diem`=@d,`HeSo`=@hs,`GhiChu`=@gc WHERE `MaCT`=@ma");
-            command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maCT;
-            command.Parameters.Add("@mhk", MySqlDbType.Int32).Value = maHK;
-            command.Parameters.Add("@ld", MySqlDbType.VarChar).Value = loaiDiem;
-            command.Parameters.Add("@d", MySqlDbType.Double).Value = diem;
-            command.Parameters.Add("@hs", MySqlDbType.Int32).Value = heSo;
-            command.Parameters.Add("@gc", MySqlDbType.VarChar).Value = ghiChu;
+            SqlCommand command = new SqlCommand("UPDATE [diem_chitiet] SET [SemesterId]=@mhk,[LoaiDiem]=@ld,[Diem]=@d,[HeSo]=@hs,[GhiChu]=@gc WHERE [MaCT]=@ma");
+            command.Parameters.Add("@ma", SqlDbType.Int).Value = maCT;
+            command.Parameters.Add("@mhk", SqlDbType.Int).Value = maHK;
+            command.Parameters.Add("@ld", SqlDbType.NVarChar).Value = loaiDiem;
+            command.Parameters.Add("@d", SqlDbType.Float).Value = diem;
+            command.Parameters.Add("@hs", SqlDbType.Int).Value = heSo;
+            command.Parameters.Add("@gc", SqlDbType.NVarChar).Value = ghiChu;
             if (run(command))
             {
                 capNhatDiemTB(maHS, tenMon);
@@ -55,8 +55,8 @@ namespace QLDiemTHPT
 
         public bool deleteChiTiet(int maCT, int maHS, string tenMon)
         {
-            MySqlCommand command = new MySqlCommand("DELETE FROM `diem_chitiet` WHERE `MaCT`=@ma");
-            command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maCT;
+            SqlCommand command = new SqlCommand("DELETE FROM [diem_chitiet] WHERE [MaCT]=@ma");
+            command.Parameters.Add("@ma", SqlDbType.Int).Value = maCT;
             if (run(command))
             {
                 capNhatDiemTB(maHS, tenMon);
@@ -67,7 +67,7 @@ namespace QLDiemTHPT
 
         public DataTable getChiTiet(int maHS, string tenMon)
         {
-            MySqlCommand command = new MySqlCommand(
+            SqlCommand command = new SqlCommand(
                 "SELECT diem_chitiet.MaCT, diem_chitiet.LoaiDiem, diem_chitiet.Diem, diem_chitiet.HeSo, " +
                 "semester.SemesterName, diem_chitiet.GhiChu, diem_chitiet.SemesterId " +
                 "FROM diem_chitiet INNER JOIN semester ON diem_chitiet.SemesterId = semester.SemesterId " +
@@ -110,7 +110,7 @@ namespace QLDiemTHPT
                 tb = tinhTrungBinh(table);
                 hocLuc = xepLoai(tb);
             }
-            MySqlCommand command = new MySqlCommand("UPDATE `score` SET `Score`=@d,`Description`=@hl WHERE `StudentId`=@mhs AND `CourseName`=@tm");
+            SqlCommand command = new SqlCommand("UPDATE [score] SET [Score]=@d,[Description]=@hl WHERE [StudentId]=@mhs AND [CourseName]=@tm");
             command.Parameters.AddWithValue("@d", tb);
             command.Parameters.AddWithValue("@hl", hocLuc);
             command.Parameters.AddWithValue("@mhs", maHS);

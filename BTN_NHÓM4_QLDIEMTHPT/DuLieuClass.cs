@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
@@ -18,25 +18,25 @@ namespace QLDiemTHPT
         protected DBconnect connect = new DBconnect();
 
         //gán kết nối cho một câu lệnh, dùng khi phải tự mở kết nối để chạy nhiều câu liên tiếp
-        protected MySqlCommand ganKetNoi(MySqlCommand command)
+        protected SqlCommand ganKetNoi(SqlCommand command)
         {
             command.Connection = connect.getconnection;
             return command;
         }
 
         //chạy câu select, trả về DataTable để đổ lên DataGridView
-        public DataTable getList(MySqlCommand command)
+        public DataTable getList(SqlCommand command)
         {
             command.Connection = connect.getconnection;
-            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
             DataTable table = new DataTable();
             adapter.Fill(table);
             return table;
         }
 
         //chạy câu thêm/sửa/xoá, trả về true khi được 1 dòng
-        //lỗi MySQL (trùng khoá, còn dữ liệu con...) thì trả về false để form báo lại cho người dùng
-        protected bool run(MySqlCommand command)
+        //lỗi SQL Server (trùng khoá, còn dữ liệu con...) thì trả về false để form báo lại cho người dùng
+        protected bool run(SqlCommand command)
         {
             command.Connection = connect.getconnection;
             try
@@ -44,7 +44,7 @@ namespace QLDiemTHPT
                 connect.openConnect();
                 return command.ExecuteNonQuery() == 1;
             }
-            catch (MySqlException)
+            catch (SqlException)
             {
                 return false;
             }
@@ -55,7 +55,7 @@ namespace QLDiemTHPT
         }
 
         //chạy câu tác động nhiều dòng, trả về số dòng đã tác động
-        protected int runNhieuDong(MySqlCommand command)
+        protected int runNhieuDong(SqlCommand command)
         {
             command.Connection = connect.getconnection;
             try
@@ -70,7 +70,7 @@ namespace QLDiemTHPT
         }
 
         //chạy câu COUNT, SUM, AVG... trả về một giá trị
-        protected string tinhMotGiaTri(MySqlCommand command)
+        protected string tinhMotGiaTri(SqlCommand command)
         {
             command.Connection = connect.getconnection;
             try
@@ -86,7 +86,7 @@ namespace QLDiemTHPT
 
         protected string tinhMotGiaTri(string cauLenh)
         {
-            return tinhMotGiaTri(new MySqlCommand(cauLenh));
+            return tinhMotGiaTri(new SqlCommand(cauLenh));
         }
     }
 }

@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace QLDiemTHPT
 {
@@ -16,44 +16,44 @@ namespace QLDiemTHPT
 
         public bool insertTiet(int maMon, int maLop, int maGV, int maPhong, int maHK, string thu, TimeSpan batDau, TimeSpan ketThuc)
         {
-            MySqlCommand command = new MySqlCommand("INSERT INTO `schedule`(`CourseId`, `ClassId`, `TeacherId`, `RoomId`, `SemesterId`, `DayOfWeek`, `StartTime`, `EndTime`) VALUES (@mm,@ml,@mgv,@mp,@mhk,@thu,@bd,@kt)");
-            command.Parameters.Add("@mm", MySqlDbType.Int32).Value = maMon;
-            command.Parameters.Add("@ml", MySqlDbType.Int32).Value = maLop;
-            command.Parameters.Add("@mgv", MySqlDbType.Int32).Value = maGV;
-            command.Parameters.Add("@mp", MySqlDbType.Int32).Value = maPhong;
-            command.Parameters.Add("@mhk", MySqlDbType.Int32).Value = maHK;
-            command.Parameters.Add("@thu", MySqlDbType.VarChar).Value = thu;
-            command.Parameters.Add("@bd", MySqlDbType.Time).Value = batDau;
-            command.Parameters.Add("@kt", MySqlDbType.Time).Value = ketThuc;
+            SqlCommand command = new SqlCommand("INSERT INTO [schedule]([CourseId], [ClassId], [TeacherId], [RoomId], [SemesterId], [DayOfWeek], [StartTime], [EndTime]) VALUES (@mm,@ml,@mgv,@mp,@mhk,@thu,@bd,@kt)");
+            command.Parameters.Add("@mm", SqlDbType.Int).Value = maMon;
+            command.Parameters.Add("@ml", SqlDbType.Int).Value = maLop;
+            command.Parameters.Add("@mgv", SqlDbType.Int).Value = maGV;
+            command.Parameters.Add("@mp", SqlDbType.Int).Value = maPhong;
+            command.Parameters.Add("@mhk", SqlDbType.Int).Value = maHK;
+            command.Parameters.Add("@thu", SqlDbType.NVarChar).Value = thu;
+            command.Parameters.Add("@bd", SqlDbType.Time).Value = batDau;
+            command.Parameters.Add("@kt", SqlDbType.Time).Value = ketThuc;
             return run(command);
         }
 
         public bool updateTiet(int maTiet, int maMon, int maLop, int maGV, int maPhong, int maHK, string thu, TimeSpan batDau, TimeSpan ketThuc)
         {
-            MySqlCommand command = new MySqlCommand("UPDATE `schedule` SET `CourseId`=@mm,`ClassId`=@ml,`TeacherId`=@mgv,`RoomId`=@mp,`SemesterId`=@mhk,`DayOfWeek`=@thu,`StartTime`=@bd,`EndTime`=@kt WHERE `ScheduleId`=@ma");
-            command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maTiet;
-            command.Parameters.Add("@mm", MySqlDbType.Int32).Value = maMon;
-            command.Parameters.Add("@ml", MySqlDbType.Int32).Value = maLop;
-            command.Parameters.Add("@mgv", MySqlDbType.Int32).Value = maGV;
-            command.Parameters.Add("@mp", MySqlDbType.Int32).Value = maPhong;
-            command.Parameters.Add("@mhk", MySqlDbType.Int32).Value = maHK;
-            command.Parameters.Add("@thu", MySqlDbType.VarChar).Value = thu;
-            command.Parameters.Add("@bd", MySqlDbType.Time).Value = batDau;
-            command.Parameters.Add("@kt", MySqlDbType.Time).Value = ketThuc;
+            SqlCommand command = new SqlCommand("UPDATE [schedule] SET [CourseId]=@mm,[ClassId]=@ml,[TeacherId]=@mgv,[RoomId]=@mp,[SemesterId]=@mhk,[DayOfWeek]=@thu,[StartTime]=@bd,[EndTime]=@kt WHERE [ScheduleId]=@ma");
+            command.Parameters.Add("@ma", SqlDbType.Int).Value = maTiet;
+            command.Parameters.Add("@mm", SqlDbType.Int).Value = maMon;
+            command.Parameters.Add("@ml", SqlDbType.Int).Value = maLop;
+            command.Parameters.Add("@mgv", SqlDbType.Int).Value = maGV;
+            command.Parameters.Add("@mp", SqlDbType.Int).Value = maPhong;
+            command.Parameters.Add("@mhk", SqlDbType.Int).Value = maHK;
+            command.Parameters.Add("@thu", SqlDbType.NVarChar).Value = thu;
+            command.Parameters.Add("@bd", SqlDbType.Time).Value = batDau;
+            command.Parameters.Add("@kt", SqlDbType.Time).Value = ketThuc;
             return run(command);
         }
 
         public bool deleteTiet(int maTiet)
         {
-            MySqlCommand command = new MySqlCommand("DELETE FROM `schedule` WHERE `ScheduleId`=@ma");
-            command.Parameters.Add("@ma", MySqlDbType.Int32).Value = maTiet;
+            SqlCommand command = new SqlCommand("DELETE FROM [schedule] WHERE [ScheduleId]=@ma");
+            command.Parameters.Add("@ma", SqlDbType.Int).Value = maTiet;
             return run(command);
         }
 
         //câu select dùng chung: nối 5 bảng để hiện tên thay vì mã
         private const string SELECT_TKB =
             "SELECT schedule.ScheduleId, course.CourseName, class.ClassName, teacher.TeacherName, " +
-            "room.RoomName, semester.SemesterName, schedule.`DayOfWeek`, schedule.StartTime, schedule.EndTime, " +
+            "room.RoomName, semester.SemesterName, schedule.[DayOfWeek], schedule.StartTime, schedule.EndTime, " +
             "schedule.CourseId, schedule.ClassId, schedule.TeacherId, schedule.RoomId, schedule.SemesterId " +
             "FROM schedule " +
             "INNER JOIN course ON schedule.CourseId = course.CourseId " +
@@ -64,13 +64,13 @@ namespace QLDiemTHPT
 
         public DataTable getAll()
         {
-            return getList(new MySqlCommand(SELECT_TKB + " ORDER BY schedule.SemesterId, schedule.`DayOfWeek`, schedule.StartTime"));
+            return getList(new SqlCommand(SELECT_TKB + " ORDER BY schedule.SemesterId, schedule.[DayOfWeek], schedule.StartTime"));
         }
 
         //tìm theo tên môn, tên lớp, giáo viên hoặc phòng
         public DataTable searchTKB(string tuKhoa)
         {
-            MySqlCommand command = new MySqlCommand(SELECT_TKB + " WHERE CONCAT(course.CourseName, class.ClassName, teacher.TeacherName, room.RoomName, semester.SemesterName) LIKE @s");
+            SqlCommand command = new SqlCommand(SELECT_TKB + " WHERE CONCAT(course.CourseName, class.ClassName, teacher.TeacherName, room.RoomName, semester.SemesterName) LIKE @s");
             command.Parameters.AddWithValue("@s", "%" + tuKhoa + "%");
             return getList(command);
         }
@@ -82,12 +82,12 @@ namespace QLDiemTHPT
          */
         public string kiemTraTrungLich(int maPhong, int maGV, int maHK, string thu, TimeSpan batDau, TimeSpan ketThuc, int maTietBoQua)
         {
-            MySqlCommand command = new MySqlCommand(
+            SqlCommand command = new SqlCommand(
                 "SELECT room.RoomName, teacher.TeacherName, schedule.RoomId, schedule.TeacherId " +
                 "FROM schedule " +
                 "INNER JOIN room ON schedule.RoomId = room.RoomId " +
                 "INNER JOIN teacher ON schedule.TeacherId = teacher.TeacherId " +
-                "WHERE schedule.SemesterId=@mhk AND schedule.`DayOfWeek`=@thu AND schedule.ScheduleId<>@bq " +
+                "WHERE schedule.SemesterId=@mhk AND schedule.[DayOfWeek]=@thu AND schedule.ScheduleId<>@bq " +
                 "AND schedule.StartTime < @kt AND schedule.EndTime > @bd " +
                 "AND (schedule.RoomId=@mp OR schedule.TeacherId=@mgv)");
             command.Parameters.AddWithValue("@mhk", maHK);
@@ -108,7 +108,7 @@ namespace QLDiemTHPT
 
         public string tongTiet()
         {
-            MySqlCommand command = new MySqlCommand("SELECT COUNT(*) FROM schedule");
+            SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM schedule");
             return tinhMotGiaTri(command);
         }
     }
