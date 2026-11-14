@@ -35,10 +35,10 @@ Không cần cài driver cơ sở dữ liệu riêng: project dùng `System.Data
 
 1. Mở **SQL Server Management Studio (SSMS)**, kết nối tới server của bạn.
 2. File → Open → File, chọn `student_db.sql` ở thư mục gốc repo.
-3. Bấm **Execute (F5)**. Script tự `CREATE DATABASE studentdb` nếu chưa có, nên không cần tạo trước.
+3. Bấm **Execute (F5)**. Script tự tạo database `studentdb`, nên không cần tạo trước. Nếu máy đã có `studentdb` thì xóa nó trước (SSMS: chuột phải vào `studentdb` → Delete, nhớ đóng chương trình đang mở), vì script không ghi đè database cũ.
 4. Kiểm tra: database `studentdb` phải có **14 bảng** — `student`, `teacher`, `class`, `student_class`, `course`, `department`, `room`, `semester`, `schedule`, `score`, `diem_chitiet`, `attendance`, `tuition`, `login`.
 
-Script chạy lại nhiều lần không sao: mỗi khối `INSERT` đều có kiểm tra bảng đã có dữ liệu chưa.
+Script chỉ chạy được khi chưa có database `studentdb`. Chạy khi đã có thì SQL Server báo lỗi (database và bảng đã tồn tại), dữ liệu cũ không bị sửa.
 
 **Tài khoản đăng nhập có sẵn:**
 
@@ -53,8 +53,10 @@ Script chạy lại nhiều lần không sao: mỗi khối `INSERT` đều có k
 Khai báo trong `BTN_NHÓM4_QLDIEMTHPT/DBconnect.cs` — **đây là nơi duy nhất**, sửa chỗ này là xong, không phải sửa chỗ nào khác:
 
 ```csharp
-Data Source=localhost;Initial Catalog=studentdb;Integrated Security=True
+Data Source=localhost,1433;Initial Catalog=studentdb;Integrated Security=True
 ```
+
+Chuỗi này nối qua cổng TCP 1433. Máy nào SQL Server chưa bật cổng 1433 (thường gặp với SQL Server Express) thì dùng biến thể `.\SQLEXPRESS` ở bảng dưới.
 
 Các biến thể thường gặp:
 
@@ -74,11 +76,13 @@ Các biến thể thường gặp:
 
 ---
 
-## 4. Crystal Report — tạo file `BaoCaoDiem.rpt`
+## 4. Crystal Report — file `BaoCaoDiem.rpt`
 
-**File `BaoCaoDiem.rpt` chưa có trong repo và phải tự tạo bằng designer của Visual Studio.** Repo chỉ có `BaoCaoDiem.xsd` (schema của dataset, dùng làm nguồn dữ liệu khi thiết kế).
+**File `BaoCaoDiem.rpt` đã có trong thư mục project**, cạnh `BaoCaoDiem.xsd` (schema của dataset). Phần dưới mô tả cách report được thiết kế, dùng khi cần vẽ lại.
 
-Trước khi tạo, chương trình vẫn chạy bình thường — chỉ khi bấm nút **Báo cáo** ở form Tra cứu thống kê thì hiện hộp thoại "Chưa có file BaoCaoDiem.rpt" rồi đóng form lại, không crash.
+> File `.rpt` hiện có được vẽ bằng Crystal Reports 9 với nguồn dữ liệu tạm, đã mở và xuất PDF được bằng Crystal 9 nhưng chưa chạy thử qua `FrmBaoCao` với runtime Crystal for Visual Studio. Nếu lúc chạy Crystal đòi đăng nhập database hoặc báo lỗi, hãy vẽ lại theo các bước bên dưới.
+
+Nếu file `.rpt` bị mất, chương trình vẫn chạy bình thường — chỉ khi bấm nút **Báo cáo** ở form Tra cứu thống kê thì hiện hộp thoại "Chưa có file BaoCaoDiem.rpt" rồi đóng form lại, không crash.
 
 ### Bản vẽ layout chi tiết
 
@@ -118,9 +122,9 @@ Hàm `timFileReport()` tìm `BaoCaoDiem.rpt` theo thứ tự:
 1. Cạnh file `.exe` (tức `bin\Debug\`)
 2. `..\..\BaoCaoDiem.rpt` — từ `bin\Debug` thì đây chính là thư mục project
 
-Nên chỉ cần file `.rpt` nằm trong thư mục project là chạy được. Muốn chắc hơn thì chọn file trong Solution Explorer → Properties → `Copy to Output Directory` = **Copy always**.
+File `.rpt` nằm trong thư mục project là chạy được, và `.csproj` đã đặt sẵn `Copy to Output Directory` = **Copy always** nên file còn được chép sang `bin\Debug` khi build.
 
-> Đừng thêm `<None Include="BaoCaoDiem.rpt">` vào `.csproj` bằng tay khi file chưa tồn tại — build sẽ fail ở task Copy. Để Visual Studio tự ghi mục đó khi bạn đặt property.
+> Mục `<None Include="BaoCaoDiem.rpt">` đã có sẵn trong `.csproj`. Nếu xóa file `.rpt` thì phải xóa luôn mục này, không thì build sẽ fail ở task Copy.
 
 ---
 
@@ -143,7 +147,7 @@ Nên chỉ cần file `.rpt` nằm trong thư mục project là chạy được.
 | Build lỗi thiếu `CrystalDecisions.*` | Chưa cài SAP Crystal Reports for Visual Studio |
 | `Could not load file or assembly 'CrystalDecisions...'` lúc chạy | Bitness của runtime lệch với app, hoặc đang dùng Crystal 9.2 — xem mục 1 |
 | Crystal không xuất hiện trong menu Add New Item của VS 2022 | Cài SP 31 trở xuống, cần SP 32+ |
-| "Chưa có file BaoCaoDiem.rpt" | Chưa tạo report, xem mục 4 |
+| "Chưa có file BaoCaoDiem.rpt" | File `.rpt` bị mất hoặc nằm sai chỗ, xem mục 4 |
 | Report mở ra nhưng trắng, chỉ có tiêu đề | Tên bảng trong report không phải `BaoCaoDiem` |
 | Report mở ra nhưng tiêu đề trống | Tên tham số trong report gõ sai |
 | Crystal đòi đăng nhập database khi chạy | Report nối trực tiếp vào SQL Server thay vì qua `BaoCaoDiem.xsd` |
@@ -157,7 +161,7 @@ Kiến trúc 2 lớp:
 
 - `DuLieuClass.cs` — lớp cơ sở, gom `getList()` / `run()` / `tinhMotGiaTri()`. Mọi lớp nghiệp vụ kế thừa từ đây.
 - `*Class.cs` — một lớp cho mỗi bảng (`HocSinhClass`, `GiaoVienClass`, `ThongKeClass`...).
-- `Frm*.cs` — 15 form, treo dưới `FrmMain`.
+- `Frm*.cs` — 16 form: `FrmLogin`, `FrmMain` và 14 form con treo dưới `FrmMain`.
 - `DBconnect.cs` — nơi duy nhất khai báo chuỗi kết nối.
 - `DGVPrinter.cs` — thư viện in `DataGridView` của bên thứ ba, dùng ở `FrmTraCuuThongKe`.
 
@@ -204,8 +208,8 @@ File tạo CSDL: `student_db.sql`. Bản MySQL gốc chỉ còn trong thư mục
 | `DOUBLE` | `FLOAT` |
 | `LONGBLOB` | `VARBINARY(MAX)` |
 | `X'89504E...'` | `0x89504E...` |
-| `CREATE TABLE IF NOT EXISTS` | `IF OBJECT_ID('x','U') IS NULL CREATE TABLE` |
-| `INSERT IGNORE` | `IF NOT EXISTS (...)` + `SET IDENTITY_INSERT ON/OFF` |
+| `CREATE TABLE IF NOT EXISTS` | `CREATE TABLE` |
+| `INSERT IGNORE` | `INSERT` |
 | `SET @photo = ...` | `DECLARE @photo VARBINARY(MAX) = ...` |
 
 ### Một khác biệt về ràng buộc cần biết
