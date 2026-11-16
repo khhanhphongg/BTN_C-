@@ -49,7 +49,7 @@ namespace QLDiemTHPT
             // label_dong
             // 
             this.label_dong.AutoSize = true;
-            this.label_dong.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_dong.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_dong.ForeColor = System.Drawing.Color.Transparent;
             this.label_dong.Location = new System.Drawing.Point(921, 2);
             this.label_dong.Name = "label_dong";
@@ -63,7 +63,7 @@ namespace QLDiemTHPT
             // label_tenTruong
             // 
             this.label_tenTruong.AutoSize = true;
-            this.label_tenTruong.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_tenTruong.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_tenTruong.ForeColor = System.Drawing.Color.Transparent;
             this.label_tenTruong.Location = new System.Drawing.Point(70, 16);
             this.label_tenTruong.Name = "label_tenTruong";
@@ -94,7 +94,7 @@ namespace QLDiemTHPT
             // label_moiDangNhap
             // 
             this.label_moiDangNhap.AutoSize = true;
-            this.label_moiDangNhap.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_moiDangNhap.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_moiDangNhap.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(71)))), ((int)(((byte)(160)))));
             this.label_moiDangNhap.Location = new System.Drawing.Point(300, 262);
             this.label_moiDangNhap.Name = "label_moiDangNhap";
@@ -142,7 +142,7 @@ namespace QLDiemTHPT
             // 
             this.button_dangNhap.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(71)))), ((int)(((byte)(160)))));
             this.button_dangNhap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_dangNhap.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_dangNhap.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_dangNhap.ForeColor = System.Drawing.Color.White;
             this.button_dangNhap.Location = new System.Drawing.Point(313, 465);
             this.button_dangNhap.Name = "button_dangNhap";
@@ -177,7 +177,7 @@ namespace QLDiemTHPT
             this.Controls.Add(this.label_moiDangNhap);
             this.Controls.Add(this.pictureBox_logoLon);
             this.Controls.Add(this.panel_tieude);
-            this.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FrmLogin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

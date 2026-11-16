@@ -63,7 +63,7 @@ namespace QLDiemTHPT
             // label_tieude
             // 
             this.label_tieude.AutoSize = true;
-            this.label_tieude.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_tieude.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_tieude.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(71)))), ((int)(((byte)(160)))));
             this.label_tieude.Location = new System.Drawing.Point(20, 15);
             this.label_tieude.Name = "label_tieude";
@@ -196,7 +196,7 @@ namespace QLDiemTHPT
             // 
             this.button_traCuu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(71)))), ((int)(((byte)(160)))));
             this.button_traCuu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_traCuu.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_traCuu.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_traCuu.ForeColor = System.Drawing.Color.White;
             this.button_traCuu.Location = new System.Drawing.Point(330, 50);
             this.button_traCuu.Name = "button_traCuu";
@@ -210,7 +210,7 @@ namespace QLDiemTHPT
             // 
             this.button_inNhanh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(71)))), ((int)(((byte)(160)))));
             this.button_inNhanh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_inNhanh.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_inNhanh.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_inNhanh.ForeColor = System.Drawing.Color.White;
             this.button_inNhanh.Location = new System.Drawing.Point(460, 50);
             this.button_inNhanh.Name = "button_inNhanh";
@@ -224,7 +224,7 @@ namespace QLDiemTHPT
             // 
             this.button_baoCao.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(71)))), ((int)(((byte)(160)))));
             this.button_baoCao.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_baoCao.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_baoCao.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_baoCao.ForeColor = System.Drawing.Color.White;
             this.button_baoCao.Location = new System.Drawing.Point(640, 50);
             this.button_baoCao.Name = "button_baoCao";
@@ -374,7 +374,7 @@ namespace QLDiemTHPT
             this.Controls.Add(this.panel_tong);
             this.Controls.Add(this.panel_loc);
             this.Controls.Add(this.panel_tieude);
-            this.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "FrmTraCuuThongKe";
             this.Text = "FrmTraCuuThongKe";
             this.Load += new System.EventHandler(this.FrmTraCuuThongKe_Load);

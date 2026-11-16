@@ -39,7 +39,7 @@ namespace QLDiemTHPT
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1000, 680);
             this.Controls.Add(this.crystalReportViewer_bc);
-            this.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "FrmBaoCao";
             this.Text = "FrmBaoCao";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

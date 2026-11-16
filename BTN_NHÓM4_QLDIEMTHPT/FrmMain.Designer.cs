@@ -111,7 +111,7 @@ namespace QLDiemTHPT
             this.button_dangXuat.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_dangXuat.FlatAppearance.BorderSize = 0;
             this.button_dangXuat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_dangXuat.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_dangXuat.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_dangXuat.ForeColor = System.Drawing.Color.White;
             this.button_dangXuat.Name = "button_dangXuat";
             this.button_dangXuat.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
@@ -127,7 +127,7 @@ namespace QLDiemTHPT
             this.button_trangChu.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_trangChu.FlatAppearance.BorderSize = 0;
             this.button_trangChu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_trangChu.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_trangChu.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_trangChu.ForeColor = System.Drawing.Color.White;
             this.button_trangChu.Name = "button_trangChu";
             this.button_trangChu.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
@@ -143,7 +143,7 @@ namespace QLDiemTHPT
             this.button_thongKe.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_thongKe.FlatAppearance.BorderSize = 0;
             this.button_thongKe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_thongKe.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_thongKe.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_thongKe.ForeColor = System.Drawing.Color.White;
             this.button_thongKe.Name = "button_thongKe";
             this.button_thongKe.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
@@ -170,7 +170,7 @@ namespace QLDiemTHPT
             this.button_hocPhi.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_hocPhi.FlatAppearance.BorderSize = 0;
             this.button_hocPhi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_hocPhi.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_hocPhi.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_hocPhi.ForeColor = System.Drawing.Color.White;
             this.button_hocPhi.Name = "button_hocPhi";
             this.button_hocPhi.Padding = new System.Windows.Forms.Padding(34, 0, 0, 0);
@@ -186,7 +186,7 @@ namespace QLDiemTHPT
             this.button_diemDanh.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_diemDanh.FlatAppearance.BorderSize = 0;
             this.button_diemDanh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_diemDanh.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_diemDanh.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_diemDanh.ForeColor = System.Drawing.Color.White;
             this.button_diemDanh.Name = "button_diemDanh";
             this.button_diemDanh.Padding = new System.Windows.Forms.Padding(34, 0, 0, 0);
@@ -202,7 +202,7 @@ namespace QLDiemTHPT
             this.button_tkb.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_tkb.FlatAppearance.BorderSize = 0;
             this.button_tkb.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_tkb.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_tkb.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_tkb.ForeColor = System.Drawing.Color.White;
             this.button_tkb.Name = "button_tkb";
             this.button_tkb.Padding = new System.Windows.Forms.Padding(34, 0, 0, 0);
@@ -218,7 +218,7 @@ namespace QLDiemTHPT
             this.button_khac.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_khac.FlatAppearance.BorderSize = 0;
             this.button_khac.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_khac.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_khac.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_khac.ForeColor = System.Drawing.Color.White;
             this.button_khac.Name = "button_khac";
             this.button_khac.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
@@ -244,7 +244,7 @@ namespace QLDiemTHPT
             this.button_chiTietDiem.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_chiTietDiem.FlatAppearance.BorderSize = 0;
             this.button_chiTietDiem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_chiTietDiem.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_chiTietDiem.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_chiTietDiem.ForeColor = System.Drawing.Color.White;
             this.button_chiTietDiem.Name = "button_chiTietDiem";
             this.button_chiTietDiem.Padding = new System.Windows.Forms.Padding(34, 0, 0, 0);
@@ -260,7 +260,7 @@ namespace QLDiemTHPT
             this.button_bangDiem.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_bangDiem.FlatAppearance.BorderSize = 0;
             this.button_bangDiem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_bangDiem.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_bangDiem.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_bangDiem.ForeColor = System.Drawing.Color.White;
             this.button_bangDiem.Name = "button_bangDiem";
             this.button_bangDiem.Padding = new System.Windows.Forms.Padding(34, 0, 0, 0);
@@ -276,7 +276,7 @@ namespace QLDiemTHPT
             this.button_diem.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_diem.FlatAppearance.BorderSize = 0;
             this.button_diem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_diem.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_diem.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_diem.ForeColor = System.Drawing.Color.White;
             this.button_diem.Name = "button_diem";
             this.button_diem.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
@@ -302,7 +302,7 @@ namespace QLDiemTHPT
             this.button_hocSinh.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_hocSinh.FlatAppearance.BorderSize = 0;
             this.button_hocSinh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_hocSinh.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_hocSinh.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_hocSinh.ForeColor = System.Drawing.Color.White;
             this.button_hocSinh.Name = "button_hocSinh";
             this.button_hocSinh.Padding = new System.Windows.Forms.Padding(34, 0, 0, 0);
@@ -318,7 +318,7 @@ namespace QLDiemTHPT
             this.button_giaoVien.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_giaoVien.FlatAppearance.BorderSize = 0;
             this.button_giaoVien.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_giaoVien.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_giaoVien.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_giaoVien.ForeColor = System.Drawing.Color.White;
             this.button_giaoVien.Name = "button_giaoVien";
             this.button_giaoVien.Padding = new System.Windows.Forms.Padding(34, 0, 0, 0);
@@ -334,7 +334,7 @@ namespace QLDiemTHPT
             this.button_nhanSu.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_nhanSu.FlatAppearance.BorderSize = 0;
             this.button_nhanSu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_nhanSu.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_nhanSu.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_nhanSu.ForeColor = System.Drawing.Color.White;
             this.button_nhanSu.Name = "button_nhanSu";
             this.button_nhanSu.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
@@ -363,7 +363,7 @@ namespace QLDiemTHPT
             this.button_lop.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_lop.FlatAppearance.BorderSize = 0;
             this.button_lop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_lop.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_lop.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_lop.ForeColor = System.Drawing.Color.White;
             this.button_lop.Name = "button_lop";
             this.button_lop.Padding = new System.Windows.Forms.Padding(34, 0, 0, 0);
@@ -379,7 +379,7 @@ namespace QLDiemTHPT
             this.button_hocKy.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_hocKy.FlatAppearance.BorderSize = 0;
             this.button_hocKy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_hocKy.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_hocKy.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_hocKy.ForeColor = System.Drawing.Color.White;
             this.button_hocKy.Name = "button_hocKy";
             this.button_hocKy.Padding = new System.Windows.Forms.Padding(34, 0, 0, 0);
@@ -395,7 +395,7 @@ namespace QLDiemTHPT
             this.button_phongHoc.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_phongHoc.FlatAppearance.BorderSize = 0;
             this.button_phongHoc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_phongHoc.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_phongHoc.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_phongHoc.ForeColor = System.Drawing.Color.White;
             this.button_phongHoc.Name = "button_phongHoc";
             this.button_phongHoc.Padding = new System.Windows.Forms.Padding(34, 0, 0, 0);
@@ -411,7 +411,7 @@ namespace QLDiemTHPT
             this.button_monHoc.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_monHoc.FlatAppearance.BorderSize = 0;
             this.button_monHoc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_monHoc.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_monHoc.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_monHoc.ForeColor = System.Drawing.Color.White;
             this.button_monHoc.Name = "button_monHoc";
             this.button_monHoc.Padding = new System.Windows.Forms.Padding(34, 0, 0, 0);
@@ -427,7 +427,7 @@ namespace QLDiemTHPT
             this.button_khoa.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_khoa.FlatAppearance.BorderSize = 0;
             this.button_khoa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_khoa.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_khoa.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_khoa.ForeColor = System.Drawing.Color.White;
             this.button_khoa.Name = "button_khoa";
             this.button_khoa.Padding = new System.Windows.Forms.Padding(34, 0, 0, 0);
@@ -443,7 +443,7 @@ namespace QLDiemTHPT
             this.button_danhMuc.Dock = System.Windows.Forms.DockStyle.Top;
             this.button_danhMuc.FlatAppearance.BorderSize = 0;
             this.button_danhMuc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_danhMuc.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_danhMuc.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_danhMuc.ForeColor = System.Drawing.Color.White;
             this.button_danhMuc.Name = "button_danhMuc";
             this.button_danhMuc.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
@@ -479,7 +479,7 @@ namespace QLDiemTHPT
             // label_tenTruong1
             // 
             this.label_tenTruong1.AutoSize = true;
-            this.label_tenTruong1.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_tenTruong1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_tenTruong1.ForeColor = System.Drawing.Color.White;
             this.label_tenTruong1.Location = new System.Drawing.Point(28, 70);
             this.label_tenTruong1.Name = "label_tenTruong1";
@@ -490,7 +490,7 @@ namespace QLDiemTHPT
             // label_tenTruong2
             // 
             this.label_tenTruong2.AutoSize = true;
-            this.label_tenTruong2.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_tenTruong2.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_tenTruong2.ForeColor = System.Drawing.Color.White;
             this.label_tenTruong2.Location = new System.Drawing.Point(48, 95);
             this.label_tenTruong2.Name = "label_tenTruong2";
@@ -664,7 +664,7 @@ namespace QLDiemTHPT
             // label_diemTBTruong
             // 
             this.label_diemTBTruong.AutoSize = true;
-            this.label_diemTBTruong.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_diemTBTruong.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_diemTBTruong.ForeColor = System.Drawing.Color.White;
             this.label_diemTBTruong.Location = new System.Drawing.Point(600, 45);
             this.label_diemTBTruong.Name = "label_diemTBTruong";
@@ -750,7 +750,7 @@ namespace QLDiemTHPT
             // label_tieude
             // 
             this.label_tieude.AutoSize = true;
-            this.label_tieude.Font = new System.Drawing.Font("Century Gothic", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_tieude.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_tieude.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(71)))), ((int)(((byte)(200)))));
             this.label_tieude.Location = new System.Drawing.Point(12, 22);
             this.label_tieude.Name = "label_tieude";
@@ -766,7 +766,7 @@ namespace QLDiemTHPT
             this.ClientSize = new System.Drawing.Size(1134, 613);
             this.Controls.Add(this.panel_main);
             this.Controls.Add(this.panel_slide);
-            this.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "FrmMain";
             this.Text = "FrmMain";
             this.MinimumSize = new System.Drawing.Size(1150, 650);
